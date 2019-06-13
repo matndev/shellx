@@ -1,0 +1,16 @@
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\controller\UserController.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\model\User.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\service\MessageServiceImpl.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\dao\UserRepository.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\model\Role.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\model\Authority.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\service\RoleService.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\ShellxApp.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\dao\AuthorityRepository.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\dao\MessageRepository.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\model\Message.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\dao\RoleRepository.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\security\WebSecurityConfig.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\service\UserService.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\controller\MessageController.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\service\MessageService.java

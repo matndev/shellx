@@ -1,0 +1,16 @@
+app\shellx\controller\MessageController.class
+app\shellx\ShellxApp.class
+app\shellx\service\RoleService.class
+app\shellx\dao\RoleRepository.class
+app\shellx\model\Role.class
+app\shellx\service\UserService.class
+app\shellx\service\MessageServiceImpl.class
+app\shellx\dao\AuthorityRepository.class
+app\shellx\model\Authority.class
+app\shellx\security\WebSecurityConfig.class
+app\shellx\dao\UserRepository.class
+app\shellx\controller\UserController.class
+app\shellx\model\User.class
+app\shellx\dao\MessageRepository.class
+app\shellx\service\MessageService.class
+app\shellx\model\Message.class
