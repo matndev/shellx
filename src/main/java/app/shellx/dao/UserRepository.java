@@ -9,4 +9,5 @@ import app.shellx.model.User;
 public interface UserRepository extends CrudRepository<User, String> {
 
 	public User findByUsername(String username);
+	public User findByEmail(String email);
 }

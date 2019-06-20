@@ -39,7 +39,6 @@ public class ShellxInitializer implements ApplicationRunner {
 		
 		for (Role role : roles) {
 			if (role.getRole().equals("ROLE_ADMIN")) {
-				System.out.println("ROLE_ADMIN found");
 				role.setAuthorities(authorities);
 			}
 		}

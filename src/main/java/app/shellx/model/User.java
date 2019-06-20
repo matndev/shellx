@@ -1,8 +1,10 @@
 package app.shellx.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -20,8 +22,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +41,16 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name = "users_id")
 	private long id;
+	@NotNull
+	@NotEmpty
 	@Column(name = "users_username", nullable = false, unique = true)
 	private String username;
+	@NotNull
+	@NotEmpty
 	@Column(name = "users_email", nullable = false, unique = true)
 	private String email;
+	@NotNull
+	@NotEmpty
 	@Column(name = "users_password")
 	private String password;
 	@Column(name = "users_enabled")
@@ -75,20 +86,20 @@ public class User implements UserDetails {
 		this.avatar = avatar;
 	}
 
-	/*public Collection<? extends GrantedAuthority> getAuthorities() {
-		Set<Authority> authorities = new HashSet<Authority>();
-		authorities = role.getAuthorities();
-		return authorities;
-	}*/
-	public Set<Authority> getAuthorities() {
-		/*Set<Authority> authorities = new HashSet<Authority>();
-		authorities = role.getAuthorities();*/
+	
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> authoritiesList = new ArrayList<GrantedAuthority>();
+		authoritiesList.add(new SimpleGrantedAuthority(role.getRole()));
+		this.authorities.stream().map(p -> new SimpleGrantedAuthority(p.getAuthority())).forEach(authoritiesList::add);
+		return authoritiesList;
+	}
+	public Set<Authority> getOnlyAuthorities() {
 		return authorities;
 	}
 	public void setAuthorities(Set<Authority> authorities) {
 		this.authorities = authorities;
 	}
-	public void setName(String username) {
+	public void setUsername(String username) {
 		this.username = username;
 	}	
 	public String getUsername() {

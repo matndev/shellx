@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,15 +31,14 @@ public class UserController {
 	
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
-	@RequestMapping("/add")
-	public void add() {
-		System.out.println("### LOG : Message sent from controller to UserService");
-		
-		/*Set<Authority> authorities = new HashSet<Authority>(0);
-		authorities.add(new Authority("READ_ACCESS"));
-		authorities.add(new Authority("WRITE_ACCESS"));*/
-		this.userService.add(new User("pierrho", "eboyfr@gmail.com", passwordEncoder.encode("123456"), true, "avatar.jpg"), "ROLE_ADMIN"); //LocalDate.now()));
-	}
+	/*@PostMapping(path="/add", consumes="application/json")
+	public void add(@RequestBody User user) {
+		System.out.println("### LOG : User sent from controller to UserService");
+		//this.userService.add(new User("pierrho", "eboyfr@gmail.com", passwordEncoder.encode("123456"), true, "avatar.jpg"), "ROLE_ADMIN"); //LocalDate.now()));
+		String password = passwordEncoder.encode(user.getPassword());
+		user.setPassword(password);
+		this.userService.add(user, "ROLE_ADMIN"); 
+	}*/
 	
 	@RequestMapping("/delete")
 	public void delete() {
@@ -56,7 +57,7 @@ public class UserController {
 		System.out.println(username);
 		User user = this.userService.loadUserByUsername(username);
 		System.out.println("Role : "+user.getRoleName());
-		Set<Authority> authorities = user.getAuthorities();
+		Set<Authority> authorities = user.getOnlyAuthorities();
 		System.out.println("Authorities : ");
 		for (Authority temp : authorities) {
 			System.out.println(temp.getAuthority());
