@@ -20,7 +20,7 @@ public class Authority implements GrantedAuthority {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "authorities_id")
 	private long id;
 	@Column(name = "authorities_name")

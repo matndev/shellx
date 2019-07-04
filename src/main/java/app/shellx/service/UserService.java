@@ -41,9 +41,6 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByUsername(username);
         Role role = user.getRole();
         user.setAuthorities(role.getAuthorities());
-        //List<GrantedAuthority> authorities = buildUserAuthority(user.getAuthorities());
-        //if you're implementing UserDetails you wouldn't need to call this method and instead return the User as it is
-        //return buildUserForAuthentication(user, authorities);
         return user;
 
     }
@@ -67,6 +64,7 @@ public class UserService implements UserDetailsService {
         user.setUsername(accountDto.getUsername());
         user.setPassword(accountDto.getPassword());
         user.setEmail(accountDto.getEmail());
+        user.setEnabled(true);
         user.setRole(roleService.findByRole("ROLE_ADMIN"));
         return userRepository.save(user);       
     }
@@ -81,7 +79,7 @@ public class UserService implements UserDetailsService {
 /*	##### REGISTRATION END ##### */    
     
     
-    
+    @Transactional
     public void update(User user) {
     	this.userRepository.save(user);
     }

@@ -30,6 +30,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 @Entity
 @Table(name="users")
 public class User implements UserDetails {
@@ -38,19 +41,18 @@ public class User implements UserDetails {
 	
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name = "users_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="user_seq")
+	//@SequenceGenerator(name="user_seq", sequenceName="")
+	@Column(name = "users_id", updatable = false, nullable = false)
 	private long id;
-	@NotNull
-	@NotEmpty
 	@Column(name = "users_username", nullable = false, unique = true)
 	private String username;
-	@NotNull
-	@NotEmpty
 	@Column(name = "users_email", nullable = false, unique = true)
 	private String email;
-	@NotNull
-	@NotEmpty
+	
+	// A TESTER
+	@JsonProperty(access = Access.WRITE_ONLY)
 	@Column(name = "users_password")
 	private String password;
 	@Column(name = "users_enabled")
@@ -59,8 +61,6 @@ public class User implements UserDetails {
 	private String avatar;
 	@Column(name = "users_date")
 	private LocalDate date;
-	/*@Column(name = "users_role")
-	private int refRole;*/
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "users_role")
@@ -155,13 +155,5 @@ public class User implements UserDetails {
 	public String getRoleName() {
 		return role.getRole();
 	}
-
-	/*public int getRefRole() {
-		return refRole;
-	}
-
-	public void setRefRole(int refRole) {
-		this.refRole = refRole;
-	}*/
 	
 }

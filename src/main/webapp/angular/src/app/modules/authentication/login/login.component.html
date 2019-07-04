@@ -1,0 +1,42 @@
+<form ngNativeValidate [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
+
+
+    <div *ngIf="!loginForm.valid"> <!-- </div>class="invalid-feedback" -->
+        <div *ngIf="loginForm.get('email').hasError('required')">Email required</div>
+        <div *ngIf="loginForm.get('email').hasError('email')">Email format is not correct</div>
+        <div *ngIf="loginForm.get('password').hasError('required')">Password required</div>
+        <div *ngIf="loginForm.get('password').hasError('minlength')">Password must be at least 30 characters</div>
+        <div *ngIf="loginForm.get('password').hasError('maxlength')">Password must not exceed 30 characters</div>
+        <div *ngIf="loginForm.get('passwordMatching').hasError('required')">Confirmation password required</div>
+        <div *ngIf="loginForm.get('passwordMatching').hasError('minlength')">Password must be at least 30 characters</div>
+        <div *ngIf="loginForm.get('passwordMatching').hasError('maxlength')">Password must not exceed 30 characters</div>
+        <div *ngIf="loginForm.errors?.passwordMatching && (loginForm.touched || loginForm.dirty)">Passwords are not matching</div>
+    </div>  
+
+    <div>
+        <label>Email * </label>
+        <input type="text" formControlName="email" required/>       
+    </div>
+
+    <div>
+        <label>Password * </label>
+        <input type="password" formControlName="password" required/> 
+    </div>
+
+    <div>
+        <label>Confirm password * </label>
+        <input type="password" formControlName="passwordMatching" required/> 
+    </div>
+
+    <button class="button" type="submit" [disabled]="!loginForm.valid">Log in</button>
+  
+</form>
+
+
+<nav>
+    <a routerLink="/register">Sign up</a>
+</nav>
+
+<div>
+    <p>Password (Length) : between 8 and 30 characters</p>
+</div>

@@ -14,6 +14,8 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 	
 	public Message findById(long id);
 	
+	public Message findByMessageIdAndMessageEnabledTrue(long id);
+	
 	public void deleteById(long id);
 	
 	@Transactional

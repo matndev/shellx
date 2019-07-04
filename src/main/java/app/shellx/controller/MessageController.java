@@ -5,10 +5,13 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.shellx.dto.MessageDto;
 import app.shellx.model.Message;
 import app.shellx.service.MessageService;
 
@@ -19,21 +22,22 @@ public class MessageController {
 	@Autowired
 	private MessageService messageService;
 	
-	/*@Autowired
-	public TestController(MessageService messageService) {
-		this.messageService = messageService;
-	}*/
-	
-	@RequestMapping("/add")
-	public void add() {
+	@PostMapping(path="/add", consumes="application/json", produces="application/json")
+	public Message add(@RequestBody MessageDto messageDto) {
 		System.out.println("### LOG : Message sent from controller to MessageService");
-		this.messageService.add(new Message("Pierre", "Alan", "Bonjour c'est Pierre", true, LocalDate.now()));
+		return this.messageService.add(messageDto);
 	}
 	
+/*	@RequestMapping("/add")
+	public void add() {
+		System.out.println("### LOG : Message sent from controller to MessageService");
+		//this.messageService.add(new Message("Pierre", "Alan", "Bonjour c'est Pierre", true, LocalDate.now(), new Room()));
+	}
+*/	
 	@RequestMapping(path = "/update")
 	public void update() {
 		System.out.println("### LOG : Message sent from controller to MessageService for update");
-		this.messageService.update(new Message("Pierre", "Alan", "Bonjour c'est Pierre", true, LocalDate.now()));
+		//this.messageService.update(new Message("Pierre", "Alan", "Bonjour c'est Pierre", true, LocalDate.now(), new Room()));
 	}
 	
 	@GetMapping(path = {"/find/{id}"})

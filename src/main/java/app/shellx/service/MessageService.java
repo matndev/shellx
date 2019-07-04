@@ -2,11 +2,12 @@ package app.shellx.service;
 
 import java.util.List;
 
+import app.shellx.dto.MessageDto;
 import app.shellx.model.Message;
 
 public interface MessageService {
 
-	public void add(Message message);
+	public Message add(MessageDto messageDto);
 	
 	public Message findById(long id);
 	

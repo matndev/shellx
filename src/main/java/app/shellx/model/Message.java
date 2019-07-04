@@ -3,19 +3,31 @@ package app.shellx.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="messages")
 public class Message implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8089787350563535412L;
+	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="messages_id")
 	private long messageId;
 	@Column(name="messages_author")
@@ -26,17 +38,25 @@ public class Message implements Serializable {
 	private String messageContent;
 	@Column(name="messages_visible")
 	private boolean messageVisible;
+	@Column(name="messages_enabled")
+	private boolean messageEnabled;
 	@Column(name="messages_date")
 	private LocalDate messageDate;
 	
-	protected Message() {}
+	@JsonBackReference
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "messages_room")
+	private Room messageRoom;
+
+	public Message() {}
 	
-	public Message(String messageAuthor, String messageReceiver, String messageContent, boolean messageVisible, LocalDate messageDate) {
+	public Message(String messageAuthor, String messageReceiver, String messageContent, boolean messageVisible, LocalDate messageDate, Room messageRoom) {
 		this.messageAuthor = messageAuthor;
 		this.messageReceiver = messageReceiver;
 		this.messageContent = messageContent;
 		this.messageVisible = messageVisible;
 		this.messageDate = messageDate;
+		this.messageRoom = messageRoom;
 	}
 
 	public String getMessageAuthor() {
@@ -78,6 +98,21 @@ public class Message implements Serializable {
 	public void setMessageVisible(boolean messageVisible) {
 		this.messageVisible = messageVisible;
 	}
-	
+
+	public Room getMessageRoom() {
+		return messageRoom;
+	}
+
+	public void setMessageRoom(Room messageRoom) {
+		this.messageRoom = messageRoom;
+	}
+
+	public boolean isMessageEnabled() {
+		return messageEnabled;
+	}
+
+	public void setMessageEnabled(boolean messageEnabled) {
+		this.messageEnabled = messageEnabled;
+	}
 	
 }
