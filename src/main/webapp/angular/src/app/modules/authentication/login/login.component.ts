@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { passwordMatchingValidator } from '../../../validator/password-matching-validator';
-import { ConfigHttpService } from 'src/app/core/http/config-http.service';
 import { User } from 'src/app/shared/models/user.model';
+import { LoginService } from './login.service';
 
 @Component({
   selector: 'app-login',
@@ -13,11 +13,11 @@ import { User } from 'src/app/shared/models/user.model';
 export class LoginComponent implements OnInit {
 
   loginForm;
-  configHttpService: ConfigHttpService;
   user: User;
 
   constructor(
-      private formBuilder: FormBuilder 
+      private formBuilder: FormBuilder,
+      private loginService: LoginService
   ) { 
       this.loginForm = this.formBuilder.group({
           email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
@@ -29,20 +29,21 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit(formData) {
+  onSubmit() {
 
     console.warn("login submitted.");
     console.warn(this.loginForm.value);
 
-    var userLogin = new User(this.loginForm.get("email"),
-                   this.loginForm.get("password"));
+    var userLogin = new User(this.loginForm.get("email").value,
+                   this.loginForm.get("password").value,
+                   this.loginForm.get("passwordMatching").value);
     
+    console.log(userLogin.getEmail());
+    console.log(userLogin.getPassword());
 
-    this.configHttpService
-    .login(userLogin)
-    .subscribe(user => this.user);
+    this.loginService.login(userLogin)
+    .subscribe((data: User) => this.user = data);
 
     //this.loginForm.reset();
   }
-
 }

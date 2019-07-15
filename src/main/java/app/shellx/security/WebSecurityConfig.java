@@ -9,10 +9,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.web.session.SessionManagementFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import app.shellx.service.UserService;
 
@@ -26,17 +26,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
+			//.addFilterBefore(corsFilter(), SessionManagementFilter.class)
 			.httpBasic()
 				.and()
+			.cors().and()
 			.authorizeRequests()
-				.antMatchers("/css/**", "/index", "/register/**").permitAll()	
+				.antMatchers("/css/**", "/login/**", "/register/**").permitAll()	// "/index"
 				.antMatchers("/admin/**").hasRole("ADMIN")		
 				.anyRequest().authenticated()
 				.and()
 			.csrf().disable()
-			.formLogin()
-				//.loginPage("/login").failureUrl("/login-error")	
-				.and()
+			/*.formLogin()
+				.loginPage("http://localhost:4200/login").failureUrl("/login-error")	
+				.and()*/
 			.logout() 
 				.permitAll();
 	}
@@ -52,5 +54,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
         authenticationProvider.setUserDetailsService(userService);
         return authenticationProvider;
+    }
+    
+//    @Bean
+//    CorsFilter corsFilter() {
+//        CorsFilter filter = new CorsFilter();
+//        return filter;
+//    }
+    
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebConfig() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                .allowedOrigins(
+                        "http://localhost:4200")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
+                .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",
+                        		"Access-Control-Request-Headers", "Authorization", "Cache-Control",
+                        		"Access-Control-Allow-Origin")
+                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+                .allowCredentials(true).maxAge(3600);
+            }
+        };
     }
 }

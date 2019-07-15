@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { User } from 'src/app/shared/models/user.model';
-import { Observable, throwError, of, log } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
-    'Authorization': 'Basic Auth'
+    //'Authorization': 'Basic Auth'
   })
 };
 
@@ -15,14 +15,15 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class ConfigHttpService {
+  
+  http: HttpClient;
 
-  constructor(private http: HttpClient) { }
+  constructor(private httpParam: HttpClient) { 
+    this.http = httpParam;
+  }
 
-  login(userLogin: User): Observable<User> {
-    return this.http.post<User>('/login', userLogin, httpOptions)
-                    .pipe(
-                        catchError(this.handleError('login', user))
-                    );
+  getHttp() : HttpClient {
+    return this.http;
   }
 
   /*private handleError(error: HttpErrorResponse) {
