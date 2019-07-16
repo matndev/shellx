@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthenticationService } from './modules/authentication/authentication/authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'angular';
+
+  constructor(authenticationService: AuthenticationService) {
+      authenticationService.authenticate(undefined, undefined);
+      console.log(authenticationService.authenticated);
+  }
+
+  /*authenticated() {
+    return authenticationService.authenticated;
+  }*/
 }

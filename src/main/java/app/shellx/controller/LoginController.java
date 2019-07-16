@@ -16,12 +16,9 @@ import app.shellx.dto.UserDto;
 public class LoginController {
 	
 	/*@Autowired
-	LoginService loginService;
+	LoginService loginService;*/
 	
-	@RequestMapping("/{username}/{password}")
-	public void login(@PathVariable("username") String username, @PathVariable("password") String password) {
-		this.loginService.login(username, password);
-	}*/
+
 	@PostMapping(path="/", consumes="application/json", produces="application/json")
 	public void login(@RequestBody UserDto userDto) {
 		System.out.println(userDto.getEmail());

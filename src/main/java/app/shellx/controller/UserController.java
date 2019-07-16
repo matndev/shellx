@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.shellx.annotation.EmailExistsException;
+import app.shellx.dto.UserDto;
 import app.shellx.model.Authority;
 import app.shellx.model.Role;
 import app.shellx.model.Role;
@@ -32,12 +34,17 @@ public class UserController {
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
 	/*@PostMapping(path="/add", consumes="application/json")
-	public void add(@RequestBody User user) {
+	public void add(@RequestBody UserDto userDto) {
 		System.out.println("### LOG : User sent from controller to UserService");
 		//this.userService.add(new User("pierrho", "eboyfr@gmail.com", passwordEncoder.encode("123456"), true, "avatar.jpg"), "ROLE_ADMIN"); //LocalDate.now()));
-		String password = passwordEncoder.encode(user.getPassword());
-		user.setPassword(password);
-		this.userService.add(user, "ROLE_ADMIN"); 
+		String password = passwordEncoder.encode(userDto.getPassword());
+		userDto.setPassword(password);
+		try {
+			this.userService.registerNewUserAccount(userDto);
+		} catch (EmailExistsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}*/
 	
 	@RequestMapping("/delete")

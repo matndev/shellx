@@ -7,12 +7,14 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './modules/authentication/login/login.component';
 import { RegisterComponent } from './modules/authentication/register/register.component';
 import { HttpClientModule } from '@angular/common/http';
+import { MessageComponent } from './modules/content/message/message.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,

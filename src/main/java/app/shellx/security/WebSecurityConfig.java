@@ -36,9 +36,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated()
 				.and()
 			.csrf().disable()
-			/*.formLogin()
-				.loginPage("http://localhost:4200/login").failureUrl("/login-error")	
-				.and()*/
+			.formLogin()
+            	.usernameParameter("email")
+				//.loginPage("http://localhost:4200/login").failureUrl("/login-error")	
+				.and()
 			.logout() 
 				.permitAll();
 	}

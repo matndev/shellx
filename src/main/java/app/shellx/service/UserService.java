@@ -35,10 +35,12 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private RoleService roleService;
 
+	// LOAD BY EMAIL ADDRESS
     @Transactional(readOnly=true)
     public User loadUserByUsername(final String username) throws UsernameNotFoundException {
 
-        User user = userRepository.findByUsername(username);
+    	String email = username;
+        User user = userRepository.findByEmail(email);
         Role role = user.getRole();
         user.setAuthorities(role.getAuthorities());
         return user;
