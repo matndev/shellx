@@ -9,14 +9,17 @@ import { catchError } from 'rxjs/operators';
 })
 export class AuthenticationService {
 
-  url = "http://localhost:8086";
-  authenticated = false;
-  user: User;
+  private url = "http://localhost:8086";
+  private authenticated = false;
+  //user: User;
 
   constructor(
     private http: HttpClient
   ) { }
 
+  isAuthenticated() {
+    return this.authenticated;
+  }
 
   authenticate(credentials, callback) {
 
@@ -28,10 +31,12 @@ export class AuthenticationService {
         httpOptions.headers = httpOptions.headers.set('Authorization', 'Basic ' + btoa(credentials.username + ':' + credentials.password));
       }*/
 
-      this.http.get(this.url+'/message/update', {headers: headers}).subscribe(response => {
-          if (response['name']) {
+      this.http.get(this.url+'/user/login/1', {headers: headers}).subscribe(response => {
+          if (response['username']) {
+              console.log(response['username']);
               this.authenticated = true;
           } else {
+              console.log("Authentication failed");
               this.authenticated = false;
           }
           return callback && callback();

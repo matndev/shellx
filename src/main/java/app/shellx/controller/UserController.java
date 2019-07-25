@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,14 +23,19 @@ import app.shellx.model.Authority;
 import app.shellx.model.Role;
 import app.shellx.model.Role;
 import app.shellx.model.User;
+import app.shellx.service.RoleService;
 import app.shellx.service.UserService;
 
 @RestController
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RequestMapping("/user")
 public class UserController {
 
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	RoleService roleService;
 	
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
@@ -59,7 +65,7 @@ public class UserController {
 		this.userService.update(user);
 	}
 	
-	@RequestMapping(value="/find/{username}", method=RequestMethod.GET)
+	@RequestMapping(value="/find/{username}", method=RequestMethod.GET, produces="application/json")
 	public void findByUsername(@PathVariable("username") String username) {
 		System.out.println(username);
 		User user = this.userService.loadUserByUsername(username);
@@ -70,5 +76,11 @@ public class UserController {
 			System.out.println(temp.getAuthority());
 		}
 		System.out.println("Utilisateur : "+user.getUsername());
+	}
+	
+	@RequestMapping(value="/login/{id}", method=RequestMethod.GET, produces="application/json")
+	public UserDto login(@PathVariable("id") long id) {
+		UserDto userDto = this.userService.loadUserById(id);
+		return userDto;
 	}
 }

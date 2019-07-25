@@ -12,17 +12,17 @@ import app.shellx.dto.UserDto;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
-@RequestMapping("/login")
+@RequestMapping("/login2")
 public class LoginController {
 	
 	/*@Autowired
 	LoginService loginService;*/
 	
 
-	@PostMapping(path="/", consumes="application/json", produces="application/json")
+	/*@PostMapping(path="/", consumes="application/json", produces="application/json")
 	public void login(@RequestBody UserDto userDto) {
 		System.out.println(userDto.getEmail());
 		System.out.println(userDto.getPassword());
 		System.out.println(userDto.getMatchingPassword());
-	}
+	}*/
 }

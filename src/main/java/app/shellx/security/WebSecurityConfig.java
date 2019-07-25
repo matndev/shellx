@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,7 +25,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			//.addFilterBefore(corsFilter(), SessionManagementFilter.class)
 			.httpBasic()
 				.and()
 			.cors().and()
@@ -36,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated()
 				.and()
 			.csrf().disable()
+			//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 			.formLogin()
             	.usernameParameter("email")
 				//.loginPage("http://localhost:4200/login").failureUrl("/login-error")	
@@ -50,18 +49,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+    public CustomDaoAuthenticationProvider authenticationProvider() {
+        CustomDaoAuthenticationProvider authenticationProvider = new CustomDaoAuthenticationProvider();
         authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
         authenticationProvider.setUserDetailsService(userService);
         return authenticationProvider;
     }
-    
-//    @Bean
-//    CorsFilter corsFilter() {
-//        CorsFilter filter = new CorsFilter();
-//        return filter;
-//    }
     
     @Bean
     public WebMvcConfigurer corsConfigurer() {

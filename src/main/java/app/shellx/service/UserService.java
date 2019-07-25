@@ -25,6 +25,7 @@ import app.shellx.dto.UserDto;
 import app.shellx.model.Authority;
 import app.shellx.model.Role;
 import app.shellx.model.User;
+import app.shellx.security.EmailNotFoundException;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -35,17 +36,41 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private RoleService roleService;
 
-	// LOAD BY EMAIL ADDRESS
     @Transactional(readOnly=true)
     public User loadUserByUsername(final String username) throws UsernameNotFoundException {
 
-    	String email = username;
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByUsername(username);
         Role role = user.getRole();
         user.setAuthorities(role.getAuthorities());
         return user;
 
     }
+    
+    // Server-side purpose
+    @Transactional(readOnly=true)
+    public User loadUserByEmail(final String email) throws EmailNotFoundException {
+
+        User user = userRepository.findByEmail(email);
+        Role role = user.getRole();
+        user.setAuthorities(role.getAuthorities());
+        return user;
+
+    } 
+    
+    // Client-side purpose
+    @Transactional(readOnly=true)
+    public UserDto loadUserById(final long id) {
+
+        User user = userRepository.findById(id);
+        if (user != null) {
+        	UserDto userDto = new UserDto(user);
+	        return userDto;
+        }
+        else {
+        	return null;
+        }
+
+    } 
     
     @Transactional
     public void delete() {
@@ -56,16 +81,15 @@ public class UserService implements UserDetailsService {
 /*	##### REGISTRATION PART ##### */    
     
     @Transactional
-    public User registerNewUserAccount(UserDto accountDto) 
+    public User registerNewUserAccount(User user) 
       throws EmailExistsException {
          
-        if (emailExists(accountDto.getEmail())) {   
-            throw new EmailExistsException("There is an account with that email address:" + accountDto.getEmail());
-        }
-        User user = new User();    
-        user.setUsername(accountDto.getUsername());
-        user.setPassword(accountDto.getPassword());
-        user.setEmail(accountDto.getEmail());
+        if (emailExists(user.getEmail())) {   
+            throw new EmailExistsException("There is an account with that email address:" + user.getEmail());
+        }  
+        //user.setUsername(accountDto.getUsername());
+        //user.setPassword(accountDto.getPassword());
+        //user.setEmail(accountDto.getEmail());
         user.setEnabled(true);
         user.setRole(roleService.findByRole("ROLE_ADMIN"));
         return userRepository.save(user);       

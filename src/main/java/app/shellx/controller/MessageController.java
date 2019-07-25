@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,9 +35,10 @@ public class MessageController {
 		//this.messageService.add(new Message("Pierre", "Alan", "Bonjour c'est Pierre", true, LocalDate.now(), new Room()));
 	}
 */	
-	@RequestMapping(path = "/update")
-	public void update() {
+	@RequestMapping(path = "/update", method = RequestMethod.GET, produces = "application/json")
+	public String update() {
 		System.out.println("### LOG : Message sent from controller to MessageService for update");
+		return "ok";
 		//this.messageService.update(new Message("Pierre", "Alan", "Bonjour c'est Pierre", true, LocalDate.now(), new Room()));
 	}
 	

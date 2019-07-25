@@ -1,0 +1,29 @@
+<div *ngIf="room">{{ room.getName() }}</div>
+<div *ngFor="let message of messages">
+    <app-message [message]="message"></app-message>
+</div>
+
+<form ngNativeValidate [formGroup]="sendMessageForm" (ngSubmit)="onSubmit()">
+
+
+
+
+    <div>
+        <input type="text" formControlName="content" required/>       
+    </div>
+
+    <button class="button" type="submit">Send</button>
+  
+</form>
+
+    <!-- <div *ngIf="!loginForm.valid">
+        <div *ngIf="loginForm.get('email').hasError('required')">Email required</div>
+        <div *ngIf="loginForm.get('email').hasError('email')">Email format is not correct</div>
+        <div *ngIf="loginForm.get('password').hasError('required')">Password required</div>
+        <div *ngIf="loginForm.get('password').hasError('minlength')">Password must be at least 30 characters</div>
+        <div *ngIf="loginForm.get('password').hasError('maxlength')">Password must not exceed 30 characters</div>
+        <div *ngIf="loginForm.get('passwordMatching').hasError('required')">Confirmation password required</div>
+        <div *ngIf="loginForm.get('passwordMatching').hasError('minlength')">Password must be at least 30 characters</div>
+        <div *ngIf="loginForm.get('passwordMatching').hasError('maxlength')">Password must not exceed 30 characters</div>
+        <div *ngIf="loginForm.errors?.passwordMatching && (loginForm.touched || loginForm.dirty)">Passwords are not matching</div>
+    </div>   -->

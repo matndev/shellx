@@ -86,7 +86,7 @@ public class User implements UserDetails {
 		this.avatar = avatar;
 	}
 
-	
+	// return role name and authorities
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority> authoritiesList = new ArrayList<GrantedAuthority>();
 		authoritiesList.add(new SimpleGrantedAuthority(role.getRole()));
@@ -156,4 +156,7 @@ public class User implements UserDetails {
 		return role.getRole();
 	}
 	
+	public long getId() {
+		return id;
+	}
 }

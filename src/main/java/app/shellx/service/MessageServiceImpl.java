@@ -38,7 +38,7 @@ public class MessageServiceImpl implements MessageService {
 		message.setMessageVisible(true);
 		message.setMessageEnabled(true);
 		try {
-			Room room = roomService.findRoomById(messageDto.getMessageRoom());
+			Room room = roomService.findCompleteRoomById(messageDto.getMessageRoom());
 			message.setMessageRoom(room);
 			return this.messageRepository.save(message);
 		} catch(Exception e) {

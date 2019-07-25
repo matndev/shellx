@@ -66,6 +66,10 @@ public class Room implements Serializable {
 		this.modePrivate = modePrivate;
 	}
 
+	public int getId() {
+		return id;
+	}
+	
 	public String getName() {
 		return name;
 	}

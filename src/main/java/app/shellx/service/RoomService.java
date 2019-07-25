@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.shellx.dao.RoomRepository;
+import app.shellx.dto.RoomDto;
 import app.shellx.model.Room;
 
 @Service
@@ -18,8 +19,16 @@ public class RoomService {
 		return this.roomRepository.save(room);
 	}
 	
+	// GET Room with all messages
 	@Transactional(readOnly = true)
-	public Room findRoomById(int id) {
+	public Room findCompleteRoomById(int id) {
 		return this.roomRepository.findById(id);
+	}
+	
+	// GET Room only
+	@Transactional(readOnly = true)
+	public RoomDto findRoomById(int id) {
+		Room room = this.roomRepository.findById(id);
+		return new RoomDto(room.getId(), room.getName(), room.getRoomAdmin(), room.isModePrivate());
 	}
 }

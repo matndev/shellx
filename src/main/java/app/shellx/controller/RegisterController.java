@@ -36,14 +36,14 @@ public class RegisterController {
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
 	@PostMapping(path="/", consumes="application/json")
-	public void registerUserAccount(@RequestBody @Valid UserDto accountDto) {
+	public void registerUserAccount(@RequestBody @Valid User account) {
 		System.out.println("### LOG : User sent from controller to UserService");
-		String password = passwordEncoder.encode(accountDto.getPassword());
-		accountDto.setPassword(password);
+		String password = passwordEncoder.encode(account.getPassword());
+		account.setPassword(password);
 		
-		User userRegistered = null;
+		//User userRegistered = null;
 	    try {
-	        userRegistered = this.userService.registerNewUserAccount(accountDto);
+	        this.userService.registerNewUserAccount(account);
 	    } catch (EmailExistsException e) {
 	        //return null;
 	    	System.out.println("Erreur : email exists");

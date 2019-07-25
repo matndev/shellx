@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { AuthenticationService } from '../../authentication/authentication/authentication.service';
+import { Router } from '@angular/router';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 
 /*const httpOptions = {
   headers: new HttpHeaders({
@@ -16,9 +19,22 @@ import { Observable, of } from 'rxjs';
 })
 export class MessageComponent implements OnInit {
 
-  constructor() { }
+  @Input() message: Message;
+
+  constructor(
+      private authenticationService: AuthenticationService,
+      private router: Router
+  ) { }
 
   ngOnInit() {
+    if (!this.authenticationService.isAuthenticated()) {
+      console.log("message service : false"); 
+      //this.router.navigateByUrl('/login');
+    }
+  }
+
+  setMessage(message: Message) {
+      this.message = message;
   }
 
   /*authenticate(userLogin: User): Observable<User> {
