@@ -4,6 +4,7 @@ import { AuthenticationService } from '../../authentication/authentication/authe
 import { Message } from 'src/app/shared/models/content/message.model';
 import { Room } from 'src/app/shared/models/content/room.model';
 import { Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-room',
@@ -20,7 +21,8 @@ export class RoomComponent implements OnInit {
   constructor(
     private authenticationService: AuthenticationService,
     private roomService: RoomService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {
     this.sendMessageForm = this.formBuilder.group({
       content: ['', [Validators.required, Validators.maxLength(100)]]
@@ -29,6 +31,9 @@ export class RoomComponent implements OnInit {
 
   ngOnInit() {
     if (!this.authenticationService.isAuthenticated()) {
+      this.router.navigateByUrl('/');
+    } 
+    else {
       console.log("Room Component : message service : false"); 
       //this.router.navigateByUrl('/login');
       
@@ -51,8 +56,8 @@ export class RoomComponent implements OnInit {
           });
 
           //this.messages.forEach(console.log);
-      });
-    }    
+      });      
+    }   
   }
 
   onSubmit() {

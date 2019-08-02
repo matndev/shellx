@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import app.shellx.annotation.PasswordMatches;
 import app.shellx.annotation.ValidEmail;
 import app.shellx.model.User;
@@ -25,9 +27,9 @@ public class UserDto {
 	private String email;
 	
 	/*@NotNull
-	@NotEmpty
+	@NotEmpty*/
 	private String password;
-	private String matchingPassword;*/
+	//private String matchingPassword;
 	
 	private String avatar;
 	private int role;
@@ -60,7 +62,8 @@ public class UserDto {
 		this.email = email;
 	}
 
-	/*public String getPassword() {
+	@JsonIgnore
+	public String getPassword() {
 		return password;
 	}
 
@@ -68,7 +71,7 @@ public class UserDto {
 		this.password = password;
 	}
 
-	public String getMatchingPassword() {
+	/*public String getMatchingPassword() {
 		return matchingPassword;
 	}
 

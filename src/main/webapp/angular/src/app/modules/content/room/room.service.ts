@@ -8,7 +8,7 @@ import { Room } from 'src/app/shared/models/content/room.model';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
-    'Authorization': 'Basic ' + btoa('eboyfr@gmail.com:12345678')
+    //'Authorization': 'Basic ' + btoa('eboyfr@gmail.com:12345678')
   }), 
   observe: 'response' as 'body'
 };
