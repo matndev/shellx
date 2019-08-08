@@ -50,11 +50,11 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly=true)
     public User loadUserByEmail(final String email) throws EmailNotFoundException {
 
-        User user = userRepository.findByEmail(email);
+    	User user = userRepository.findByEmail(email);
         Role role = user.getRole();
         user.setAuthorities(role.getAuthorities());
         return user;
-
+        
     } 
     
     // Client-side purpose

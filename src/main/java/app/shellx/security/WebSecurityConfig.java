@@ -11,6 +11,13 @@
  * mieux pour authentifier le subject côté client.
  * S'il en trouve un qui match, il utilise sa méthode authenticate()
  * 
+ * 
+ * FILTER CHAIN
+ * 
+ * Chaque objet http utilisé dans configure() créé une filterchain spécifique
+ * Antmatcher() 		définit l'entrypoint de la filterchain (par défaut "/**" donc toutes les URI)
+ * authorizeRequest() 	déclare que les URI suivantes (avec antmatcher()) sont des endpoints restrictifs 
+ * 
  * On peut connaitre la liste et l'ordre des filtres de la FilterChain au travers de la classe :
  * @see FilterComparator
  * https://github.com/spring-projects/spring-security/blob/master/config/src/main/java/org/springframework/
@@ -22,7 +29,10 @@
  * 		### configure(AuthenticationManagerBuilder auth)
  * 
  * Ajoute un AuthenticationProvider à la liste des AuthenticationProvider
- * Cette liste est parcourue par l'AuthenticationManager
+ * Cette liste est parcourue par le ProviderManager qui implémente l'AuthenticationManager
+ * Le ProviderManager fait appel au travers de sa propre méthode authenticate() aux méthodes authenticate()
+ * des AuthenticationProvider. Le premier AuthenticationProvider qui arrive à authentifier fait sortir de la boucle
+ * et annule les test des AuthenticationProvider suivants.
  * 
 */
 
@@ -31,7 +41,8 @@ package app.shellx.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,7 +51,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -55,45 +65,44 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	UserService userService;
 	
 	@Autowired
-	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-//	@Autowired
-//	private UserDetailsService jwtUserDetailsService;
-
-	@Autowired
 	private JwtTokenFilter jwtTokenFilter;
 	
+//	@Autowired
+//	private CustomUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter; 
+	
+	@Autowired
+	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			.httpBasic()
-				.and()
-			.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-				.and()
+			.httpBasic().disable()
+			.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
 			.sessionManagement()
 	        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 			.cors().and()
 			.csrf().disable()
-			.authorizeRequests()
-				.antMatchers("/css/**", "/login/**", "/register/**").permitAll()
+			.authorizeRequests() // .antMatchers("/**")
+				.antMatchers("/login/**", "/register/**").permitAll()
 				.antMatchers("/admin/**").hasRole("ADMIN")		
 				.anyRequest().authenticated()
 				.and()
 			//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+			.addFilterAt(new CustomUsernamePasswordAuthenticationFilter(authenticationManagerBean()), UsernamePasswordAuthenticationFilter.class)	
 			.formLogin()
+				.loginPage("http://localhost:4200/login")//.failureUrl("/login-error")
+				.loginProcessingUrl("/login") 
             	.usernameParameter("email")
-				//.loginPage("http://localhost:4200/login").failureUrl("/login-error")	
+				.successHandler(customAuthenticationSuccessHandler)
 				.and()
 			.logout() 
 				.permitAll();
-		http
-			.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-	}
-
+	}    
+    
 	@Autowired
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(authenticationProvider());
+		auth.authenticationProvider(authenticationProvider()); // AuthenticationProvider inserted into ProviderManager
 	}
 	
     @Bean
@@ -103,6 +112,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationProvider.setUserDetailsService(userService);
         return authenticationProvider;
     }
+    
+    // Return the AuthenticationManager used by the configure(AuthenticationManagerBuilder auth) method
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+    	System.out.println("Configuration of authenticationManagerBean");
+    	return super.authenticationManagerBean();
+    }
+    
+//    @Bean
+//    public FilterRegistrationBean<CustomUsernamePasswordAuthenticationFilter> registration(CustomUsernamePasswordAuthenticationFilter filter) {
+//    	FilterRegistrationBean<CustomUsernamePasswordAuthenticationFilter> registration = new FilterRegistrationBean<CustomUsernamePasswordAuthenticationFilter>(filter);
+//    	registration.setEnabled(false);
+//    	return registration;
+//    }
     
     @Bean
     public WebMvcConfigurer corsConfigurer() {

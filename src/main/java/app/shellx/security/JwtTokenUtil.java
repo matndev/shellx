@@ -5,7 +5,7 @@
 */
 package app.shellx.security;
 
-import java.io.Serializable;
+/*import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -86,4 +86,4 @@ public class JwtTokenUtil implements Serializable {
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
 
-}
+}*/

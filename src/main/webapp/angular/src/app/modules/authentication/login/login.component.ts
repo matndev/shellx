@@ -43,10 +43,10 @@ export class LoginComponent implements OnInit {
     console.log(this.loginForm.get("email").value);
     console.log(this.loginForm.get("password").value);
 
-    var credentials = { username: this.loginForm.get("email").value,
+    var credentials = { email: this.loginForm.get("email").value, // Attention email à la place de username peut créer prob
                     password: this.loginForm.get("password").value};
 
-    this.authenticationService.authenticate(credentials, () => {
+    this.authenticationService.login(credentials, () => {
       this.router.navigateByUrl('/');
   });
 

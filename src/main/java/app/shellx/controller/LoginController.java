@@ -15,12 +15,13 @@ import app.shellx.security.JwtTokenProvider;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
-@RequestMapping("/login")
+@RequestMapping("/login2")
 public class LoginController {
 	
 	/*@Autowired
 	LoginService loginService;*/
-	@Autowired
+	
+	/*@Autowired
 	CustomDaoAuthenticationProvider authenticationManager; 
 	
 	@Autowired 
@@ -40,5 +41,5 @@ public class LoginController {
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username/password supplied");
         }
-	}
+	}*/
 }

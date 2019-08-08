@@ -5,6 +5,20 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>shellx</name>
   
+	<build>
+		<plugins>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-compiler-plugin</artifactId>
+			    <version>3.1</version>
+			    <configuration>
+			        <source>1.8</source>
+			        <target>1.8</target>
+			    </configuration>
+			</plugin>
+		</plugins>	
+	</build>
+  
   <dependencies>
   
 <!--  	  https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web  -->
@@ -67,6 +81,13 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.10.7</version>
 			<scope>runtime</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-core</artifactId>
+		    <version>2.12.0</version>
 		</dependency>
 
   </dependencies>

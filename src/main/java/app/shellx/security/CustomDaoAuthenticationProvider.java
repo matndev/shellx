@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
@@ -67,7 +66,7 @@ public class CustomDaoAuthenticationProvider extends AbstractUserDetailsAuthenti
 	// ~ Methods
 	// ========================================================================================================
 
-	@SuppressWarnings("deprecation")
+	//@SuppressWarnings("deprecation")
 	protected void additionalAuthenticationChecks(UserDetails userDetails,
 			UsernamePasswordAuthenticationToken authentication)
 			throws AuthenticationException {
@@ -99,21 +98,35 @@ public class CustomDaoAuthenticationProvider extends AbstractUserDetailsAuthenti
 			throws AuthenticationException {
 		prepareTimingAttackProtection();
 		try {
+			//System.out.println("Authentification : email : "+email);
 			UserDetails loadedUser = ((UserService) this.getUserDetailsService()).loadUserByEmail(email);
+			System.out.println("Authentification : email : "+loadedUser.getUsername());
+			// DEBUG
+			/*System.out.println(loadedUser.toString());
 			if (loadedUser == null) {
 				throw new InternalAuthenticationServiceException(
 						"UserDetailsService returned null, which is an interface contract violation");
-			}
+			}*/
 			return loadedUser;
 		}
-		catch (UsernameNotFoundException ex) {
+		/*catch (UsernameNotFoundException ex) {
+			mitigateAgainstTimingAttack(authentication);
+			throw ex;
+		}*/
+		catch (EmailNotFoundException ex) {
 			mitigateAgainstTimingAttack(authentication);
 			throw ex;
 		}
 		catch (InternalAuthenticationServiceException ex) {
+			System.out.println("DEBUG : Erreur interne");
+			throw ex;
+		}
+		catch (NullPointerException ex) {
+			System.out.println("DEBUG : null point exception");
 			throw ex;
 		}
 		catch (Exception ex) {
+			System.out.println("Cause of Exception: " + ex.getCause()); 
 			throw new InternalAuthenticationServiceException(ex.getMessage(), ex);
 		}
 	}

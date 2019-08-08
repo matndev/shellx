@@ -1,5 +1,6 @@
 package app.shellx.security;
 
+import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -20,23 +21,31 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtTokenProvider {
 	
-	@Value("${security.jwt.token.secret-key:secret}")
-    private String secretKey = "secret";
+	@Value("${security.jwt.token.secret.key}")
+    private String secretKey;
 	
-	@Value("${security.jwt.token.expire-length:3600000}")
-    private long validityInMilliseconds = 3600000; // 1h    
+	@Value("${security.jwt.token.expire-length:60000}")
+    private long validityInMilliseconds = 60000; // 1h = 3600000   
 	
 	@Autowired
     private UserDetailsService userDetailsService;
 	
 	@PostConstruct
-    protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+    protected void init() {	
+        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());       
     }
+	
+	private Key getSigningKey() {
+		byte[] keyBytes = Decoders.BASE64.decode(this.secretKey);
+		return Keys.hmacShaKeyFor(keyBytes);
+//		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+	}
 	
 	public String createToken(String username, List<String> roles) {
 		
@@ -48,7 +57,7 @@ public class JwtTokenProvider {
         			.setClaims(claims)//
         			.setIssuedAt(now)//
         			.setExpiration(validity)//
-        			.signWith(SignatureAlgorithm.HS256, secretKey)//
+        			.signWith(getSigningKey())//
         			.compact();
     }
 	
