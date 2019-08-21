@@ -5,6 +5,7 @@ import { passwordMatchingValidator } from '../../../validator/password-matching-
 import { User } from 'src/app/shared/models/user.model';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
   constructor(
       private formBuilder: FormBuilder,
       private authenticationService: AuthenticationService,
-      private router: Router
+      private router: Router,
+      private cookieService: CookieService
   ) { 
       this.loginForm = this.formBuilder.group({
           email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],

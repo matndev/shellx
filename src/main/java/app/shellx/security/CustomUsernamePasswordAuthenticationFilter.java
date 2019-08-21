@@ -16,21 +16,27 @@ package app.shellx.security;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-//@Component
+
+@Component
 public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
 	public static final String SPRING_SECURITY_FORM_USERNAME_KEY = "username";
@@ -39,14 +45,18 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
 	private String usernameParameter = SPRING_SECURITY_FORM_USERNAME_KEY;
 	private String passwordParameter = SPRING_SECURITY_FORM_PASSWORD_KEY;
 	private boolean postOnly = true;
-
 	
-	public CustomUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager) { // AuthenticationManager authenticationManager
+	@Autowired
+	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+	
+	public CustomUsernamePasswordAuthenticationFilter() {
 		super(new AntPathRequestMatcher("/login", "POST"));
-		this.setAuthenticationManager(authenticationManager);
-		System.out.println("Constructor filter");
 	}
 	
+//	@PostConstruct
+//	public void init() {
+//		this.setAuthenticationSuccessHandler(customAuthenticationSuccessHandler);
+//	}
 	
 	public Authentication attemptAuthentication(HttpServletRequest request,
 			HttpServletResponse response) throws AuthenticationException {
@@ -65,11 +75,9 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
 		// Allow subclasses to set the "details" property
 		setDetails(request, authRequest);
 		
-		System.out.println("AVANT AUTHENTIFICATION : "+authRequest.getPrincipal() + " " + authRequest.getCredentials());
+		this.setAuthenticationSuccessHandler(customAuthenticationSuccessHandler);
 		
-		Authentication auth2 = this.getAuthenticationManager().authenticate(authRequest);
-		System.out.println("APRES AUTHENTIFICATION : "+auth2.getPrincipal() + " " + auth2.getCredentials());
-		return auth2;
+		return this.getAuthenticationManager().authenticate(authRequest);
 	}
 
 	private UsernamePasswordAuthenticationToken getUserNamePasswordAuthenticationToken(HttpServletRequest request)  throws IOException {
@@ -107,6 +115,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
 	    }
 	    System.out.println("email : "+sr.getEmail());
 	    System.out.println("password : "+sr.getPassword());
+	    
 	    return new UsernamePasswordAuthenticationToken(sr.getEmail(), sr.getPassword());
 	}	
 	
@@ -122,7 +131,13 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
         }
     }
        
-
+    @Autowired
+    @Qualifier(BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        super.setAuthenticationManager(authenticationManager);
+    }
+    
 	protected void setDetails(HttpServletRequest request,
 			UsernamePasswordAuthenticationToken authRequest) {
 		authRequest.setDetails(authenticationDetailsSource.buildDetails(request));

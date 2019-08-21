@@ -8,7 +8,9 @@ import { AuthenticationService } from './modules/authentication/authentication/a
 })
 export class AppComponent {
 
-  constructor(authenticationService: AuthenticationService) {
+  constructor(
+    authenticationService: AuthenticationService
+    ) {
       /*authenticationService.authenticate(undefined, undefined);*/
       console.log(authenticationService.isAuthenticated());
   }

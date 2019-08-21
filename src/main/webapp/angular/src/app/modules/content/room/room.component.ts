@@ -30,7 +30,7 @@ export class RoomComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.authenticationService.isAuthenticated()) {
+    if (this.authenticationService.isAuthenticated()) { // ATTENTION METTRE ! devant
       this.router.navigateByUrl('/');
     } 
     else {

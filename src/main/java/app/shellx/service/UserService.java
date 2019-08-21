@@ -1,15 +1,7 @@
 package app.shellx.service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,11 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.shellx.annotation.EmailExistsException;
-import app.shellx.dao.AuthorityRepository;
-import app.shellx.dao.RoleRepository;
 import app.shellx.dao.UserRepository;
 import app.shellx.dto.UserDto;
-import app.shellx.model.Authority;
 import app.shellx.model.Role;
 import app.shellx.model.User;
 import app.shellx.security.EmailNotFoundException;

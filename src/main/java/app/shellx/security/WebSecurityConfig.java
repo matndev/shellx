@@ -34,6 +34,15 @@
  * des AuthenticationProvider. Le premier AuthenticationProvider qui arrive à authentifier fait sortir de la boucle
  * et annule les test des AuthenticationProvider suivants.
  * 
+ * 
+ * 
+ * A AJOUTER AUTRE PART
+ * 
+ * @Configuration vs @Component
+ * Si une classe est annotée avec @Configuration, alors toutes les méthodes annotées @Bean à l'intérieur
+ * renverront un singleton de la méthode (proxy par CGLIB).
+ * Si elle est annotée @Component, une nouvelle instance de la méthode annotée @Bean sera renvoyée.
+ * 
 */
 
 package app.shellx.security;
@@ -62,21 +71,23 @@ import app.shellx.service.UserService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	UserService userService;
+	private UserService userService;
 	
 	@Autowired
 	private JwtTokenFilter jwtTokenFilter;
 	
-//	@Autowired
-//	private CustomUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter; 
+	@Autowired
+	private CustomUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter; 
 	
 	@Autowired
-	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-
+	private ExceptionTokenVerificationHandlerFilter exceptionTokenVerificationHandlerFilter;
+	
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.httpBasic().disable()
+			.addFilterBefore(exceptionTokenVerificationHandlerFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
 			.sessionManagement()
 	        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -89,13 +100,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated()
 				.and()
 			//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-			.addFilterAt(new CustomUsernamePasswordAuthenticationFilter(authenticationManagerBean()), UsernamePasswordAuthenticationFilter.class)	
-			.formLogin()
+			.addFilterAt(customUsernamePasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)	
+			/*.formLogin()
 				.loginPage("http://localhost:4200/login")//.failureUrl("/login-error")
 				.loginProcessingUrl("/login") 
             	.usernameParameter("email")
 				.successHandler(customAuthenticationSuccessHandler)
-				.and()
+				.and()*/
 			.logout() 
 				.permitAll();
 	}    
@@ -104,6 +115,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authenticationProvider()); // AuthenticationProvider inserted into ProviderManager
 	}
+
 	
     @Bean
     public CustomDaoAuthenticationProvider authenticationProvider() {
@@ -140,7 +152,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",
                         		"Access-Control-Request-Headers", "Authorization", "Cache-Control",
                         		"Access-Control-Allow-Origin")
-                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
+                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", "set-cookie")
                 .allowCredentials(true).maxAge(3600);
             }
         };

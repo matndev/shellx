@@ -17,10 +17,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
@@ -71,9 +71,9 @@ public class JwtTokenProvider {
     }
 	
 	public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7, bearerToken.length());
+        String accessToken = req.getHeader("Cookie");
+        if (accessToken != null && accessToken.startsWith("access_token")) {
+            return accessToken.substring(13, accessToken.length());
         }
         return null;
     }
@@ -81,10 +81,13 @@ public class JwtTokenProvider {
 	public boolean validateToken(String token) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            if (claims.getBody().getExpiration().before(new Date())) {
-                return false;
-            }
+//            System.out.println("Timestamp token : "+claims.getBody().getExpiration()+", timestamp: new date : "+new Date());
+//            if (claims.getBody().getExpiration().before(new Date())) {
+//                return false;
+//            }
             return true;
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtException(null, null, "Token expired");
         } catch (JwtException | IllegalArgumentException e) {
             throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
         }

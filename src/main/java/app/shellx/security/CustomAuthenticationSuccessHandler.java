@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -17,19 +20,35 @@ import org.springframework.stereotype.Component;
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
 	@Autowired
-	JwtTokenProvider jwtTokenProvider;
+	private JwtTokenProvider jwtTokenProvider;
+	
+	private Logger log = LogManager.getLogger(CustomAuthenticationSuccessHandler.class.getName());
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
+		
+		log.error("#DEBUG : Authentication successed");
 		
 		// Token doesn't exist so it is a successful authentication by form login
 		if (jwtTokenProvider.resolveToken(request) == null) {
 			
 			System.out.println("JWT Token creation");
 			List<String> authorities = authentication.getAuthorities().stream().map(e -> e.getAuthority()).collect(Collectors.toList());
+			
+			System.out.println("Username : "+authentication.getName());
+			authorities.forEach(System.out::println);
+			
 			String jwtToken = jwtTokenProvider.createToken(authentication.getName(), authorities);
-			response.setHeader("Authorization", jwtToken);
+			log.info("Contenu token créé "+jwtToken);
+			
+			final Cookie cookie = new Cookie("access_token", jwtToken);
+			cookie.setSecure(false); // a mettre en commentaire si ca marche pas
+			cookie.setHttpOnly(true);
+			cookie.setMaxAge(3600*24);
+			response.addCookie(cookie);
+			
+//			response.setHeader("Authorization", jwtToken);
 		}
 	}
 

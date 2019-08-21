@@ -98,15 +98,7 @@ public class CustomDaoAuthenticationProvider extends AbstractUserDetailsAuthenti
 			throws AuthenticationException {
 		prepareTimingAttackProtection();
 		try {
-			//System.out.println("Authentification : email : "+email);
 			UserDetails loadedUser = ((UserService) this.getUserDetailsService()).loadUserByEmail(email);
-			System.out.println("Authentification : email : "+loadedUser.getUsername());
-			// DEBUG
-			/*System.out.println(loadedUser.toString());
-			if (loadedUser == null) {
-				throw new InternalAuthenticationServiceException(
-						"UserDetailsService returned null, which is an interface contract violation");
-			}*/
 			return loadedUser;
 		}
 		/*catch (UsernameNotFoundException ex) {
@@ -134,6 +126,8 @@ public class CustomDaoAuthenticationProvider extends AbstractUserDetailsAuthenti
 	@Override
 	protected Authentication createSuccessAuthentication(Object principal,
 			Authentication authentication, UserDetails user) {
+		//DEBUG
+		System.out.println("createSuccessAuth username 1 : "+user.getUsername());
 		boolean upgradeEncoding = this.userDetailsPasswordService != null
 				&& this.passwordEncoder.upgradeEncoding(user.getPassword());
 		if (upgradeEncoding) {
@@ -141,7 +135,9 @@ public class CustomDaoAuthenticationProvider extends AbstractUserDetailsAuthenti
 			String newPassword = this.passwordEncoder.encode(presentedPassword);
 			user = this.userDetailsPasswordService.updatePassword(user, newPassword);
 		}
-		return super.createSuccessAuthentication(principal, authentication, user);
+		Authentication auth = super.createSuccessAuthentication(principal, authentication, user);
+		System.out.println("createSuccessAuth username 2 : "+auth.getPrincipal());
+		return auth;
 	}
 
 	private void prepareTimingAttackProtection() {

@@ -3,6 +3,7 @@ import { User } from 'src/app/shared/models/user.model';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class AuthenticationService {
   //user: User;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private cookieService: CookieService
   ) { }
 
   isAuthenticated() {
@@ -46,14 +48,16 @@ export class AuthenticationService {
   }
 
   login(credentials, callback) {
-    this.http.post(this.url+'/login', credentials).subscribe(response => {
-      if (response['username']) {
-          console.log(response['username']);
-          this.authenticated = true;
-      } else {
-          console.log("Authentication failed");
-          this.authenticated = false;
-      }
+    this.http.post(this.url+'/login', credentials, { observe: 'response', withCredentials: true }).subscribe(response => {
+      // if (response['username']) {
+      //     console.log(response['username']);
+      //     this.authenticated = true;
+      // } else {
+      //     console.log("Authentication failed");
+      //     this.authenticated = false;
+      // }
+      //response.headers ? console.log("cookie présent") : console.log("Cookie non présent");
+
       return callback && callback();
   });
   }
