@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,4 +93,13 @@ public class JwtTokenProvider {
             throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
         }
     }
+	
+	public Cookie createCookieForToken(String token) {
+	     final Cookie newCookie = new Cookie("access_token", token);
+		 newCookie.setSecure(false); // a mettre en commentaire si ca marche pas
+		 newCookie.setHttpOnly(true);
+		 newCookie.setMaxAge(3600*24);
+		 newCookie.setPath("/");
+		 return newCookie;
+	}
 }

@@ -42,10 +42,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 			String jwtToken = jwtTokenProvider.createToken(authentication.getName(), authorities);
 			log.info("Contenu token créé "+jwtToken);
 			
-			final Cookie cookie = new Cookie("access_token", jwtToken);
-			cookie.setSecure(false); // a mettre en commentaire si ca marche pas
-			cookie.setHttpOnly(true);
-			cookie.setMaxAge(3600*24);
+			final Cookie cookie = jwtTokenProvider.createCookieForToken(jwtToken);
 			response.addCookie(cookie);
 			
 //			response.setHeader("Authorization", jwtToken);
