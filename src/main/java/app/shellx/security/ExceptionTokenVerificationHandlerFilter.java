@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -40,6 +41,13 @@ public class ExceptionTokenVerificationHandlerFilter extends OncePerRequestFilte
         		message = "access-denied";
         	}
             
+        	// if token is expired we delete the old cookie by setting 0 value inside it
+			final Cookie newCookie = new Cookie("access_token", "");
+			newCookie.setSecure(false); // a mettre en commentaire si ca marche pas
+			newCookie.setHttpOnly(true);
+			newCookie.setMaxAge(0);
+			newCookie.setPath("/");
+			response.addCookie(newCookie);
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.getWriter().write(convertObjectToJson(message));
     }
