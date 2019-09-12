@@ -36,6 +36,7 @@ app\shellx\model\Role.class
 app\shellx\security\EmailNotFoundException.class
 app\shellx\annotation\EmailExistsException.class
 app\shellx\security\CustomDaoAuthenticationProvider.class
+app\shellx\security\ExceptionTokenVerificationHandlerFilter.class
 app\shellx\annotation\PasswordMatchesValidator.class
 app\shellx\model\User.class
 app\shellx\security\CorsFilter.class

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { AuthenticationService } from './modules/authentication/authentication/authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +7,7 @@ import { AuthenticationService } from './modules/authentication/authentication/a
 })
 export class AppComponent {
 
-  constructor(
-    authenticationService: AuthenticationService
-    ) {
-      /*authenticationService.authenticate(undefined, undefined);*/
-      console.log(authenticationService.isAuthenticated());
-  }
+  constructor() {}
 
   /*authenticated() {
     return authenticationService.authenticated;

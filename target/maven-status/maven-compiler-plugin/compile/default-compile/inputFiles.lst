@@ -1,5 +1,6 @@
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\dto\UserDto.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\security\EmailNotFoundException.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\security\ExceptionTokenVerificationHandlerFilter.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\security\JwtTokenUtil.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\model\User.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\service\MessageServiceImpl.java

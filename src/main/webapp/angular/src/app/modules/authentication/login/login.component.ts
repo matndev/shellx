@@ -20,13 +20,12 @@ export class LoginComponent implements OnInit {
   constructor(
       private formBuilder: FormBuilder,
       private authenticationService: AuthenticationService,
-      private router: Router,
-      private cookieService: CookieService
+      private router: Router
   ) { 
       this.loginForm = this.formBuilder.group({
           email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
           password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]],
-          passwordMatching: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]]
+          matchingPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]]
       }, { validators: passwordMatchingValidator });
   }
 
@@ -50,7 +49,7 @@ export class LoginComponent implements OnInit {
 
     this.authenticationService.login(credentials, () => {
       this.router.navigateByUrl('/');
-  });
+    });
 
     //this.loginForm.reset();
   }

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, first } from 'rxjs/operators';
 import { Message } from 'src/app/shared/models/content/message.model';
 import { Room } from 'src/app/shared/models/content/room.model';
 import { Router } from '@angular/router';
+import { SocketClientService } from 'src/app/core/websocket/socket-client.service';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -21,7 +22,8 @@ export class RoomService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private socketClient: SocketClientService
   ) { }
 
   getRoom(id: string): Observable<HttpResponse<Room>> {
@@ -50,4 +52,15 @@ export class RoomService {
     return throwError(
       'Something bad happened; please try again later.');
   };
+
+  public findAll(): Observable<Message[]> {
+    return this.socketClient
+      .onMessage('/app/message/get/all')
+      .pipe(first(), map(messages => messages.map(RoomService.getMessages)));
+  }
+
+  private static getMessages(message: any): Message {
+    const postedAt = new Date(message['postedAt']);
+    return {...message, postedAt};
+  }  
 }

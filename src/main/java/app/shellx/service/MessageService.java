@@ -9,6 +9,8 @@ public interface MessageService {
 
 	public Message add(MessageDto messageDto);
 	
+	public List<Message> findAll();
+	
 	public Message findById(long id);
 	
 	public void update(Message message);

@@ -5,12 +5,12 @@
         <div *ngIf="loginForm.get('email').hasError('required')">Email required</div>
         <div *ngIf="loginForm.get('email').hasError('email')">Email format is not correct</div>
         <div *ngIf="loginForm.get('password').hasError('required')">Password required</div>
-        <div *ngIf="loginForm.get('password').hasError('minlength')">Password must be at least 30 characters</div>
+        <div *ngIf="loginForm.get('password').hasError('minlength')">Password must be at least 8 characters</div>
         <div *ngIf="loginForm.get('password').hasError('maxlength')">Password must not exceed 30 characters</div>
-        <div *ngIf="loginForm.get('passwordMatching').hasError('required')">Confirmation password required</div>
-        <div *ngIf="loginForm.get('passwordMatching').hasError('minlength')">Password must be at least 30 characters</div>
-        <div *ngIf="loginForm.get('passwordMatching').hasError('maxlength')">Password must not exceed 30 characters</div>
-        <div *ngIf="loginForm.errors?.passwordMatching && (loginForm.touched || loginForm.dirty)">Passwords are not matching</div>
+        <div *ngIf="loginForm.get('matchingPassword').hasError('required')">Confirmation password required</div>
+        <div *ngIf="loginForm.get('matchingPassword').hasError('minlength')">Password must be at least 8 characters</div>
+        <div *ngIf="loginForm.get('matchingPassword').hasError('maxlength')">Password must not exceed 30 characters</div>
+        <div *ngIf="loginForm.errors?.matchingPassword && (loginForm.touched || loginForm.dirty)">Passwords are not matching</div>
     </div>  
 
     <div>
@@ -25,10 +25,10 @@
 
     <div>
         <label>Confirm password * </label>
-        <input type="password" formControlName="passwordMatching" required/> 
+        <input type="password" formControlName="matchingPassword" required/> 
     </div>
 
-    <button class="button" type="submit" [disabled]="!loginForm.valid">Log in</button>
+    <button class="button" type="submit" [disabled]="!loginForm.valid">Sign in</button>
   
 </form>
 

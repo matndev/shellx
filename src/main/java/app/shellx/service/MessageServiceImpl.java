@@ -47,6 +47,11 @@ public class MessageServiceImpl implements MessageService {
 	}
 	
 	@Transactional(readOnly = true)
+	public List<Message> findAll() {
+		return this.messageRepository.findAll();
+	}
+	
+	@Transactional(readOnly = true)
 	public Message findById(long id) {
 		return this.messageRepository.findByMessageIdAndMessageEnabledTrue(id);
 	}

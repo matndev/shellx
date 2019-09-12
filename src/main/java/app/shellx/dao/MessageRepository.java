@@ -1,5 +1,7 @@
 package app.shellx.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -11,6 +13,8 @@ import app.shellx.model.Message;
 
 @Repository
 public interface MessageRepository extends CrudRepository<Message, Long> {
+	
+	public List<Message> findAll();
 	
 	public Message findById(long id);
 	

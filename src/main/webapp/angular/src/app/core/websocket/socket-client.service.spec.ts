@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LoginService } from './login.service';
+import { SocketClientService } from './socket-client.service';
 
-describe('LoginService', () => {
+describe('SocketClientService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: LoginService = TestBed.get(LoginService);
+    const service: SocketClientService = TestBed.get(SocketClientService);
     expect(service).toBeTruthy();
   });
 });
