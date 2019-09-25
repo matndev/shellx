@@ -27,10 +27,6 @@ export class MessageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (!this.authenticationService.isAuthenticated()) {
-      console.log("message service : false"); 
-      //this.router.navigateByUrl('/login');
-    }
   }
 
   setMessage(message: Message) {

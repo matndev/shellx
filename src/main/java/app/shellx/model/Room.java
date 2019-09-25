@@ -49,12 +49,12 @@ public class Room implements Serializable {
 	protected boolean modePrivate;
 	
 	@JsonManagedReference
-	@OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="messageRoom")
+	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="messageRoom")
 	@Where(clause = "messages_enabled = true")
 	protected Set<Message> messages;
 	
-	@Transient
-	protected List<User> users;
+	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="room")
+	protected Set<RoomUser> users;
 	
 	public Room() {
 		
@@ -110,12 +110,35 @@ public class Room implements Serializable {
 		this.messages = messages;
 	}
 
-	public List<User> getUsers() {
+	public Set<RoomUser> getUsers() {
 		return users;
 	}
 
-	public void setUsers(List<User> users) {
+	public void setUsers(Set<RoomUser> users) {
 		this.users = users;
 	}
 	
+	public String toString() {
+		
+//		String messagesToString = "";
+//		String usersToString = "";
+//		for (Message message : this.messages) {
+//			messagesToString += message.getMessageContent()+" ";
+//		}
+//		for (RoomUser user : this.users) {
+//			usersToString += user.getUser().+" ";
+//		}
+		this.messages.forEach(message -> System.out.println(message.toString()));
+		this.users.forEach(user -> System.out.println(user.toString()));
+		
+		return "ROOM toString() method : \n"+
+				"ID : "+this.id+"\n"+
+				"NAME : "+this.name+"\n"+
+				"ROOM ADMIN : "+this.roomAdmin+"\n"+
+				"DATE CREATION : "+this.dateCreation+"\n"+
+				"ENABLED : "+this.enabled+"\n"+
+				"PRIVATE MODE : "+this.modePrivate+"\n"+
+				"MESSAGES [] : "+this.messages.size()+"\n"+
+				"USERS [] : "+this.users.size()+"\n";
+	}
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from 'src/app/shared/models/user.model';
+import { UserLogin } from 'src/app/shared/models/authentication/user-login.model';
 import { Observable, of, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';

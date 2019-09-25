@@ -115,4 +115,8 @@ public class Message implements Serializable {
 		this.messageEnabled = messageEnabled;
 	}
 	
+	public String toString() {
+		return messageContent;
+	}
+	
 }

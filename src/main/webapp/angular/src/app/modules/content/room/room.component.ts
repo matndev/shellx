@@ -5,7 +5,7 @@ import { Message } from 'src/app/shared/models/content/message.model';
 import { Room } from 'src/app/shared/models/content/room.model';
 import { Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { User } from 'src/app/shared/models/authentication/user.model';
 
 @Component({
   selector: 'app-room',
@@ -15,12 +15,13 @@ import { map } from 'rxjs/operators';
 export class RoomComponent implements OnInit {
 
   messages: Message[] = []; 
-  room: Room;
+  room: Room = null;
   headersResp: string[];
   sendMessageForm;
+  private users: User[] = [];
+  private rooms: Room[] = [];
 
   constructor(
-    private authenticationService: AuthenticationService,
     private roomService: RoomService,
     private formBuilder: FormBuilder,
     private router: Router
@@ -30,41 +31,54 @@ export class RoomComponent implements OnInit {
     });
   }
 
+  // Get first rooms menu by user id with small details (id, name, enabled, private, room admin)
+  // Get then informations related to the current room (users, messages)
+
   ngOnInit() {
-    // if (this.authenticationService.isAuthenticated()) { // ATTENTION METTRE ! devant
-    //   this.router.navigateByUrl('/');
-    // } 
-    // else {
-    //   console.log("Room Component : message service : false"); 
-    //   //this.router.navigateByUrl('/login');
-      
-    //   // EXAMPLE
-    //   this.roomService.getRoomWithMessages("1").subscribe(resp => {  
-   
-    //       const keys = resp.headers.keys();
-    //       this.headersResp = keys.map(key => `${key}: ${resp.headers.get(key)}`);
+    const resGetRooms = this.getRooms();
+    resGetRooms.then((result) => {
+      result.body.forEach(element => {
+        this.rooms.push(new Room(parseInt(element['id']),
+                        element['name'],
+                        element['roomAdmin'],
+                        element['enabled'],
+                        element['modePrivate']
+                        ));
+      });
+    })
+    .then(() => {
+      var idRoom = this.rooms[0].getId();
+      console.log(idRoom);
+      this.getRoomById(1);
+    });
+    
+    // this.getRoomInformations();
+    // this.getUsersRoom(1);
+    // this.roomService
+    //   .channelSubscription(1)
+    //   // .pipe(map(messages => messages.sort(RoomComponent.descendingByPostedAt)))
+    //   .subscribe(messages => this.messages = messages); 
+  }
 
-    //       this.room = new Room(resp.body['name'], resp.body['roomAdmin'], resp.body['enabled'], resp.body['modePrivate']);
-
-    //       resp.body['messages'].forEach(element => {
-    //             this.messages.push(new Message(element['messageAuthor'],
-    //             element['messageContent'],
-    //             element['messageDate'],
-    //             element['messageEnabled'],
-    //             element['messageReceiver'],
-    //             element['messageVisible']));
-    //       });
+  public getRoomById(id: number) {
+    this.roomService.getRoom(id).subscribe(data => {
+      console.log(data.body);
+      //this.room = new Room(null, data.body['name'], data.body['roomAdmin'], data.body['enabled'], data.body['modePrivate']);
+    });
+  } 
 
 
-    //   });      
-    // } 
-    // this.roomService.getRoomWithMessages("1").subscribe(data => {
-    //   this.room = new Room(data.body['name'], data.body['roomAdmin'], data.body['enabled'], data.body['modePrivate']);
-    // });
-    this.roomService
-      .findAll()
-      // .pipe(map(messages => messages.sort(RoomComponent.descendingByPostedAt)))
-      .subscribe(messages => this.messages = messages);      
+
+  async getRooms() : Promise<any> {
+    return await this.roomService.getRoomsByUserId("1").toPromise();
+  }  
+
+  public getUsersRoom(id: number) {
+    this.roomService.getUsersByRoomId(id).subscribe(data => {
+      data.body.forEach(element => {
+            this.users.push(new User(element['username']));
+      });
+    });
   }
 
   // public static descendingByPostedAt(message1: Message, message2: Message): number {
@@ -72,7 +86,21 @@ export class RoomComponent implements OnInit {
   // }
 
   onSubmit() {
+    this.createMessage(this.sendMessageForm);
+  }
 
+  public createMessage(data: any) : void {
+    // A MODIFIER
+    //var date = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+    var date = new Date();
+    let newMessage = new Message( new User("pierrho", "", 1),
+                                  data.get("content").value,
+                                  date,
+                                  true,
+                                  null,
+                                  true,
+                                  this.room.getId());
+    this.roomService.save(newMessage);
   }
 }
 

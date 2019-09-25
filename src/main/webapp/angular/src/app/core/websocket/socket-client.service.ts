@@ -24,9 +24,11 @@ export class SocketClientService implements OnDestroy {
   private state: BehaviorSubject<SocketClientState>
 
   constructor() { 
+    console.log("Connection Websocket beginning");
     this.client = Stomp.over(function() { return new SockJS("http://localhost:8086/ws")});
     this.state = new BehaviorSubject<SocketClientState>(SocketClientState.ATTEMPTING);
     this.client.connect({}, () => {
+      console.log("connexion established");
       this.state.next(SocketClientState.CONNECTED);
     });
   }

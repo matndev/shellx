@@ -1,6 +1,12 @@
 <div *ngIf="room">{{ room.getName() }}</div>
+<div *ngFor="let user of users">
+    {{ user.getUsername() }}
+</div>
 <div *ngFor="let message of messages">
     <app-message [message]="message"></app-message>
+</div>
+<div *ngFor="let room of rooms">
+    {{ room.getName() }}
 </div>
 
 <form ngNativeValidate [formGroup]="sendMessageForm" (ngSubmit)="onSubmit()">
@@ -9,7 +15,7 @@
         <input type="text" formControlName="content" required/>       
     </div>
 
-    <button class="button" type="submit">Send</button>
+    <button class="button" type="submit" [disabled]="!sendMessageForm.valid" >Send</button>
   
 </form>
 

@@ -3,6 +3,8 @@ package app.shellx.dto;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import app.shellx.model.Room;
+
 public class RoomDto implements Serializable {
 	
 	/**
@@ -27,6 +29,13 @@ public class RoomDto implements Serializable {
 		this.name = name;
 		this.roomAdmin = roomAdmin;
 		this.modePrivate = modePrivate;
+	}
+	
+	public RoomDto(Room room) {
+		this.id = room.getId();
+		this.name = room.getName();
+		this.roomAdmin = room.getRoomAdmin();
+		this.modePrivate = room.isModePrivate();
 	}
 	
 	public int getId() {

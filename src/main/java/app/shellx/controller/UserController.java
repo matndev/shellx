@@ -78,9 +78,9 @@ public class UserController {
 		System.out.println("Utilisateur : "+user.getUsername());
 	}
 	
-	@RequestMapping(value="/login3/{id}", method=RequestMethod.GET, produces="application/json")
-	public UserDto login(@PathVariable("id") long id) {
-		UserDto userDto = this.userService.loadUserById(id);
-		return userDto;
-	}
+//	@RequestMapping(value="/login3/{id}", method=RequestMethod.GET, produces="application/json")
+//	public UserDto login(@PathVariable("id") long id) {
+//		UserDto userDto = this.userService.loadUserById(id);
+//		return userDto;
+//	}
 }

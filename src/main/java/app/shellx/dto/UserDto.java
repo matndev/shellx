@@ -41,7 +41,7 @@ public class UserDto {
 	public UserDto(User user) {
 		this.id = user.getId();
 		this.username = user.getUsername();
-		this.email = user.getEmail();
+		//this.email = user.getEmail();
 		this.avatar = user.getAvatar();
 		this.role = user.getRole().getId();
 	}

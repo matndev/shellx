@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +20,7 @@ import app.shellx.model.Message;
 import app.shellx.service.MessageService;
 
 @RestController
-@RequestMapping("/message")
+//@RequestMapping("/message")
 public class MessageController {
 
 	@Autowired
@@ -27,15 +29,23 @@ public class MessageController {
 	
 	@SubscribeMapping("/message/get/all")
 	public List<Message> findAll() {
+		System.out.println("### LOG : Inside subscribemapping message/get/all");
 		return this.messageService.findAll();
 	}
 	
-	
-	@PostMapping(path="/add", consumes="application/json", produces="application/json")
-	public Message add(@RequestBody MessageDto messageDto) {
+	@MessageMapping("/add")
+	@SendTo("/topic/message/get/all")
+	public void add(MessageDto messageDto) {
 		System.out.println("### LOG : Message sent from controller to MessageService");
-		return this.messageService.add(messageDto);
-	}
+		this.messageService.add(messageDto);
+	}	
+	
+//	@PostMapping(path="/add", consumes="application/json", produces="application/json")
+//	public Message add(@RequestBody MessageDto messageDto) {
+//		System.out.println("### LOG : Message sent from controller to MessageService");
+//		return this.messageService.add(messageDto);
+//	}
+	
 	
 /*	@RequestMapping("/add")
 	public void add() {

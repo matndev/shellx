@@ -42,8 +42,8 @@ public class User implements UserDetails {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="user_seq")
-	//@SequenceGenerator(name="user_seq", sequenceName="")
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="user_seq")
+//	@SequenceGenerator(name="user_seq", sequenceName="")
 	@Column(name = "users_id", updatable = false, nullable = false)
 	private long id;
 	@Column(name = "users_username", nullable = false, unique = true)
@@ -73,7 +73,11 @@ public class User implements UserDetails {
 	@Transient
 	private Set<Authority> authorities;
 	
+	@OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="user")
+	private Set<RoomUser> rooms;
+
 	
+
 	public User() {
 		
 	}
@@ -158,5 +162,17 @@ public class User implements UserDetails {
 	
 	public long getId() {
 		return id;
+	}
+	
+	public Set<RoomUser> getRooms() {
+		return rooms;
+	}
+
+	public void setRooms(Set<RoomUser> rooms) {
+		this.rooms = rooms;
+	}
+	
+	public String toString() {
+		return username;
 	}
 }

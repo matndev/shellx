@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { passwordMatchingValidator } from '../../../validator/password-matching-validator';
-import { User } from 'src/app/shared/models/user.model';
+import { UserLogin } from 'src/app/shared/models/authentication/user-login.model';
 import { AuthenticationService } from '../authentication/authentication.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
@@ -15,7 +15,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class LoginComponent implements OnInit {
 
   loginForm;
-  user: User;
+  user: UserLogin;
 
   constructor(
       private formBuilder: FormBuilder,

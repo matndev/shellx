@@ -1,7 +1,5 @@
-export class User {
+export class UserLogin {
 
-    //private id: number;
-    //private username: string;
     private email: string;
     private password: string;
     private matchingPassword: string;
@@ -23,15 +21,15 @@ export class User {
         this.matchingPassword = p_matchingPassword;        
     } 
 
-    getEmail() : string {
+    public getEmail() : string {
         return this.email;
     }
 
-    getPassword() : string {
+    public getPassword() : string {
         return this.password;
     }
 
-    getMatchingPassword() : string {
+    public getMatchingPassword() : string {
         return this.matchingPassword;
     }
 }

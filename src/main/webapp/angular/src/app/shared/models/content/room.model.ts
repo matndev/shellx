@@ -1,5 +1,5 @@
 import { Message } from './message.model';
-import { User } from '../user.model';
+import { User } from '../authentication/user.model';
 
 export class Room {
 
@@ -10,14 +10,16 @@ export class Room {
 	private enabled: boolean;
 	private modePrivate: boolean;
 	private messages: Message[];
-	private users: User[];
+	public users: User[];
 	
-    constructor(name?: string, 
+    constructor(id?: number,
+				name?: string, 
                 roomAdmin?: number, 
                 enabled?: boolean, 
                 modePrivate?: boolean, 
                 messages?: Message[], 
                 users?: User[]) {
+		this.id = id;
         this.name = name;
         this.roomAdmin = roomAdmin;
         this.enabled = enabled;

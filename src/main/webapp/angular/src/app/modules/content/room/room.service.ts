@@ -6,6 +6,7 @@ import { Message } from 'src/app/shared/models/content/message.model';
 import { Room } from 'src/app/shared/models/content/room.model';
 import { Router } from '@angular/router';
 import { SocketClientService } from 'src/app/core/websocket/socket-client.service';
+import { User } from 'src/app/shared/models/authentication/user.model';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -26,14 +27,28 @@ export class RoomService {
     private socketClient: SocketClientService
   ) { }
 
-  getRoom(id: string): Observable<HttpResponse<Room>> {
-    return this.http.get<HttpResponse<Room>>("http://localhost:8086/rooms/"+id, httpOptions);
+  getRoom(id: number): Observable<HttpResponse<Room>> {
+    return this.http.get<HttpResponse<Room>>("http://localhost:8086/rooms/get/"+id, httpOptions);
   }
 
-  getRoomWithMessages(id: string): Observable<HttpResponse<Message[]>> {
-    return this.http.get<HttpResponse<Message[]>>("http://localhost:8086/rooms/c/"+id, httpOptions)
+  // getRoomWithMessages(id: string): Observable<HttpResponse<Message[]>> {
+  //   return this.http.get<HttpResponse<Message[]>>("http://localhost:8086/rooms/c/"+id, httpOptions)
+  //       .pipe(
+  //           catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
+  //       );
+  // }
+
+  public getRoomsByUserId(id: string) : Observable<HttpResponse<Room[]>> {
+    return this.http.get<HttpResponse<Room[]>>("http://localhost:8086/rooms/get/rooms/"+id, httpOptions)
         .pipe(
-            catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
+          catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
+        );
+  }
+
+  public getUsersByRoomId(id: number) : Observable<HttpResponse<User[]>> {
+    return this.http.get<HttpResponse<User[]>>("http://localhost:8086/rooms/get/users/"+id, httpOptions)
+        .pipe(
+          catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
         );
   }
 
@@ -53,9 +68,9 @@ export class RoomService {
       'Something bad happened; please try again later.');
   };
 
-  public findAll(): Observable<Message[]> {
+  public channelSubscription(id: number): Observable<Message[]> {
     return this.socketClient
-      .onMessage('/app/message/get/all')
+      .onMessage('/topic/room/'+id)
       .pipe(first(), map(messages => messages.map(RoomService.getMessages)));
   }
 
@@ -63,4 +78,8 @@ export class RoomService {
     const postedAt = new Date(message['postedAt']);
     return {...message, postedAt};
   }  
+
+  public save(message: Message) : void {
+    this.socketClient.send("/app/message/add", message);
+  }
 }

@@ -29,7 +29,7 @@ public class MessageServiceImpl implements MessageService {
 	}*/
 	
 	@Transactional
-	public Message add(MessageDto messageDto) throws NullPointerException {
+	public void add(MessageDto messageDto) throws NullPointerException {
 		Message message = new Message();
 		message.setMessageAuthor(messageDto.getMessageAuthor());
 		message.setMessageReceiver(messageDto.getMessageReceiver());
@@ -38,11 +38,12 @@ public class MessageServiceImpl implements MessageService {
 		message.setMessageVisible(true);
 		message.setMessageEnabled(true);
 		try {
-			Room room = roomService.findCompleteRoomById(messageDto.getMessageRoom());
+			Room room = roomService.findRoomById(messageDto.getMessageRoom());
 			message.setMessageRoom(room);
-			return this.messageRepository.save(message);
+			this.messageRepository.save(message);
 		} catch(Exception e) {
-			return null;
+			// LOGGER
+			System.out.println("Error : message can't be saved");
 		}
 	}
 	
