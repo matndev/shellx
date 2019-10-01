@@ -37,14 +37,15 @@ public class MessageServiceImpl implements MessageService {
 		message.setMessageDate(messageDto.getMessageDate());
 		message.setMessageVisible(true);
 		message.setMessageEnabled(true);
-		try {
-			Room room = roomService.findRoomById(messageDto.getMessageRoom());
-			message.setMessageRoom(room);
-			this.messageRepository.save(message);
-		} catch(Exception e) {
-			// LOGGER
-			System.out.println("Error : message can't be saved");
-		}
+		message.setMessageRoom(messageDto.getMessageRoom());
+//		try {
+//			Room room = roomService.findRoomById(messageDto.getMessageRoom());
+//			message.setMessageRoom(room);
+//			this.messageRepository.save(message);
+//		} catch(Exception e) {
+//			// LOGGER
+//			System.out.println("Error : message can't be saved");
+//		}
 	}
 	
 	@Transactional(readOnly = true)

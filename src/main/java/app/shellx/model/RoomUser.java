@@ -2,15 +2,21 @@ package app.shellx.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import app.shellx.dto.UserDto;
 
 @Entity
+@Table(name="rooms_users")
 public class RoomUser implements Serializable {
 
 	/**
@@ -18,15 +24,25 @@ public class RoomUser implements Serializable {
 	 */
 	private static final long serialVersionUID = 2891938868124560462L;
 	
-	@Id
-	@ManyToOne
+	@EmbeddedId
+	RoomUserId id;	
+	
+	// MapsId link to composite key in RoomUserId.java
+	
+	@MapsId(value = "roomId")
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="rooms_id")
 	private Room room; // int
-	@Id
-	@ManyToOne
+	
+	@MapsId(value = "userId")	
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="users_id")
-	private User user; // long
+	private User user; // long	
+	
 	private int role;
+	
+	@Transient
+	private UserDto userDto;
 	
 	RoomUser() {
 		
@@ -38,7 +54,9 @@ public class RoomUser implements Serializable {
 		this.role = role;
 	}
 
+	
 	public Room getRoom() {
+		room.setUsers(null);
 		return room;
 	}
 
@@ -60,6 +78,14 @@ public class RoomUser implements Serializable {
 
 	public void setRole(int role) {
 		this.role = role;
+	}
+
+	public UserDto getUserDto() {
+		return userDto;
+	}
+
+	public void setUserDto(UserDto userDto) {
+		this.userDto = userDto;
 	}
 
 }

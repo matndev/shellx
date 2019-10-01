@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.shellx.dao.RoleRepository;
-import app.shellx.model.Authority;
 import app.shellx.model.Role;
 
 @Service

@@ -17,7 +17,6 @@ import app.shellx.dao.UserRepository;
 import app.shellx.dto.RoomDto;
 import app.shellx.dto.UserDto;
 import app.shellx.model.Role;
-import app.shellx.model.Room;
 import app.shellx.model.RoomUser;
 import app.shellx.model.User;
 import app.shellx.security.EmailNotFoundException;
@@ -37,6 +36,7 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByUsername(username);
         Role role = user.getRole();
         user.setAuthorities(role.getAuthorities());
+        
         return user;
 
     }
@@ -48,6 +48,7 @@ public class UserService implements UserDetailsService {
     	User user = userRepository.findByEmail(email);
         Role role = user.getRole();
         user.setAuthorities(role.getAuthorities());
+        System.out.println("####### DEBUG : "+user.getId());
         return user;
         
     } 

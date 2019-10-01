@@ -13,12 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.springframework.transaction.annotation.Transactional;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "roles")
@@ -36,7 +34,7 @@ public class Role implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="role")
 	private Set<User> users;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) // EAGER
     @JoinTable(
             name = "roles_authorities", 
             joinColumns = { @JoinColumn(name = "roles_id") }, 

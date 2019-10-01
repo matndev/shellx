@@ -1,25 +1,33 @@
 package app.shellx.service;
 
-import java.util.ArrayList;
+import java.security.Principal;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.shellx.dao.RoomRepository;
+import app.shellx.dao.RoomUserRepository;
 import app.shellx.dto.RoomDto;
 import app.shellx.dto.UserDto;
 import app.shellx.model.Room;
 import app.shellx.model.RoomUser;
+import app.shellx.model.RoomUserId;
+import app.shellx.model.User;
 
 @Service
 public class RoomService {
 
 	@Autowired
 	private RoomRepository roomRepository;
+	
+	@Autowired
+	private RoomUserRepository roomUserRepository;
 	
 	@Transactional
 	public Room add(Room room) {
@@ -28,8 +36,16 @@ public class RoomService {
 	
 	// GET Room with all messages
 	@Transactional(readOnly = true)
-	public Room findRoomById(int id) {
-		return this.roomRepository.findById(id);
+	public Room findRoomById(int id, Authentication authentication) {
+
+		User user = (User) authentication.getPrincipal();		
+		RoomUserId compKey = new RoomUserId(id, user.getId());
+		if (this.roomUserRepository.existsById(compKey)) {
+			Room room = this.roomRepository.findById(id);	
+			room.setUsers(null);
+			return room;
+		}
+		else { return null; }
 	}
 	
 	// GET Room only

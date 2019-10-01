@@ -2,7 +2,6 @@ package app.shellx.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,14 +11,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Where;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -48,8 +48,13 @@ public class Room implements Serializable {
 	@Column(name="rooms_mode_private")
 	protected boolean modePrivate;
 	
-	@JsonManagedReference
-	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="messageRoom")
+	//@JsonManagedReference
+//	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="messageRoom")
+	
+//	orphanRemoval (ORM-specific func) :
+//	"child" entity is removed when it's no longer referenced from the "parent" entity
+	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="messages_id_room")
 	@Where(clause = "messages_enabled = true")
 	protected Set<Message> messages;
 	
@@ -60,11 +65,11 @@ public class Room implements Serializable {
 		
 	}
 	
-	public Room(String name, int roomAdmin, boolean modePrivate) {
-		this.name = name;
-		this.roomAdmin = roomAdmin;
-		this.modePrivate = modePrivate;
-	}
+//	public Room(String name, int roomAdmin, boolean modePrivate) {
+//		this.name = name;
+//		this.roomAdmin = roomAdmin;
+//		this.modePrivate = modePrivate;
+//	}
 
 	public int getId() {
 		return id;

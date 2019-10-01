@@ -7,6 +7,9 @@
 
 package app.shellx.security;
 
+import java.util.HashMap;
+
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -21,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.util.Assert;
 
+import app.shellx.model.User;
 import app.shellx.service.UserService;
 
 /**
@@ -126,8 +130,9 @@ public class CustomDaoAuthenticationProvider extends AbstractUserDetailsAuthenti
 	@Override
 	protected Authentication createSuccessAuthentication(Object principal,
 			Authentication authentication, UserDetails user) {
-		//DEBUG
-		System.out.println("createSuccessAuth username 1 : "+user.getUsername());
+//		//DEBUG
+//		System.out.println("createSuccessAuth username 1 : "+user.getUsername());
+		
 		boolean upgradeEncoding = this.userDetailsPasswordService != null
 				&& this.passwordEncoder.upgradeEncoding(user.getPassword());
 		if (upgradeEncoding) {
@@ -135,8 +140,20 @@ public class CustomDaoAuthenticationProvider extends AbstractUserDetailsAuthenti
 			String newPassword = this.passwordEncoder.encode(presentedPassword);
 			user = this.userDetailsPasswordService.updatePassword(user, newPassword);
 		}
+		
+		// Insérer le user ID de "user" dans l'objet authentication (setDetails()) qui contient déjà un objet
+//		Object request = authentication.getDetails();
+//		System.out.println("createSuccessAuthentication user id : ");
+//		System.out.println(((User) user).getId());
+//		HashMap<String, Object> additionalInfos = new HashMap<String, Object>();
+//		additionalInfos.put("request", request);
+//		additionalInfos.put("userId", ((User) user).getId());
+//		((AbstractAuthenticationToken) authentication).setDetails(additionalInfos);
+
+		
 		Authentication auth = super.createSuccessAuthentication(principal, authentication, user);
-		System.out.println("createSuccessAuth username 2 : "+auth.getPrincipal());
+//		HashMap<String, Object> authInfos = (HashMap<String, Object>) auth.getDetails();
+//		System.out.println(authInfos.get("userId"));
 		return auth;
 	}
 

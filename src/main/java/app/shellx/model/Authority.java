@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity
@@ -28,7 +29,7 @@ public class Authority implements GrantedAuthority {
 	/*@Column(name = "authorities_role")
 	private int role;*/
 	
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy="authorities")
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy="authorities") // EAGER
 	private Set<Role> roles;
 	
 	public Authority() {

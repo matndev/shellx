@@ -15,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="messages")
@@ -43,14 +42,15 @@ public class Message implements Serializable {
 	@Column(name="messages_date")
 	private LocalDate messageDate;
 	
-	@JsonBackReference
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "messages_room")
-	private Room messageRoom;
+//	@JsonBackReference
+//	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@JoinColumn(name = "messages_room")
+	@Column(name = "messages_id_room")
+	private int messageRoom;
 
 	public Message() {}
 	
-	public Message(String messageAuthor, String messageReceiver, String messageContent, boolean messageVisible, LocalDate messageDate, Room messageRoom) {
+	public Message(String messageAuthor, String messageReceiver, String messageContent, boolean messageVisible, LocalDate messageDate, int messageRoom) {
 		this.messageAuthor = messageAuthor;
 		this.messageReceiver = messageReceiver;
 		this.messageContent = messageContent;
@@ -99,11 +99,11 @@ public class Message implements Serializable {
 		this.messageVisible = messageVisible;
 	}
 
-	public Room getMessageRoom() {
+	public int getMessageRoom() {
 		return messageRoom;
 	}
 
-	public void setMessageRoom(Room messageRoom) {
+	public void setMessageRoom(int messageRoom) {
 		this.messageRoom = messageRoom;
 	}
 

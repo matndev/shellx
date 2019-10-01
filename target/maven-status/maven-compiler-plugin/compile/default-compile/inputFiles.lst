@@ -12,6 +12,8 @@ C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\security\JwtTok
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\service\AuthorityService.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\controller\LoginController.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\model\Authority.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\model\RoomUserId.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\config\WebSocketConfig.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\service\RoleService.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\dao\AuthorityRepository.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\security\WebConfig.java
@@ -26,6 +28,7 @@ C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\security\Custom
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\dto\MessageDto.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\controller\UserController.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\service\RoomService.java
+C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\model\RoomUser.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\security\CorsFilter.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\annotation\PasswordMatches.java
 C:\Users\kamax\eclipse-workspace\shellx\src\main\java\app\shellx\model\Role.java

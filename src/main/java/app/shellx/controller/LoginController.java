@@ -1,17 +1,8 @@
 package app.shellx.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import app.shellx.dto.UserDto;
-import app.shellx.security.CustomDaoAuthenticationProvider;
-import app.shellx.security.JwtTokenProvider;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)

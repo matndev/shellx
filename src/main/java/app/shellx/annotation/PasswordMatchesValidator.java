@@ -3,8 +3,6 @@ package app.shellx.annotation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import app.shellx.dto.UserDto;
-
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, Object> { 
    
   @Override

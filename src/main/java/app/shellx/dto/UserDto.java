@@ -1,14 +1,10 @@
 package app.shellx.dto;
 
-import java.time.LocalDate;
-
-import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import app.shellx.annotation.PasswordMatches;
 import app.shellx.annotation.ValidEmail;
 import app.shellx.model.User;
 
@@ -44,6 +40,13 @@ public class UserDto {
 		//this.email = user.getEmail();
 		this.avatar = user.getAvatar();
 		this.role = user.getRole().getId();
+	}
+	
+	public UserDto(long id, String username, String avatar, int role) {
+		this.id = id;
+		this.username = username;
+		this.avatar = avatar;
+		this.role = role;
 	}
 
 	public String getUsername() {

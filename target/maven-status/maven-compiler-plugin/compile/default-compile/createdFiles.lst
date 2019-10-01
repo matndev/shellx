@@ -15,6 +15,7 @@ app\shellx\initializer\ShellxInitializer.class
 app\shellx\annotation\PasswordMatches.class
 app\shellx\security\WebSecurityConfig.class
 app\shellx\controller\RoomController.class
+app\shellx\model\RoomUser.class
 app\shellx\dao\MessageRepository.class
 app\shellx\security\InvalidJwtAuthenticationException.class
 app\shellx\controller\MessageController.class
@@ -29,10 +30,12 @@ app\shellx\service\MessageServiceImpl.class
 app\shellx\dao\AuthorityRepository.class
 app\shellx\model\Authority.class
 app\shellx\security\CustomUsernamePasswordAuthenticationFilter.class
+app\shellx\model\RoomUserId.class
 app\shellx\ShellxApp.class
 app\shellx\security\JwtAuthenticationEntryPoint.class
 app\shellx\controller\LoginController.class
 app\shellx\model\Role.class
+app\shellx\config\WebSocketConfig.class
 app\shellx\security\EmailNotFoundException.class
 app\shellx\annotation\EmailExistsException.class
 app\shellx\security\CustomDaoAuthenticationProvider.class
