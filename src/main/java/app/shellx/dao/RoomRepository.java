@@ -12,5 +12,5 @@ public interface RoomRepository extends CrudRepository<Room, Integer> {
 
 	public Set<Room> findByName(String name);
 	
-	public Room findById(int id);
+	public Room findById(long id);
 }

@@ -11,6 +11,8 @@ public interface MessageService {
 	
 	public List<Message> findAll();
 	
+	public List<Message> findAllByRoom(long id);
+	
 	public Message findById(long id);
 	
 	public void update(Message message);

@@ -121,7 +121,7 @@ public class UserService implements UserDetailsService {
     
 	//GET All rooms by user ID
 	@Transactional(readOnly = true)
-	public Set<RoomDto> findRoomsByUserId(int id) {
+	public Set<RoomDto> findRoomsByUserId(long id) {
 		User user = this.userRepository.findById(id);
 		if (user == null) {return null;}
 		else {

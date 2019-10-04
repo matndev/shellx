@@ -3,20 +3,19 @@ import { User } from '../authentication/user.model';
 export class Message {
 
 	private messageId: number;
-	private messageAuthor: User;
-	private messageReceiver: User;
+	private messageAuthor: number;
+	private messageReceiver: number;
     private messageContent: string;
     private messageDate: Date;
 	private messageVisible: boolean;
     private messageEnabled: boolean;
     private messageRoomId: number;
-    //private messageDate: date;
     
-    constructor(messageAuthor?: User, 
+    constructor(messageAuthor?: number, 
                 messageContent?: string,
                 messageDate?: Date,
                 messageEnabled?: boolean,
-                messageReceiver?: User,
+                messageReceiver?: number,
                 messageVisible?: boolean,
                 messageRoomId?: number) {
         this.messageAuthor = messageAuthor;
@@ -32,17 +31,17 @@ export class Message {
         return this.messageId;
     }
 
-    getMessageAuthor(): User {
+    getMessageAuthor(): number {
         return this.messageAuthor;
     }
-    setMessageAuthor(author: User) {
+    setMessageAuthor(author: number) {
         this.messageAuthor = author;
     }
 
-    getMessageReceiver(): User {
+    getMessageReceiver(): number {
         return this.messageReceiver;
     }
-    setMessageReceiver(receiver: User) {
+    setMessageReceiver(receiver: number) {
         this.messageReceiver = receiver;
     }
 
@@ -52,6 +51,13 @@ export class Message {
     setMessageContent(content: string) {
         this.messageContent = content;
     }
+
+    getMessageDate(): Date {
+        return this.messageDate;
+    }
+    setMessageDate(date: Date) {
+        this.messageDate = date;
+    }    
 
     getMessageVisible(): boolean {
         return this.messageVisible;

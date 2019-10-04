@@ -1,0 +1,4 @@
+<app-room (currentRoomEmitter)="setCurrentRoom($event)"></app-room>
+<app-message    [currentRoom]="currentRoom" 
+                [userLogged]="userLogged" >
+</app-message>

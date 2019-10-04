@@ -32,12 +32,12 @@ public class RoomUser implements Serializable {
 	@MapsId(value = "roomId")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="rooms_id")
-	private Room room; // int
+	private Room room;
 	
 	@MapsId(value = "userId")	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="users_id")
-	private User user; // long	
+	private User user;
 	
 	private int role;
 	

@@ -15,21 +15,25 @@ import javax.persistence.Column;
 public class RoomUserId implements Serializable{
 
 	@Column(name="rooms_id")
-	private int roomId; // int
+	private long roomId; // int
 	
 	@Column(name="users_id")
 	private long userId; // long
 
-	public RoomUserId(int roomId, long userId) {
+	public RoomUserId() {
+		
+	}
+	
+	public RoomUserId(long roomId, long userId) {
 		this.roomId = roomId;
 		this.userId = userId;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + roomId;
+		result = prime * result + (int) (roomId ^ (roomId >>> 32));
 		result = prime * result + (int) (userId ^ (userId >>> 32));
 		return result;
 	}

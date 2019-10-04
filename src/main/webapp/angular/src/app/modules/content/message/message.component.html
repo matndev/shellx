@@ -1,1 +1,13 @@
-<p>{{message.messageContent}}</p>
+<div *ngFor="let message of messages">
+    <p>{{message.messageAuthor}} : {{message.messageContent}}</p>
+</div>
+
+<form ngNativeValidate [formGroup]="sendMessageForm" (ngSubmit)="onSubmit()">
+
+    <div>
+        <input type="text" formControlName="content" required/>       
+    </div>
+
+    <button class="button" type="submit" [disabled]="!sendMessageForm.valid" >Send</button>
+  
+</form>

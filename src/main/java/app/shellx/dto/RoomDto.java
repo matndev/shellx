@@ -13,9 +13,9 @@ public class RoomDto implements Serializable {
 	private static final long serialVersionUID = 689488752381752561L;
 	
 
-	protected int id;
+	protected long id;
 	protected String name;
-	protected int roomAdmin;
+	protected long roomAdmin;
 	protected LocalDate dateCreation;
 	protected boolean enabled;
 	protected boolean modePrivate;
@@ -24,7 +24,7 @@ public class RoomDto implements Serializable {
 		
 	}
 	
-	public RoomDto(int id, String name, int roomAdmin, boolean modePrivate) {
+	public RoomDto(long id, String name, long roomAdmin, boolean modePrivate) {
 		this.id = id;
 		this.name = name;
 		this.roomAdmin = roomAdmin;
@@ -38,11 +38,11 @@ public class RoomDto implements Serializable {
 		this.modePrivate = room.isModePrivate();
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	
@@ -54,11 +54,11 @@ public class RoomDto implements Serializable {
 		this.name = name;
 	}
 
-	public int getRoomAdmin() {
+	public long getRoomAdmin() {
 		return roomAdmin;
 	}
 
-	public void setRoomAdmin(int roomAdmin) {
+	public void setRoomAdmin(long roomAdmin) {
 		this.roomAdmin = roomAdmin;
 	}
 

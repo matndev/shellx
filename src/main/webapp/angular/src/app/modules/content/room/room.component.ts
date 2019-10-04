@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { RoomService } from './room.service';
-import { AuthenticationService } from '../../authentication/authentication/authentication.service';
-import { Message } from 'src/app/shared/models/content/message.model';
 import { Room } from 'src/app/shared/models/content/room.model';
 import { Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,12 +12,12 @@ import { User } from 'src/app/shared/models/authentication/user.model';
 })
 export class RoomComponent implements OnInit {
 
-  messages: Message[] = []; 
   room: Room = null;
   headersResp: string[];
   sendMessageForm;
   private users: User[] = [];
   private rooms: Room[] = [];
+  @Output() currentRoomEmitter = new EventEmitter<number>();
 
   constructor(
     private roomService: RoomService,
@@ -35,6 +33,7 @@ export class RoomComponent implements OnInit {
   // Get then informations related to the current room (users, messages)
 
   ngOnInit() {
+    // Get rooms
     const resGetRooms = this.getRooms();
     resGetRooms.then((result) => {
       result.body.forEach(element => {
@@ -47,32 +46,44 @@ export class RoomComponent implements OnInit {
       });
     })
     .then(() => {
+      // Sort rooms by ID
+      this.rooms = this.rooms.sort((first, second) => {
+          console.log("first : "+first.getName()+", second: "+second.getName());
+          if (first.getId() > second.getId()) {
+              return 1;
+          }
+          else {
+              return -1;
+          }
+      });
+    })
+    .then(() => {
+      // Send back first room ID
+      this.currentRoomEmitter.emit(this.rooms[0].getId());
+    })   
+    .then(() => {
+      // Get current room info
       var idRoom = this.rooms[0].getId();
-      console.log(idRoom);
-      this.getRoomById(1);
+      this.getRoomById(idRoom);
     });
-    
-    // this.getRoomInformations();
     // this.getUsersRoom(1);
-    // this.roomService
-    //   .channelSubscription(1)
-    //   // .pipe(map(messages => messages.sort(RoomComponent.descendingByPostedAt)))
-    //   .subscribe(messages => this.messages = messages); 
+ 
   }
-
-  public getRoomById(id: number) {
-    this.roomService.getRoom(id).subscribe(data => {
-      console.log(data.body);
-      //this.room = new Room(null, data.body['name'], data.body['roomAdmin'], data.body['enabled'], data.body['modePrivate']);
-    });
-  } 
-
-
 
   async getRooms() : Promise<any> {
     return await this.roomService.getRoomsByUserId("1").toPromise();
-  }  
+  } 
 
+  public getRoomById(id: number) {
+    this.roomService.getRoom(id).subscribe(data => {
+      this.room = new Room(data.body['id'], data.body['name'], data.body['roomAdmin'], data.body['enabled'], data.body['modePrivate']);
+    });
+  } 
+ 
+
+
+
+  
   public getUsersRoom(id: number) {
     this.roomService.getUsersByRoomId(id).subscribe(data => {
       data.body.forEach(element => {
@@ -85,23 +96,24 @@ export class RoomComponent implements OnInit {
   //   return message2.getMessageDate.getTime() - message1.postedAt.getTime();
   // }
 
-  onSubmit() {
-    this.createMessage(this.sendMessageForm);
-  }
+  // onSubmit() {
+  //   console.log(this.room.getId());
+  //   this.createMessage(this.sendMessageForm);
+  // }
 
-  public createMessage(data: any) : void {
-    // A MODIFIER
-    //var date = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-    var date = new Date();
-    let newMessage = new Message( new User("pierrho", "", 1),
-                                  data.get("content").value,
-                                  date,
-                                  true,
-                                  null,
-                                  true,
-                                  this.room.getId());
-    this.roomService.save(newMessage);
-  }
+  // public createMessage(data: any) : void {
+  //   // A MODIFIER
+  //   //var date = new Date().toJSON().slice(0,10).replace(/-/g,'/');
+  //   // var date = new Date();
+  //   let newMessage = new Message( new User("pierrho", "", 1),
+  //                                 data.get("content").value,
+  //                                 null,
+  //                                 true,
+  //                                 null,
+  //                                 true,
+  //                                 this.room.getId());
+  //   this.roomService.saveNewMessage(newMessage);
+  // }
 }
 
 // ngOnInit() {

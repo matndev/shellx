@@ -1,13 +1,10 @@
 package app.shellx.service;
 
-import java.security.Principal;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,9 +31,9 @@ public class RoomService {
 		return this.roomRepository.save(room);
 	}
 	
-	// GET Room with all messages
+	// GET ROOM / MESSAGES / NO USERS
 	@Transactional(readOnly = true)
-	public Room findRoomById(int id, Authentication authentication) {
+	public Room findRoomById(long id, Authentication authentication) {
 
 		User user = (User) authentication.getPrincipal();		
 		RoomUserId compKey = new RoomUserId(id, user.getId());
@@ -48,16 +45,21 @@ public class RoomService {
 		else { return null; }
 	}
 	
-	// GET Room only
+	// GET ROOM ONLY
 	@Transactional(readOnly = true)
-	public RoomDto findRoomDtoById(int id) {
-		Room room = this.roomRepository.findById(id);
-		return new RoomDto(room.getId(), room.getName(), room.getRoomAdmin(), room.isModePrivate());
+	public RoomDto findRoomDtoById(long id, Authentication authentication) {
+		User user = (User) authentication.getPrincipal();		
+		RoomUserId compKey = new RoomUserId(id, user.getId());
+		if (this.roomUserRepository.existsById(compKey)) {		
+			Room room = this.roomRepository.findById(id);
+			return new RoomDto(room.getId(), room.getName(), room.getRoomAdmin(), room.isModePrivate());
+		}
+		else { return null; }			
 	}
 	
 	//GET All users by room ID
 	@Transactional(readOnly = true)
-	public Set<UserDto> findUsersByRoomId(int id) {
+	public Set<UserDto> findUsersByRoomId(long id) {
 		Room room = this.roomRepository.findById(id);
 		if (room == null) {return null;}
 		else {

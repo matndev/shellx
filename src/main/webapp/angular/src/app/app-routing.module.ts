@@ -3,14 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './modules/authentication/login/login.component';
 import { RegisterComponent } from './modules/authentication/register/register.component';
-import { MessageComponent } from './modules/content/message/message.component';
-import { RoomComponent } from './modules/content/room/room.component';
+import { ChatComponent } from './modules/templates/chat/chat.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'message', component: MessageComponent },
-  { path: 'room', component: RoomComponent }
+  { path: 'login',      component: LoginComponent },
+  { path: 'register',   component: RegisterComponent },
+  // { path: 'room',       component: RoomComponent },
+  { path: 'chat',       component: ChatComponent },
   //{ path: '', redirectTo: '/message', pathMatch: 'full' }
 ];
 

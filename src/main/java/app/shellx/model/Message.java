@@ -3,18 +3,13 @@ package app.shellx.model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name="messages")
@@ -46,11 +41,11 @@ public class Message implements Serializable {
 //	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //	@JoinColumn(name = "messages_room")
 	@Column(name = "messages_id_room")
-	private int messageRoom;
+	private long messageRoom;
 
 	public Message() {}
 	
-	public Message(String messageAuthor, String messageReceiver, String messageContent, boolean messageVisible, LocalDate messageDate, int messageRoom) {
+	public Message(String messageAuthor, String messageReceiver, String messageContent, boolean messageVisible, LocalDate messageDate, long messageRoom) {
 		this.messageAuthor = messageAuthor;
 		this.messageReceiver = messageReceiver;
 		this.messageContent = messageContent;
@@ -99,11 +94,11 @@ public class Message implements Serializable {
 		this.messageVisible = messageVisible;
 	}
 
-	public int getMessageRoom() {
+	public long getMessageRoom() {
 		return messageRoom;
 	}
 
-	public void setMessageRoom(int messageRoom) {
+	public void setMessageRoom(long messageRoom) {
 		this.messageRoom = messageRoom;
 	}
 

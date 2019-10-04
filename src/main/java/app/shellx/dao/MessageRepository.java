@@ -16,6 +16,10 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
 	
 	public List<Message> findAll();
 	
+	@Modifying
+	@Query(nativeQuery = true, value = "SELECT * FROM messages WHERE messages_id_room = :id")
+	public List<Message> findAllByRoom(@Param("id") long id);
+	
 	public Message findById(long id);
 	
 	public Message findByMessageIdAndMessageEnabledTrue(long id);

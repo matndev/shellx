@@ -14,7 +14,7 @@ public class MessageDto implements Serializable {
 	private String messageReceiver;
 	private String messageContent;
 	private LocalDate messageDate;
-	private int messageRoom;
+	private int messageRoomId;
 	
 	public MessageDto() {
 		
@@ -53,10 +53,17 @@ public class MessageDto implements Serializable {
 	}
 
 	public int getMessageRoom() {
-		return messageRoom;
+		return messageRoomId;
 	}
 
-	public void setMessageRoom(int messageRoom) {
-		this.messageRoom = messageRoom;
+	public void setMessageRoom(int messageRoomId) {
+		this.messageRoomId = messageRoomId;
+	}
+	
+	public String toString() {
+		return "MESSAGE toString() : \n"+
+				"Content : " + this.messageContent +"\n"+
+				"Author : " + this.messageAuthor +"\n"+
+				"Room : " + this.messageRoomId;
 	}
 }

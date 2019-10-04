@@ -1,6 +1,5 @@
 package app.shellx.controller;
 
-import java.security.Principal;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,36 +40,25 @@ public class RoomController {
 	}
 	
 	// GET Room with messages
-	@GetMapping(path = {"/get/{id}"}, produces="application/json")
-	public Room findComplete(@PathVariable int id, Authentication authentication) {
+	@GetMapping(path = {"/get/c/{id}"}, produces="application/json")
+	public Room findComplete(@PathVariable long id, Authentication authentication) {
 		return this.roomService.findRoomById(id, authentication);
-//		Room room = this.roomService.findRoomById(id);
-//		Set<RoomUser> roomsUsers = room.getUsers();
-//		boolean isUserOK = roomsUsers.stream().anyMatch(roomUser -> (roomUser.getUser().getUsername().equals(principal.getName())));
-//		System.out.println("User in current room : "+isUserOK);
-//		// trier les infos pour les users de le room (garder que le username, l'avatar et le role)
-//					roomsUsers.forEach(roomUser -> {
-//						roomUser.setUserDto(new UserDto(roomUser.getUser()));
-//					});
-//		if (isUserOK == true) { return room; } else { return null; }
 	}
-	
-	
 	
 	
 	// GET Room only (s = simplified)
-	@GetMapping(path = {"/get/s/{id}"}, produces="application/json")
-	public RoomDto find(@PathVariable int id) {
-		return this.roomService.findRoomDtoById(id);
+	@GetMapping(path = {"/get/{id}"}, produces="application/json")
+	public RoomDto find(@PathVariable long id, Authentication authentication) {
+		return this.roomService.findRoomDtoById(id, authentication);
 	}
 	
 	@GetMapping(path = {"/get/users/{id}"}, produces="application/json")
-	public Set<UserDto> findUsersByRoomId(@PathVariable int id) {
+	public Set<UserDto> findUsersByRoomId(@PathVariable long id) {
 		return this.roomService.findUsersByRoomId(id);
 	}
 	
-	@GetMapping(path = {"/get/rooms/{id}"}, produces="application/json")
-	public Set<RoomDto> findRoomsByUserId(@PathVariable int id) {
+	@GetMapping(path = {"/get/all/{id}"}, produces="application/json")
+	public Set<RoomDto> findRoomsByUserId(@PathVariable long id) {
 		return this.userService.findRoomsByUserId(id);
 	}	
 }

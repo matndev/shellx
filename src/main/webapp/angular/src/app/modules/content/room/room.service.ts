@@ -5,7 +5,6 @@ import { map, catchError, first } from 'rxjs/operators';
 import { Message } from 'src/app/shared/models/content/message.model';
 import { Room } from 'src/app/shared/models/content/room.model';
 import { Router } from '@angular/router';
-import { SocketClientService } from 'src/app/core/websocket/socket-client.service';
 import { User } from 'src/app/shared/models/authentication/user.model';
 
 const httpOptions = {
@@ -23,8 +22,7 @@ export class RoomService {
 
   constructor(
     private http: HttpClient,
-    private router: Router,
-    private socketClient: SocketClientService
+    private router: Router
   ) { }
 
   getRoom(id: number): Observable<HttpResponse<Room>> {
@@ -39,7 +37,7 @@ export class RoomService {
   // }
 
   public getRoomsByUserId(id: string) : Observable<HttpResponse<Room[]>> {
-    return this.http.get<HttpResponse<Room[]>>("http://localhost:8086/rooms/get/rooms/"+id, httpOptions)
+    return this.http.get<HttpResponse<Room[]>>("http://localhost:8086/rooms/get/all/"+id, httpOptions)
         .pipe(
           catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
         );
@@ -68,18 +66,18 @@ export class RoomService {
       'Something bad happened; please try again later.');
   };
 
-  public channelSubscription(id: number): Observable<Message[]> {
-    return this.socketClient
-      .onMessage('/topic/room/'+id)
-      .pipe(first(), map(messages => messages.map(RoomService.getMessages)));
-  }
+  // public channelSubscription(id: number): Observable<Message[]> {
+  //   return this.socketClient
+  //     .onMessage('/topic/room/'+id)
+  //     .pipe(first(), map(messages => messages.map(RoomService.getMessages)));
+  // }
 
-  private static getMessages(message: any): Message {
-    const postedAt = new Date(message['postedAt']);
-    return {...message, postedAt};
-  }  
+  // private static getMessages(message: any): Message {
+  //   const postedAt = new Date(message['postedAt']);
+  //   return {...message, postedAt};
+  // }  
 
-  public save(message: Message) : void {
-    this.socketClient.send("/app/message/add", message);
-  }
+  // public saveNewMessage(message: Message) : void {
+  //   this.socketClient.send("/app/message/add", message);
+  // }
 }

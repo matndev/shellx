@@ -20,7 +20,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="rooms")
@@ -34,13 +33,13 @@ public class Room implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="rooms_id")
-	protected int id;
+	protected long id;
 	@NotNull
 	@NotEmpty
 	@Column(name="rooms_name")
 	protected String name;
 	@Column(name="rooms_admin")
-	protected int roomAdmin;
+	protected long roomAdmin;
 	@Column(name="rooms_date_creation")
 	protected LocalDate dateCreation;
 	@Column(name="rooms_enabled")
@@ -58,6 +57,7 @@ public class Room implements Serializable {
 	@Where(clause = "messages_enabled = true")
 	protected Set<Message> messages;
 	
+	@JsonIgnore
 	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="room")
 	protected Set<RoomUser> users;
 	
@@ -71,7 +71,7 @@ public class Room implements Serializable {
 //		this.modePrivate = modePrivate;
 //	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	
@@ -83,11 +83,11 @@ public class Room implements Serializable {
 		this.name = name;
 	}
 
-	public int getRoomAdmin() {
+	public long getRoomAdmin() {
 		return roomAdmin;
 	}
 
-	public void setRoomAdmin(int roomAdmin) {
+	public void setRoomAdmin(long roomAdmin) {
 		this.roomAdmin = roomAdmin;
 	}
 

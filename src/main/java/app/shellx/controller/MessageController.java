@@ -3,6 +3,7 @@ package app.shellx.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
@@ -17,25 +18,30 @@ import app.shellx.model.Message;
 import app.shellx.service.MessageService;
 
 @RestController
-//@RequestMapping("/message")
 public class MessageController {
 
 	@Autowired
 	private MessageService messageService;
 	
-	
-	@SubscribeMapping("/message/get/all")
-	public List<Message> findAll() {
-		System.out.println("### LOG : Inside subscribemapping message/get/all");
+	// @RequestMapping ignored
+	@SubscribeMapping("/messages/subscribe/{id}")
+	public List<Message> findAll(@DestinationVariable long id) {
+		System.out.println("### LOG : Inside subscribemapping messages/subscribe/{id}");
 		return this.messageService.findAll();
 	}
 	
-	@MessageMapping("/add")
-	@SendTo("/topic/message/get/all")
+	@MessageMapping("/messages/add")
+	@SendTo("/topic/messages/subscribe")
 	public void add(MessageDto messageDto) {
 		System.out.println("### LOG : Message sent from controller to MessageService");
-		this.messageService.add(messageDto);
-	}	
+		System.out.println(messageDto.toString());
+		//this.messageService.add(messageDto);
+	}
+	
+	@GetMapping("/get/all/{id}")
+	public List<Message> getPreviousAll(@PathVariable long id) {
+		return this.messageService.findAllByRoom(id);
+	}
 	
 //	@PostMapping(path="/add", consumes="application/json", produces="application/json")
 //	public Message add(@RequestBody MessageDto messageDto) {
