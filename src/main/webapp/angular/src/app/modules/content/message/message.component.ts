@@ -58,9 +58,8 @@ export class MessageComponent implements OnInit, OnChanges {
   // }
 
   onSubmit() {
-    //this.createMessage(this.sendMessageForm);
     if (this.userLogged != null) {
-        console.log("Room id avant insertion dans objet message : "+this.currentRoom);
+        // If message not a response to a specific user in the room let field "Receiver" empty
         let newMessage = new Message( this.userLogged.getId(),
                                       this.sendMessageForm.get("content").value,
                                       null,

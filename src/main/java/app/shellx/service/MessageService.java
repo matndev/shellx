@@ -7,7 +7,7 @@ import app.shellx.model.Message;
 
 public interface MessageService {
 
-	public void add(MessageDto messageDto);
+	public Message add(MessageDto messageDto);
 	
 	public List<Message> findAll();
 	

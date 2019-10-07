@@ -10,29 +10,29 @@ public class MessageDto implements Serializable {
 	 */
 	private static final long serialVersionUID = 7352317631349868845L;
 
-	private String messageAuthor;
-	private String messageReceiver;
+	private long messageAuthor;
+	private long messageReceiver;
 	private String messageContent;
 	private LocalDate messageDate;
-	private int messageRoomId;
+	private long messageRoomId;
 	
 	public MessageDto() {
 		
 	}
 	
-	public String getMessageAuthor() {
+	public long getMessageAuthor() {
 		return messageAuthor;
 	}
 
-	public void setMessageAuthor(String messageAuthor) {
+	public void setMessageAuthor(long messageAuthor) {
 		this.messageAuthor = messageAuthor;
 	}
 
-	public String getMessageReceiver() {
+	public long getMessageReceiver() {
 		return messageReceiver;
 	}
 
-	public void setMessageReceiver(String messageReceiver) {
+	public void setMessageReceiver(long messageReceiver) {
 		this.messageReceiver = messageReceiver;
 	}
 
@@ -52,11 +52,11 @@ public class MessageDto implements Serializable {
 		this.messageDate = messageDate;
 	}
 
-	public int getMessageRoom() {
+	public long getMessageRoomId() {
 		return messageRoomId;
 	}
 
-	public void setMessageRoom(int messageRoomId) {
+	public void setMessageRoomId(long messageRoomId) {
 		this.messageRoomId = messageRoomId;
 	}
 	
@@ -64,6 +64,8 @@ public class MessageDto implements Serializable {
 		return "MESSAGE toString() : \n"+
 				"Content : " + this.messageContent +"\n"+
 				"Author : " + this.messageAuthor +"\n"+
+				"Receiver : " + this.messageReceiver +"\n"+
+				"Date : " + this.messageDate +"\n"+
 				"Room : " + this.messageRoomId;
 	}
 }

@@ -25,9 +25,9 @@ public class Message implements Serializable {
 	@Column(name="messages_id")
 	private long messageId;
 	@Column(name="messages_author")
-	private String messageAuthor;
+	private long messageAuthor;
 	@Column(name="messages_receiver")
-	private String messageReceiver;
+	private long messageReceiver;
 	@Column(name="messages_content")
 	private String messageContent;
 	@Column(name="messages_visible")
@@ -45,7 +45,7 @@ public class Message implements Serializable {
 
 	public Message() {}
 	
-	public Message(String messageAuthor, String messageReceiver, String messageContent, boolean messageVisible, LocalDate messageDate, long messageRoom) {
+	public Message(long messageAuthor, long messageReceiver, String messageContent, boolean messageVisible, LocalDate messageDate, long messageRoom) {
 		this.messageAuthor = messageAuthor;
 		this.messageReceiver = messageReceiver;
 		this.messageContent = messageContent;
@@ -54,19 +54,19 @@ public class Message implements Serializable {
 		this.messageRoom = messageRoom;
 	}
 
-	public String getMessageAuthor() {
+	public long getMessageAuthor() {
 		return messageAuthor;
 	}
 
-	public void setMessageAuthor(String messageAuthor) {
+	public void setMessageAuthor(long messageAuthor) {
 		this.messageAuthor = messageAuthor;
 	}
 
-	public String getMessageReceiver() {
+	public long getMessageReceiver() {
 		return messageReceiver;
 	}
 
-	public void setMessageReceiver(String messageReceiver) {
+	public void setMessageReceiver(long messageReceiver) {
 		this.messageReceiver = messageReceiver;
 	}
 

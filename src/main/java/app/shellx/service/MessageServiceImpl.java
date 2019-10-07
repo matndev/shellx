@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import app.shellx.dao.MessageRepository;
 import app.shellx.dto.MessageDto;
 import app.shellx.model.Message;
-import app.shellx.model.Room;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -17,8 +16,8 @@ public class MessageServiceImpl implements MessageService {
 	@Autowired
 	private MessageRepository messageRepository;
 	
-	@Autowired
-	private RoomService roomService;
+//	@Autowired
+//	private RoomService roomService;
 	
 	/*@Autowired
 	private Message message;*/
@@ -29,15 +28,17 @@ public class MessageServiceImpl implements MessageService {
 	}*/
 	
 	@Transactional
-	public void add(MessageDto messageDto) throws NullPointerException {
+	public Message add(MessageDto messageDto) throws NullPointerException {
 		Message message = new Message();
 		message.setMessageAuthor(messageDto.getMessageAuthor());
 		message.setMessageReceiver(messageDto.getMessageReceiver());
 		message.setMessageContent(messageDto.getMessageContent());
-		message.setMessageDate(messageDto.getMessageDate());
+		//message.setMessageDate();
 		message.setMessageVisible(true);
 		message.setMessageEnabled(true);
-		message.setMessageRoom(messageDto.getMessageRoom());
+		message.setMessageRoom(messageDto.getMessageRoomId());
+		this.messageRepository.save(message);
+		return message;
 //		try {
 //			Room room = roomService.findRoomById(messageDto.getMessageRoom());
 //			message.setMessageRoom(room);
