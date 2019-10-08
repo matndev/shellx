@@ -119,6 +119,18 @@ public class UserService implements UserDetailsService {
     	return username;
     }
     
+//	@Transactional(readOnly = true)
+//	public Set<UserDto> findUsersByRoomId(long id) {
+//		RoomUser room = this.roomUserRepository.findById(id);
+//		if (room == null) {return null;}
+//		else {
+//		Set<UserDto> userList = new HashSet<UserDto>();
+//		Set<RoomUser> roomUser = room.getUsers();
+//		roomUser.forEach(user -> userList.add(new UserDto(user.getUser())));
+//		return userList;
+//		}
+//	}    
+    
 	//GET All rooms by user ID
 	@Transactional(readOnly = true)
 	public Set<RoomDto> findRoomsByUserId(long id) {

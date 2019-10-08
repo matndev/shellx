@@ -2,6 +2,9 @@ package app.shellx.dto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class MessageDto implements Serializable {
 
@@ -13,7 +16,8 @@ public class MessageDto implements Serializable {
 	private long messageAuthor;
 	private long messageReceiver;
 	private String messageContent;
-	private LocalDate messageDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss[xxx]") // ISO_OFFSET_DATE_TIME
+	private LocalDateTime messageDate;
 	private long messageRoomId;
 	
 	public MessageDto() {
@@ -44,11 +48,11 @@ public class MessageDto implements Serializable {
 		this.messageContent = messageContent;
 	}
 
-	public LocalDate getMessageDate() {
+	public LocalDateTime getMessageDate() {
 		return messageDate;
 	}
 
-	public void setMessageDate(LocalDate messageDate) {
+	public void setMessageDate(LocalDateTime messageDate) {
 		this.messageDate = messageDate;
 	}
 

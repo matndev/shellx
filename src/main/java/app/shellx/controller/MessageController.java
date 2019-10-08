@@ -32,10 +32,10 @@ public class MessageController {
 	
 	@MessageMapping("/messages/add")
 	@SendTo("/topic/messages/subscribe")
-	public void add(MessageDto messageDto) {
+	public Message add(MessageDto messageDto) {
 		System.out.println("### LOG : Message sent from controller to MessageService");
 		System.out.println(messageDto.toString());
-		//this.messageService.add(messageDto);
+		return this.messageService.add(messageDto);
 	}
 	
 	@GetMapping("/get/all/{id}")

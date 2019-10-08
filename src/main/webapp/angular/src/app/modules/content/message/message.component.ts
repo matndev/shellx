@@ -5,6 +5,7 @@ import { MessageService } from './message.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/app/shared/models/authentication/user.model';
 import { Message } from 'src/app/shared/models/content/message.model';
+import * as moment from 'moment';
 
 /*const httpOptions = {
   headers: new HttpHeaders({
@@ -23,6 +24,7 @@ export class MessageComponent implements OnInit, OnChanges {
 
   @Input() currentRoom: number;
   @Input() userLogged: User;
+  @Input() userList: User[] = [];
   messages: Message[] = []; 
   previousMessages: Message[] = [];
   headersResp: string[];
@@ -42,12 +44,12 @@ export class MessageComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.currentRoom.currentValue != null) {
+    if (changes.currentRoom !== undefined && changes.currentRoom.currentValue != changes.currentRoom.previousValue) {
       this.messageService
         .channelSubscription(changes.currentRoom.currentValue)
         // .pipe(map(messages => messages.sort(RoomComponent.descendingByPostedAt)))
         .subscribe(messages => this.messages = messages);       
-    }
+    }    
   }
 
   // GET HISTORY 10 by 10 or more
@@ -60,9 +62,10 @@ export class MessageComponent implements OnInit, OnChanges {
   onSubmit() {
     if (this.userLogged != null) {
         // If message not a response to a specific user in the room let field "Receiver" empty
+        let dateUTC = moment.utc().format("YYYY-MM-DDTHH:mm:ssZ");
         let newMessage = new Message( this.userLogged.getId(),
                                       this.sendMessageForm.get("content").value,
-                                      null,
+                                      dateUTC,
                                       true,
                                       null,
                                       true,
@@ -71,24 +74,14 @@ export class MessageComponent implements OnInit, OnChanges {
     } 
   }
 
-  public createMessage(data: any) : void {
-    // A MODIFIER
-    //var date = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-    // var date = new Date();
-    // let newMessage = new Message( new User("pierrho", "", 1),
-    //                               data.get("content").value,
-    //                               null,
-    //                               true,
-    //                               null,
-    //                               true,
-    //                               this.currentRoom);
-    // this.messageService.saveNewMessage(newMessage);
+  getAuthorUsername(id: number) : string {
+    if (this.userList.some(e => e.getId() === id)) {
+      return this.userList.find(e => e.getId() === id).getUsername();
+    }
+    else {
+      return "anonymous";
+    }
   }
-
-
-
-
-
 
   // setMessage(message: Message) {
   //     this.message = message;

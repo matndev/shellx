@@ -1,4 +1,5 @@
 import { User } from '../authentication/user.model';
+import * as moment from 'moment';
 
 export class Message {
 
@@ -6,14 +7,14 @@ export class Message {
 	private messageAuthor: number;
 	private messageReceiver: number;
     private messageContent: string;
-    private messageDate: Date;
+    private messageDate: string;
 	private messageVisible: boolean;
     private messageEnabled: boolean;
     private messageRoomId: number;
     
     constructor(messageAuthor?: number, 
                 messageContent?: string,
-                messageDate?: Date,
+                messageDate?: string,
                 messageEnabled?: boolean,
                 messageReceiver?: number,
                 messageVisible?: boolean,
@@ -52,10 +53,10 @@ export class Message {
         this.messageContent = content;
     }
 
-    getMessageDate(): Date {
+    getMessageDate(): string {
         return this.messageDate;
     }
-    setMessageDate(date: Date) {
+    setMessageDate(date: string) {
         this.messageDate = date;
     }    
 

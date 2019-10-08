@@ -33,7 +33,7 @@ public class MessageServiceImpl implements MessageService {
 		message.setMessageAuthor(messageDto.getMessageAuthor());
 		message.setMessageReceiver(messageDto.getMessageReceiver());
 		message.setMessageContent(messageDto.getMessageContent());
-		//message.setMessageDate();
+		message.setMessageDate(messageDto.getMessageDate());
 		message.setMessageVisible(true);
 		message.setMessageEnabled(true);
 		message.setMessageRoom(messageDto.getMessageRoomId());

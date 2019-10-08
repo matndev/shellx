@@ -1,5 +1,6 @@
 app\shellx\service\AuthorityService.class
 app\shellx\annotation\EmailValidator.class
+app\shellx\dao\RoomUserRepository.class
 app\shellx\security\CustomUsernamePasswordAuthenticationFilter$AuthReq.class
 app\shellx\service\UserService.class
 app\shellx\model\Room.class

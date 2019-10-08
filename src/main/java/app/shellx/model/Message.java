@@ -2,6 +2,7 @@ package app.shellx.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +36,7 @@ public class Message implements Serializable {
 	@Column(name="messages_enabled")
 	private boolean messageEnabled;
 	@Column(name="messages_date")
-	private LocalDate messageDate;
+	private LocalDateTime messageDate;
 	
 //	@JsonBackReference
 //	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -45,7 +46,7 @@ public class Message implements Serializable {
 
 	public Message() {}
 	
-	public Message(long messageAuthor, long messageReceiver, String messageContent, boolean messageVisible, LocalDate messageDate, long messageRoom) {
+	public Message(long messageAuthor, long messageReceiver, String messageContent, boolean messageVisible, LocalDateTime messageDate, long messageRoom) {
 		this.messageAuthor = messageAuthor;
 		this.messageReceiver = messageReceiver;
 		this.messageContent = messageContent;
@@ -78,11 +79,11 @@ public class Message implements Serializable {
 		this.messageContent = messageContent;
 	}
 
-	public LocalDate getMessageDate() {
+	public LocalDateTime getMessageDate() {
 		return messageDate;
 	}
 
-	public void setMessageDate(LocalDate messageDate) {
+	public void setMessageDate(LocalDateTime messageDate) {
 		this.messageDate = messageDate;
 	}
 

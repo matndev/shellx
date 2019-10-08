@@ -9,6 +9,7 @@ import { User } from 'src/app/shared/models/authentication/user.model';
 export class ChatComponent implements OnInit {
 
   private currentRoom: number;
+  private userList: User[] = [];
   private userLogged: User;
 
   constructor() { }
@@ -22,5 +23,9 @@ export class ChatComponent implements OnInit {
   }
   setCurrentRoom(currentRoomFromRoomComponent: number) {
     this.currentRoom = currentRoomFromRoomComponent;
+  }
+
+  setUserList(userListFromUserListComponent: User[]) {
+    this.userList = userListFromUserListComponent;
   }
 }

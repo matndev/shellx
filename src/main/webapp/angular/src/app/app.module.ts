@@ -12,6 +12,7 @@ import { RoomComponent } from './modules/content/room/room.component';
 import { CookieService } from 'ngx-cookie-service';
 import { CustomHttpInterceptorService } from './core/http/custom-http-interceptor.service';
 import { ChatComponent } from './modules/templates/chat/chat.component';
+import { UserlistComponent } from './modules/content/user/userlist/userlist.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ChatComponent } from './modules/templates/chat/chat.component';
     RegisterComponent,
     MessageComponent,
     RoomComponent,
-    ChatComponent
+    ChatComponent,
+    UserlistComponent
   ],
   imports: [
     BrowserModule,

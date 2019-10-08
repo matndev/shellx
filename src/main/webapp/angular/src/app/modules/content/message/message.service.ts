@@ -5,6 +5,7 @@ import { map, catchError, first } from 'rxjs/operators';
 import { Message } from 'src/app/shared/models/content/message.model';
 import { Router } from '@angular/router';
 import { SocketClientService } from 'src/app/core/websocket/socket-client.service';
+import * as moment from 'moment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -28,15 +29,30 @@ export class MessageService {
   public channelSubscription(id: number): Observable<Message[]> {
     return this.socketClient
       .onMessage('/app/messages/subscribe/'+id)
-      .pipe(first(), map(messages => messages.map(MessageService.getMessages)));
+      .pipe(first(), map(messages => this.dateManager(messages)));
   }
 
-  private static getMessages(message: any): Message {
-    const postedAt = new Date(message['postedAt']);
-    return {...message, postedAt};
-  }  
+  // .pipe(first(), map(messages => messages.map(MessageService.getMessages)));
+  // private static getMessages(message: any): Message {
+  //   console.log("DEBUG : Deserialize messages date : "+(message['postedAt'])); //+message.getMessageDate());
+  //   const postedAt = new Date(message['postedAt']);
+  //   return {...message, postedAt};
+  // }  
+
+  private dateManager(messages: any) : Message[] {
+    messages.forEach(element => {
+      if (element.messageDate != null) {
+          var utc = moment.utc(element.messageDate).toDate();
+          element.messageDate = moment(utc).local().format('YYYY-MM-DD HH:mm:ss');
+      }
+    });
+    return messages;
+  }
 
   public saveNewMessage(message: Message) : void {
+    console.log("Date UTC");
+    console.log(message.getMessageDate());
+    console.log(message.getMessageDate().toString());
     this.socketClient.send("/app/messages/add", message);
   } 
   
