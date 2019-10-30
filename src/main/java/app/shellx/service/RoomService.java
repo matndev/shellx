@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import app.shellx.dao.RoomRepository;
 import app.shellx.dao.RoomUserRepository;
+import app.shellx.dao.UserRepository;
 import app.shellx.dto.RoomDto;
 import app.shellx.dto.UserDto;
 import app.shellx.model.Room;
@@ -26,9 +27,15 @@ public class RoomService {
 	@Autowired
 	private RoomUserRepository roomUserRepository;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
 	@Transactional
-	public Room add(Room room) {
-		return this.roomRepository.save(room);
+	public RoomDto add(Room room) {
+		User user = this.userRepository.findById(room.getRoomAdmin());
+		room.addUser(user);
+		Room resRoom = this.roomRepository.save(room);
+		return new RoomDto(resRoom);
 	}
 	
 	// GET ROOM / MESSAGES / NO USERS

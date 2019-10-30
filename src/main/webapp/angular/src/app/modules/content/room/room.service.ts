@@ -50,6 +50,17 @@ export class RoomService {
         );
   }
 
+  public createNewRoom(room: Room) : Observable<HttpResponse<Room>> {
+    return this.http.post<HttpResponse<Room>>("http://localhost:8086/rooms/add", room, httpOptions)
+        .pipe(
+          catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
+        );
+  }
+
+  // public createNewRoom(room: Room) : void {
+  //   this.socketClient.send("/app/rooms/add", room);
+  // } 
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

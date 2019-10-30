@@ -35,7 +35,7 @@ public class RoomController {
 	
 	
 	@PostMapping(path="/add", consumes="application/json", produces="application/json")
-	public Room add(@RequestBody Room room) {
+	public RoomDto add(@RequestBody Room room) {
 		return this.roomService.add(room);
 	}
 	

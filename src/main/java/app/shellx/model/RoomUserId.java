@@ -28,6 +28,23 @@ public class RoomUserId implements Serializable{
 		this.roomId = roomId;
 		this.userId = userId;
 	}
+	
+	
+	public long getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(long roomId) {
+		this.roomId = roomId;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
 
 	@Override
 	public int hashCode() {

@@ -107,4 +107,12 @@ public class UserDto {
 		this.role = role;
 	}
 	
+	public String toString() {
+		return "User.class toString() : \n"+
+				"ID : "+this.id+"\n"+
+				"Username : "+this.username+"\n"+
+				"Email : "+this.email+"\n"+
+				"Role : "+this.role;
+	}	
+	
 }

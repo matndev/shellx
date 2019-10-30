@@ -50,9 +50,6 @@ export class MessageService {
   }
 
   public saveNewMessage(message: Message) : void {
-    console.log("Date UTC");
-    console.log(message.getMessageDate());
-    console.log(message.getMessageDate().toString());
     this.socketClient.send("/app/messages/add", message);
   } 
   

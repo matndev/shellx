@@ -13,12 +13,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.shellx.annotation.EmailExistsException;
+import app.shellx.dao.RoomRepository;
+import app.shellx.dao.RoomUserRepository;
 import app.shellx.dao.UserRepository;
+import app.shellx.dto.MessageDto;
 import app.shellx.dto.RoomDto;
+import app.shellx.dto.RoomUserDto;
 import app.shellx.dto.UserDto;
+import app.shellx.model.Message;
 import app.shellx.model.Role;
+import app.shellx.model.Room;
 import app.shellx.model.RoomUser;
+import app.shellx.model.RoomUserId;
 import app.shellx.model.User;
+import app.shellx.model.projections.UserlistByRoomProj;
 import app.shellx.security.EmailNotFoundException;
 
 @Service
@@ -26,6 +34,12 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
     private UserRepository userRepository;
+	
+	@Autowired
+	private RoomUserRepository roomUserRepository;
+	
+	@Autowired
+	private RoomRepository roomRepository;
 	
 	@Autowired
 	private RoleService roleService;
@@ -105,6 +119,14 @@ public class UserService implements UserDetailsService {
     public void update(User user) {
     	this.userRepository.save(user);
     }
+    
+    @Transactional(readOnly=true)
+    public Set<RoomUserDto> getUsers(long id) {
+    	Set<RoomUser> roomsUsers = this.roomUserRepository.findByRoomId(id);
+    	Set<RoomUserDto> userlistWithRoles = new HashSet<RoomUserDto>();
+    	roomsUsers.forEach(roomUser -> userlistWithRoles.add(new RoomUserDto(roomUser)));
+    	return userlistWithRoles;
+    }
 	
     public String getCurrentUser() {
     	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -118,6 +140,16 @@ public class UserService implements UserDetailsService {
     	
     	return username;
     }
+    
+	@Transactional
+	public UserDto add(long idRoom, UserDto userDto) throws NullPointerException {
+		User user = this.userRepository.findById(userDto.getId());
+		Room room = this.roomRepository.findById(idRoom);
+		RoomUser roomUser = new RoomUser(room, user, 3);
+		this.roomUserRepository.save(roomUser);
+		UserDto resUser = new UserDto(user);
+		return resUser;
+	}    
     
 //	@Transactional(readOnly = true)
 //	public Set<UserDto> findUsersByRoomId(long id) {

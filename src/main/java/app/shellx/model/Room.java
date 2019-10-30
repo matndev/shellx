@@ -2,6 +2,7 @@ package app.shellx.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -38,12 +39,15 @@ public class Room implements Serializable {
 	@NotEmpty
 	@Column(name="rooms_name")
 	protected String name;
+	@NotNull
 	@Column(name="rooms_admin")
 	protected long roomAdmin;
 	@Column(name="rooms_date_creation")
 	protected LocalDate dateCreation;
+	@NotNull
 	@Column(name="rooms_enabled")
 	protected boolean enabled;
+	@NotNull
 	@Column(name="rooms_mode_private")
 	protected boolean modePrivate;
 	
@@ -59,21 +63,20 @@ public class Room implements Serializable {
 	
 	@JsonIgnore
 	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="room")
-	protected Set<RoomUser> users;
+	protected Set<RoomUser> users = new HashSet<RoomUser>();
 	
 	public Room() {
 		
 	}
 	
-//	public Room(String name, int roomAdmin, boolean modePrivate) {
-//		this.name = name;
-//		this.roomAdmin = roomAdmin;
-//		this.modePrivate = modePrivate;
-//	}
 
 	public long getId() {
 		return id;
 	}
+	
+//	public void setId(Long id) {
+//		this.id = id;
+//	}
 	
 	public String getName() {
 		return name;
@@ -121,6 +124,12 @@ public class Room implements Serializable {
 
 	public void setUsers(Set<RoomUser> users) {
 		this.users = users;
+	}
+	
+	public void addUser(User user) {
+		RoomUser roomUser = new RoomUser(this, user, 1);
+		this.users.add(roomUser);
+		user.getRooms().add(roomUser);
 	}
 	
 	public String toString() {

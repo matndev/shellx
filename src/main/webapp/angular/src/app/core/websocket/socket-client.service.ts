@@ -42,6 +42,7 @@ export class SocketClientService implements OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log("Websocket Disconnection");
     this.disconnect();
   }
 

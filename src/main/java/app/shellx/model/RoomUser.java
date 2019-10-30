@@ -44,17 +44,32 @@ public class RoomUser implements Serializable {
 	@Transient
 	private UserDto userDto;
 	
-	RoomUser() {
+	public RoomUser() {
 		
 	}
 	
-	RoomUser(Room room, User user, int role) {
+	public RoomUser(long idRoom, long idUser, int role) {
+		this.id = new RoomUserId(idRoom, idUser);
+		this.role = role;
+	}
+	
+	public RoomUser(Room room, User user, int role) {
+		this.id = new RoomUserId(room.getId(), user.getId());
 		this.room = room;
 		this.user = user;
 		this.role = role;
 	}
 
 	
+	
+	public RoomUserId getId() {
+		return id;
+	}
+
+	public void setId(RoomUserId id) {
+		this.id = id;
+	}
+
 	public Room getRoom() {
 		room.setUsers(null);
 		return room;
@@ -88,4 +103,12 @@ public class RoomUser implements Serializable {
 		this.userDto = userDto;
 	}
 
+	public String toString() {
+		return "Class: RoomUser, toString() method\n"+
+		"Room ID : "+this.id.getRoomId()+"\n"+
+		"User ID : "+this.id.getUserId()+"\n"+
+		"Room Object : "+this.getRoom().getName()+"\n"+
+		"User Object : "+this.getUser().getUsername()+"\n"+
+		"Role Id : "+this.getRole();
+	}
 }

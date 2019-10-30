@@ -12,19 +12,22 @@ import { User } from 'src/app/shared/models/authentication/user.model';
 })
 export class RoomComponent implements OnInit {
 
+  @Output() currentRoomEmitter = new EventEmitter<number>();
+
   room: Room = null;
   headersResp: string[];
-  sendMessageForm;
-  private users: User[] = [];
+
+  createRoomForm;
+  isNewRoomExists: boolean = false;
+  // private users: User[] = [];
   private rooms: Room[] = [];
-  @Output() currentRoomEmitter = new EventEmitter<number>();
 
   constructor(
     private roomService: RoomService,
     private formBuilder: FormBuilder,
     private router: Router
   ) {
-    this.sendMessageForm = this.formBuilder.group({
+    this.createRoomForm = this.formBuilder.group({
       content: ['', [Validators.required, Validators.maxLength(100)]]
     });
   }
@@ -48,7 +51,7 @@ export class RoomComponent implements OnInit {
     .then(() => {
       // Sort rooms by ID
       this.rooms = this.rooms.sort((first, second) => {
-          console.log("first : "+first.getName()+", second: "+second.getName());
+          // console.log("first : "+first.getName()+", second: "+second.getName());
           if (first.getId() > second.getId()) {
               return 1;
           }
@@ -66,8 +69,6 @@ export class RoomComponent implements OnInit {
       var idRoom = this.rooms[0].getId();
       this.getRoomById(idRoom);
     });
-    // this.getUsersRoom(1);
- 
   }
 
   async getRooms() : Promise<any> {
@@ -84,22 +85,29 @@ export class RoomComponent implements OnInit {
 
 
   
-  public getUsersRoom(id: number) {
-    this.roomService.getUsersByRoomId(id).subscribe(data => {
-      data.body.forEach(element => {
-            this.users.push(new User(element['username']));
-      });
-    });
-  }
+  // public getUsersRoom(id: number) {
+  //   this.roomService.getUsersByRoomId(id).subscribe(data => {
+  //     data.body.forEach(element => {
+  //           this.users.push(new User(element['username']));
+  //     });
+  //   });
+  // }
 
   // public static descendingByPostedAt(message1: Message, message2: Message): number {
   //   return message2.getMessageDate.getTime() - message1.postedAt.getTime();
   // }
 
-  // onSubmit() {
-  //   console.log(this.room.getId());
-  //   this.createMessage(this.sendMessageForm);
-  // }
+  onSubmit() {
+    let newRoom = new Room(null, this.createRoomForm.get("content").value, 1, true, false, null, null);
+    this.roomService.createNewRoom(newRoom).subscribe(result => {
+        this.rooms.push(new Room(result.body['id'],
+                                  result.body['name'],
+                                  result.body['roomAdmin'],
+                                  result.body['enabled'],
+                                  result.body['modePrivate']));
+    });
+    // this.roomService.createNewRoom(newRoom);
+  }
 
   // public createMessage(data: any) : void {
   //   // A MODIFIER

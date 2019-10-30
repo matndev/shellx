@@ -9,15 +9,15 @@
     {{ room.getName() }}
 </div>
 
-<!-- <form ngNativeValidate [formGroup]="sendMessageForm" (ngSubmit)="onSubmit()">
+<form ngNativeValidate [formGroup]="createRoomForm" (ngSubmit)="onSubmit()">
 
     <div>
         <input type="text" formControlName="content" required/>       
     </div>
 
-    <button class="button" type="submit" [disabled]="!sendMessageForm.valid" >Send</button>
+    <button class="button" type="submit" [disabled]="!createRoomForm.valid" >Send</button>
   
-</form> -->
+</form>
 
     <!-- <div *ngIf="!loginForm.valid">
         <div *ngIf="loginForm.get('email').hasError('required')">Email required</div>

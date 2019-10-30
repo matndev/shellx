@@ -3,6 +3,7 @@ package app.shellx.model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +29,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
+import app.shellx.annotation.ValidEmail;
+import app.shellx.dto.UserDto;
 
 @Entity
 @Table(name="users")
@@ -67,12 +74,16 @@ public class User implements UserDetails {
 	private Set<Authority> authorities;
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="user")
-	private Set<RoomUser> rooms;
+	private Set<RoomUser> rooms = new HashSet<RoomUser>();
 
 	
 
 	public User() {
 		
+	}
+	
+	public User(long id) {
+		this.id = id;
 	}
 	
 	public User(String username, String email, String password, boolean enabled, String avatar) {
@@ -81,8 +92,16 @@ public class User implements UserDetails {
 		this.password = password;
 		this.enabled = enabled;
 		this.avatar = avatar;
-	}
+	}	
 
+	public User(UserDto userDto) {
+		this.id = userDto.getId();
+		this.username = userDto.getUsername();
+		this.email = userDto.getEmail();
+		this.avatar = userDto.getAvatar();
+		this.role = new Role(userDto.getRole());
+	}
+	
 	// return role name and authorities
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority> authoritiesList = new ArrayList<GrantedAuthority>();
@@ -166,6 +185,14 @@ public class User implements UserDetails {
 	}
 	
 	public String toString() {
-		return username;
+		return "User.class toString() : \n"+
+				"ID : "+this.id+"\n"+
+				"Username : "+this.username+"\n"+
+				"Email : "+this.email+"\n"+
+				"Enabled : "+this.enabled+"\n"+
+				"Date creation : "+this.date+"\n"+
+				"Role : "+this.role.toString()+"\n"+
+				"Authorities : "+this.authorities.toString()+"\n"+
+				"Rooms : "+this.rooms.toString();
 	}
 }

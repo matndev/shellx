@@ -1,5 +1,5 @@
 <div *ngFor="let message of messages">
-    <p>{{ getAuthorUsername(message.messageAuthor) }} : {{ message.messageContent }}<br />{{ message.messageDate }}</p>
+    <p>@{{ getAuthorUsername(message.messageAuthor) }} <span class="receiver" *ngIf="message.messageReceiver!=0">@{{ getReceiverUsername(message.messageReceiver) }}</span> : {{ message.messageContent }}<br />{{ message.messageDate }}</p>
 </div>
 
 <form ngNativeValidate [formGroup]="sendMessageForm" (ngSubmit)="onSubmit()">

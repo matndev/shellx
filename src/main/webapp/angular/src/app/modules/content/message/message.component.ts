@@ -83,6 +83,15 @@ export class MessageComponent implements OnInit, OnChanges {
     }
   }
 
+  getReceiverUsername(id: number) : string {
+    if (this.userList.some(e => e.getId() === id)) {
+      return this.userList.find(e => e.getId() === id).getUsername();
+    }
+    else {
+      return "anonymous";
+    }    
+  }
+
   // setMessage(message: Message) {
   //     this.message = message;
   // }
