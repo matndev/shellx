@@ -121,11 +121,13 @@ public class UserService implements UserDetailsService {
     }
     
     @Transactional(readOnly=true)
-    public Set<RoomUserDto> getUsers(long id) {
+    public Set<UserDto> getUsers(long id) {
     	Set<RoomUser> roomsUsers = this.roomUserRepository.findByRoomId(id);
-    	Set<RoomUserDto> userlistWithRoles = new HashSet<RoomUserDto>();
-    	roomsUsers.forEach(roomUser -> userlistWithRoles.add(new RoomUserDto(roomUser)));
-    	return userlistWithRoles;
+//    	Set<RoomUserDto> userlistWithRoles = new HashSet<RoomUserDto>();
+    	Set<UserDto> userlist = new HashSet<UserDto>();
+    	roomsUsers.forEach(roomUser -> userlist.add(new UserDto(roomUser.getId().getUserId(), roomUser.getUser().getUsername(), roomUser.getUser().getAvatar(), roomUser.getRole())));
+//    	roomsUsers.forEach(roomUser -> userlistWithRoles.add(new RoomUserDto(roomUser)));
+    	return userlist;
     }
 	
     public String getCurrentUser() {

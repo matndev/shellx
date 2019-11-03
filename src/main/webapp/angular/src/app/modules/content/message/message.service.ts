@@ -26,10 +26,21 @@ export class MessageService {
     private socketClient: SocketClientService
   ) { }
 
-  public channelSubscription(id: number): Observable<Message[]> {
+  public subscribeChannel(id: number): Observable<Message[]> {
     return this.socketClient
-      .onMessage('/app/messages/subscribe/'+id)
-      .pipe(first(), map(messages => this.dateManager(messages)));
+            .onMessage('/topic/messages/subscribe/'+id)
+            .pipe(first(), map(messages => {
+                    var newMessages: Message[] = [];
+                    if (messages instanceof Array){
+                        messages.forEach(e => newMessages.push(new Message(e.messageAuthor, e.messageContent, e.messageDate, e.messageEnabled, e.messageReceiver, e.messageVisible, e.messageRoom)));
+                        messages = this.dateManager(messages);
+                    }
+                    else {
+                        newMessages.push(new Message(messages.messageAuthor, messages.messageContent, messages.messageDate, messages.messageEnabled, messages.messageReceiver, messages.messageVisible, messages.messageRoom));
+                        newMessages = this.dateManager(newMessages);
+                    }
+                    return newMessages;
+            }));
   }
 
   // .pipe(first(), map(messages => messages.map(MessageService.getMessages)));
@@ -54,8 +65,18 @@ export class MessageService {
   } 
   
   public getMessagesHistory(currentRoomId: number) : Observable<HttpResponse<Message[]>> {
-    return this.http.get<HttpResponse<Message[]>>("http://localhost:8086/messages/get/all/"+currentRoomId, httpOptions)
+    return this.http.get<HttpResponse<any>>("http://localhost:8086/messages/get/all/"+currentRoomId, httpOptions)
         .pipe(
+          map(obj => {
+            var messagesArray: Message[] = [];
+            obj.body.forEach(e => 
+              messagesArray.push(new Message(e.messageAuthor, e.messageContent, e.messageDate, e.messageEnabled, e.messageReceiver, e.messageVisible, e.messageRoom))
+            );
+            messagesArray = this.dateManager(messagesArray);
+            return obj.clone({
+              body: messagesArray
+            });
+          }),
           catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
         );
   }

@@ -45,10 +45,20 @@ export class MessageComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.currentRoom !== undefined && changes.currentRoom.currentValue != changes.currentRoom.previousValue) {
-      this.messageService
-        .channelSubscription(changes.currentRoom.currentValue)
-        // .pipe(map(messages => messages.sort(RoomComponent.descendingByPostedAt)))
-        .subscribe(messages => this.messages = messages);       
+      // this.messageService
+      //   .channelSubscription(changes.currentRoom.currentValue)
+      //   // .pipe(map(messages => messages.sort(RoomComponent.descendingByPostedAt)))
+      //   .subscribe(messages => this.messages = messages);  
+      this.messageService.subscribeChannel(changes.currentRoom.currentValue).subscribe(data => {
+        console.log("data: "+data);
+        this.messages.push(...data);
+        this.messages = this.messages.sort((a,b) => (a.getMessageDate() > b.getMessageDate()) ? 1 : ((b.getMessageDate() > a.getMessageDate()) ? -1 : 0));
+      });
+      this.messageService.getMessagesHistory(changes.currentRoom.currentValue).subscribe(data => {
+        data.body.map(element => this.messages.push(element));
+        this.messages = [ ...new Set(this.messages) ];
+        this.messages = this.messages.sort((a,b) => (a.getMessageDate() > b.getMessageDate()) ? 1 : ((b.getMessageDate() > a.getMessageDate()) ? -1 : 0));        
+      });
     }    
   }
 

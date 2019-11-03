@@ -25,28 +25,49 @@ export class UserlistService {
     private socketClient: SocketClientService
   ) { }
 
-  // public getUsersByRoomId(id: number) : Observable<HttpResponse<User[]>> {
-  //   return this.http.get<HttpResponse<User[]>>("http://localhost:8086/rooms/get/users/"+id, httpOptions)
-  //       .pipe(
-  //         catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
-  //       );
-  // }
-
-  // public subscribeUserlist(id: number) : Observable<User[]> {
-  //   return this.socketClient.onMessage('/topic/user/room/'+id);
-  // }
-
-  public getUsersByRoomId(id: number): Observable<User[]> {
-    return this.socketClient
-      .onMessage('/app/user/subscribe/'+id)
-      .pipe(first(), map(messages => {
-          let users: User[] = [];
-          messages.forEach(e => {
-            users.push(new User(e.username, null, e.idUser, e.role))
-          });
-          return users;
-      }));
+  // No interfaces used because Typescript convert it in JS at runtime
+  public getUsersByRoomId(id: number) : Observable<HttpResponse<User[]>> {
+    return this.http.get<HttpResponse<any>>("http://localhost:8086/user/room/"+id, httpOptions)
+        .pipe(
+            map(obj => {
+              var userArray: User[] = [];
+              obj.body.forEach(e => 
+                userArray.push(new User(e.username, null, e.id, e.role, e.avatar))
+              );
+              return obj.clone({
+                body: userArray
+              });
+            }),
+            catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
+        );
   }
+
+  public subscribeUserlist(id: number) : Observable<User[]> {
+    return this.socketClient
+            .onMessage('/topic/user/subscribe/'+id)
+            .pipe(first(), map(user => {
+                    var newUsers: User[] = [];
+                    if (user instanceof Array){
+                        user.forEach(e => newUsers.push(new User(e.username, e.email, e.id, e.role, e.avatar)));
+                    }
+                    else {
+                        newUsers.push(new User(user.username, user.email, user.id, user.role, user.avatar));
+                    }
+                    return newUsers;
+            }));
+  }
+
+  // public getUsersByRoomId(id: number): Observable<User[]> {
+  //   return this.socketClient
+  //     .onMessage('/app/user/subscribe/'+id)
+  //     .pipe(first(), map(messages => {
+  //         let users: User[] = [];
+  //         messages.forEach(e => {
+  //           users.push(new User(e.username, null, e.idUser, e.role))
+  //         });
+  //         return users;
+  //     }));
+  // }
 
   public add(idRoom: number, idUser: string) : void {
     var userToBeAdded = new User(null, null, +idUser);

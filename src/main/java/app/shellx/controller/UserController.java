@@ -36,29 +36,12 @@ public class UserController {
 	
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
-	/*@PostMapping(path="/add", consumes="application/json")
-	public void add(@RequestBody UserDto userDto) {
-		System.out.println("### LOG : User sent from controller to UserService");
-		//this.userService.add(new User("pierrho", "eboyfr@gmail.com", passwordEncoder.encode("123456"), true, "avatar.jpg"), "ROLE_ADMIN"); //LocalDate.now()));
-		String password = passwordEncoder.encode(userDto.getPassword());
-		userDto.setPassword(password);
-		try {
-			this.userService.registerNewUserAccount(userDto);
-		} catch (EmailExistsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-	}*/
-
-	@SubscribeMapping("/user/subscribe/{id}")
-	public Set<RoomUserDto> getUsers(@DestinationVariable long id) { // Set<User>
-		return this.userService.getUsers(id);
-	}	
 	
-//	@GetMapping("/room/{id}")
-//	public Set<RoomUserDto> getUsers(@PathVariable long id) { // Set<User>
-//		return this.userService.getUsers(id);
-//	}
+	// Load initial users in the room
+	@GetMapping("/room/{id}")
+	public Set<UserDto> getUsers(@PathVariable long id) { // Set<User>
+		return this.userService.getUsers(id);
+	}
 	
 	@MessageMapping("/user/add/{id}")
 	@SendTo("/topic/user/subscribe/{id}")
@@ -66,12 +49,7 @@ public class UserController {
 		System.out.println("### LOG : User sent from controller to UserService");
 		System.out.println(userDto.toString());
 		return this.userService.add(id, userDto);
-	}	
-	
-//	@GetMapping("/subscribe/{id}")
-//	public Set<RoomUserDto> getUsersTest(@PathVariable long id) { // Set<User>
-//		return this.userService.getUsers(id);
-//	}	
+	}		
 	
 	@RequestMapping("/delete")
 	public void delete() {

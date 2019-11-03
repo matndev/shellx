@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,23 +24,27 @@ public class MessageController {
 	@Autowired
 	private MessageService messageService;
 	
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
+	
 	// @RequestMapping ignored
-	@SubscribeMapping("/messages/subscribe/{id}")
-	public List<Message> findAll(@DestinationVariable long id) {
-		System.out.println("### LOG : Inside subscribemapping messages/subscribe/{id}");
-		return this.messageService.findAll();
-	}
+//	@GetMapping("/messages/subscribe/{id}")
+//	public List<Message> findAll(@PathVariable long id) {
+//		System.out.println("### LOG : Inside subscribemapping messages/subscribe/{id}");
+//		return this.messageService.findAll();
+//	}
 	
 	@MessageMapping("/messages/add")
-	@SendTo("/topic/messages/subscribe")
-	public Message add(MessageDto messageDto) {
+	//@SendTo("/topic/messages/subscribe/{id}")
+	public void add(MessageDto messageDto) {
 		System.out.println("### LOG : Message sent from controller to MessageService");
 		System.out.println(messageDto.toString());
-		return this.messageService.add(messageDto);
+		Message message = this.messageService.add(messageDto);
+		simpMessagingTemplate.convertAndSend("/topic/messages/subscribe/" + messageDto.getMessageRoomId(), message);
 	}
 	
-	@GetMapping("/get/all/{id}")
-	public List<Message> getPreviousAll(@PathVariable long id) {
+	@GetMapping("/messages/get/all/{id}")
+	public List<Message> getMessagesByRoomId(@PathVariable long id) {
 		return this.messageService.findAllByRoom(id);
 	}
 	

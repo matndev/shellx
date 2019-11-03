@@ -27,12 +27,24 @@ export class UserlistComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.currentRoom !== undefined && changes.currentRoom.currentValue != changes.currentRoom.previousValue) {
-        // this.userlistService.subscribeUserlist(changes.currentRoom.currentValue).subscribe(data => {
-        //   data.forEach(user => this.users.push(user));
-        // });
+        this.userlistService.subscribeUserlist(changes.currentRoom.currentValue).subscribe(data => {
+          console.log("data: "+data);
+          this.users.push(...data);
+          this.users = this.users.sort((a,b) => (a.getUsername() > b.getUsername()) ? 1 : ((b.getUsername() > a.getUsername()) ? -1 : 0));
+          this.userListEmitter.emit(this.users);
+        });
+
         const resGetUsers = this.getUsersByRoomId(changes.currentRoom.currentValue);
         resGetUsers.then((result) => {
-          this.users = result;
+          this.users.push(...result.body);
+          // this.users = this.users.sort(function(a, b) { 
+          //   return a.getId() - b.getId();
+          // });
+          this.users = [ ...new Set(this.users) ];
+          // this.users still Array type
+          // Or useful method for older versions
+          // return names.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]);
+          this.users = this.users.sort((a,b) => (a.getUsername() > b.getUsername()) ? 1 : ((b.getUsername() > a.getUsername()) ? -1 : 0));
         })
         .then(() => {
           this.userListEmitter.emit(this.users);

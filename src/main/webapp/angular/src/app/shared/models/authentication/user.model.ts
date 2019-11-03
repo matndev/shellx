@@ -1,9 +1,10 @@
 export class User {
 
-    private id: number;
-    private username: string;
-    private email: string;
-    private role: number;
+    id: number;
+    username: string;
+    email: string;
+    role: number;
+    avatar: string;
 
     /*public static fromJson(json: Object): User {
         return new User(
@@ -13,30 +14,51 @@ export class User {
         );
     }*/
 
-    constructor(public p_username: string,
-                public p_email?: string,
-                public p_id?: number,
-                public p_role?: number
+    constructor(username: string,
+                email?: string,
+                id?: number,
+                role?: number,
+                avatar?: string
                 ) {
-        this.username = p_username;
-        this.email = p_email; 
-        this.id = p_id; 
-        this.role = p_role;      
+        this.username = username;
+        this.email = email; 
+        this.id = id; 
+        this.role = role;
+        this.avatar = avatar;   
     } 
 
-    public getUsername() : string {
+    getUsername() : string {
         return this.username;
     }
+    setUsername(username: string) {
+        this.username = username;
+    }    
 
-    public getEmail() : string {
+    getEmail() : string {
         return this.email;
     }
+    setEmail(email: string) {
+        this.email = email;
+    }     
 
-    public getId() : number {
+    getId() : number {
         return this.id;
     }
+    setId(id: number) {
+        this.id = id;
+    }     
 
-    public getRole() : number {
+    getRole() : number {
         return this.role;
     }
+    setRole(role: number) {
+        this.role = role;
+    }     
+   
+    getAvatar() : string {
+        return this.avatar;
+    }  
+    setAvatar(avatar: string) {
+        this.avatar = avatar;
+    }       
 }
