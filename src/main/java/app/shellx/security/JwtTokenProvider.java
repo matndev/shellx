@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
@@ -55,16 +54,15 @@ public class JwtTokenProvider {
         claims.put("roles", roles);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
-        return Jwts.builder()//
-        			.setClaims(claims)//
-        			.setIssuedAt(now)//
-        			.setExpiration(validity)//
-        			.signWith(getSigningKey())//
+        return Jwts.builder()
+        			.setClaims(claims)
+        			.setIssuedAt(now)
+        			.setExpiration(validity)
+        			.signWith(getSigningKey())
         			.compact();
     }
 	
 	public Authentication getAuthentication(String token) {
-//        UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
 		User userDetails = (User) this.userDetailsService.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
@@ -73,12 +71,26 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 	
+	public Date getExpirationDate(String token) {
+		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getExpiration();
+	}
+	
 	public String resolveToken(HttpServletRequest req) {
-        String accessToken = req.getHeader("Cookie");
-        if (accessToken != null && accessToken.startsWith("access_token")) {
-            return accessToken.substring(13, accessToken.length());
-        }
-        return null;
+//        String accessToken = req.getHeader("Cookie");
+//        if (accessToken != null && accessToken.startsWith("access_token")) {
+//            return accessToken.substring(13, accessToken.length());
+//        }
+//        return null;
+		Cookie cookies[] = req.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("access_token")) {
+					System.out.println("### DEBUG : ResolveToken: cookie value: "+cookie.getValue());
+					return cookie.getValue();
+				}
+			}
+		}
+		return null;
     }
 	
 	public boolean validateToken(String token) {
@@ -95,13 +107,4 @@ public class JwtTokenProvider {
             throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
         }
     }
-	
-	public Cookie createCookieForToken(String token) {
-	     final Cookie newCookie = new Cookie("access_token", token);
-		 newCookie.setSecure(false); // a mettre en commentaire si ca marche pas
-		 newCookie.setHttpOnly(true);
-		 newCookie.setMaxAge(3600*24);
-		 newCookie.setPath("/");
-		 return newCookie;
-	}
 }

@@ -12,6 +12,7 @@ import { User } from 'src/app/shared/models/authentication/user.model';
 })
 export class RoomComponent implements OnInit {
 
+  @Input() currentRoom: number;  
   @Output() currentRoomEmitter = new EventEmitter<number>();
 
   room: Room = null;
@@ -36,6 +37,7 @@ export class RoomComponent implements OnInit {
   // Get then informations related to the current room (users, messages)
 
   ngOnInit() {
+    console.log("ROOM COMPONENT : INIT : current room value : "+this.currentRoom);
     // Get rooms
     const resGetRooms = this.getRooms();
     resGetRooms.then((result) => {
@@ -58,16 +60,17 @@ export class RoomComponent implements OnInit {
           else {
               return -1;
           }
-      });
+      }); 
     })
     .then(() => {
       // Send back first room ID
-      this.currentRoomEmitter.emit(this.rooms[0].getId());
+      if (this.currentRoom == undefined)
+          this.currentRoomEmitter.emit(this.rooms[0].getId());
     })   
     .then(() => {
       // Get current room info
-      var idRoom = this.rooms[0].getId();
-      this.getRoomById(idRoom);
+      // var idRoom = this.rooms[0].getId();
+      this.currentRoom != undefined ? this.getRoomById(this.currentRoom) : this.getRoomById(this.rooms[0].getId());
     });
   }
 

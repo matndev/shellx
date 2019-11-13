@@ -1,6 +1,7 @@
 package app.shellx.security;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+
+import app.shellx.config.CookieConfig;
+import app.shellx.dto.UserDto;
+import app.shellx.model.User;
+import app.shellx.utils.JsonTools;
 
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -42,9 +48,20 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 			String jwtToken = jwtTokenProvider.createToken(authentication.getName(), authorities);
 			log.info("Contenu token créé "+jwtToken);
 			
-			final Cookie cookie = jwtTokenProvider.createCookieForToken(jwtToken);
-			response.addCookie(cookie);
+//			long userId = ((User) authentication.getPrincipal()).getId();
 			
+//			final Cookie cookie = jwtTokenProvider.createCookieForToken(jwtToken);
+//			response.addCookie(cookie);
+			
+			UserDto userDto = new UserDto((User) authentication.getPrincipal());
+			
+			response.addCookie(CookieConfig.createCookieForJWT(jwtToken));
+			response.addCookie(CookieConfig.createCookieExpirationSession(jwtTokenProvider.getExpirationDate(jwtToken)));		
+			response.addCookie(CookieConfig.createCookieWithIdUser(userDto.getId()));
+			
+//			response.getWriter().print(userDto);
+			response.getWriter().write(JsonTools.convertObjectToJson(userDto));
+
 //			response.setHeader("Authorization", jwtToken);
 		}
 	}

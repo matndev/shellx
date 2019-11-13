@@ -13,6 +13,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { CustomHttpInterceptorService } from './core/http/custom-http-interceptor.service';
 import { ChatComponent } from './modules/templates/chat/chat.component';
 import { UserlistComponent } from './modules/content/user/userlist/userlist.component';
+import { LogoTextComponent } from './modules/content/logo-text/logo-text/logo-text.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { UserlistComponent } from './modules/content/user/userlist/userlist.comp
     MessageComponent,
     RoomComponent,
     ChatComponent,
-    UserlistComponent
+    UserlistComponent,
+    LogoTextComponent
   ],
   imports: [
     BrowserModule,

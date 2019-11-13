@@ -18,16 +18,20 @@
   </li>
 </ul> -->
 
-<div class="container">
-  <ul class="nav nav-pills">
-    <li><a routerLinkActive="active" routerLink="/">Home</a></li>
-    <li><a routerLinkActive="active" routerLink="/login">Sign in</a></li>
-    <li><a routerLinkActive="active" routerLink="/register">Sign up</a></li>
-    <li><a routerLinkActive="active" routerLink="/chat">Chat</a></li>
-    <li><a (click)="logout()">Logout</a></li>
-  </ul>
+<div class="container-fluid bg-dark d-flex flex-column h-100">
+  <div class="row bg-warning">
+      <ul class="nav nav-pills">
+        <li><a routerLinkActive="active" routerLink="/">Home</a></li>
+        <li><a routerLinkActive="active" routerLink="/login">Sign in</a></li>
+        <li><a routerLinkActive="active" routerLink="/register">Sign up</a></li>
+        <li><a routerLinkActive="active" routerLink="/chat">Chat</a></li>
+        <li><a (click)="logout()">Logout</a></li>
+      </ul>
+  </div>
+  
+  <div class="row flex-grow-1 bg-danger">
+    <router-outlet ></router-outlet> <!-- class="d-none" -->
+  </div>
+
 </div>
 
-<div class="container">
-  <router-outlet></router-outlet>
-</div>

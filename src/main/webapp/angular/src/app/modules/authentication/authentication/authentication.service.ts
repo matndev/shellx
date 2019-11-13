@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ModuleWithComponentFactories } from '@angular/core';
 import { UserLogin } from 'src/app/shared/models/authentication/user-login.model';
 import { Observable, of, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
+import * as moment from 'moment';
+import { User } from 'src/app/shared/models/authentication/user.model';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -20,17 +22,32 @@ export class AuthenticationService {
 
   private url = "http://localhost:8086";
   private authenticated = false;
+  private cookieExpValue = '';
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private cookieService: CookieService
   ) { }
 
-  isAuthenticated() {
-    return this.authenticated;
+  isAuthenticated() : boolean {
+    // console.log("Expiration cookie : "+this.cookieService.get('_exp'));
+    // console.log("Current time : "+moment().format());
+    // console.log("Expiration comparison :");
+    var exp = moment(this.cookieService.get('_exp')).diff(moment().format());
+    console.log(exp);
+    return (exp > 30000) ? true : false;
+  }
+
+  getCurrentUserInfos() : User {
+    if (this.isAuthenticated()) {
+      var obj = JSON.parse(localStorage.getItem("user"));
+      return new User(obj.username, obj.email, obj.id, obj.role, obj.avatar);
+    }
   }
 
   login(credentials, callback) {
     this.http.post(this.url+'/login', credentials, { observe: 'response', withCredentials: true }).subscribe(response => {
+      localStorage.setItem("user", JSON.stringify(response.body));
       return callback && callback();
     });
   }

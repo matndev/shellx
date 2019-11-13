@@ -60,5 +60,9 @@ export class User {
     }  
     setAvatar(avatar: string) {
         this.avatar = avatar;
-    }       
+    }
+    
+    toString() : string {
+        return "USER object: id: "+this.id+", username: "+this.username+", email: "+this.email+", role: "+this.role+", avatar: "+this.avatar;
+    }
 }

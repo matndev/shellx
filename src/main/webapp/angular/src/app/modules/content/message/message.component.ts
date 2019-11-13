@@ -50,7 +50,7 @@ export class MessageComponent implements OnInit, OnChanges {
       //   // .pipe(map(messages => messages.sort(RoomComponent.descendingByPostedAt)))
       //   .subscribe(messages => this.messages = messages);  
       this.messageService.subscribeChannel(changes.currentRoom.currentValue).subscribe(data => {
-        console.log("data: "+data);
+        // console.log("data: "+data);
         this.messages.push(...data);
         this.messages = this.messages.sort((a,b) => (a.getMessageDate() > b.getMessageDate()) ? 1 : ((b.getMessageDate() > a.getMessageDate()) ? -1 : 0));
       });

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/shared/models/authentication/user.model';
+import { AuthenticationService } from '../../authentication/authentication/authentication.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chat',
@@ -12,10 +14,18 @@ export class ChatComponent implements OnInit {
   private userList: User[] = [];
   private userLogged: User;
 
-  constructor() { }
+  constructor(private auth: AuthenticationService,
+              private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit() {
-    this.userLogged = new User( "Pierrho", "", 1);
+    // this.userLogged = new User( "Pierrho", "", 1 );
+    this.userLogged = this.auth.getCurrentUserInfos();
+    this.route.paramMap.subscribe(params => {
+      if (params.get('roomId') != undefined)
+          this.currentRoom = +params.get('roomId');
+    });
+    // console.log("Current user infos: "+this.userLogged.toString());
   }
 
   getCurrentRoom() : number {

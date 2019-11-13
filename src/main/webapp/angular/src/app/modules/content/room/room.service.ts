@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { map, catchError, first } from 'rxjs/operators';
-import { Message } from 'src/app/shared/models/content/message.model';
+import { catchError } from 'rxjs/operators';
 import { Room } from 'src/app/shared/models/content/room.model';
 import { Router } from '@angular/router';
 import { User } from 'src/app/shared/models/authentication/user.model';
@@ -69,7 +68,7 @@ export class RoomService {
       console.error(
         `Backend returned code ${error.status}, ` +
         `body was: ${error.error}`);
-      if (error.error == "token-expired") {
+      if (error.error == "token-expired") { // error.error == "token-expired" || error.error == "cookie-not-found"
         this.router.navigateByUrl('/login');
       }
     }

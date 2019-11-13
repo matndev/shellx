@@ -18,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import app.shellx.utils.JsonTools;
 import io.jsonwebtoken.JwtException;
 
 @Order(1)
@@ -31,34 +32,43 @@ public class ExceptionTokenVerificationHandlerFilter extends OncePerRequestFilte
         try {
         	log.info("Filter: ExceptionTokenVerificationHandlerFilter (doFilterInternal)");
             filterChain.doFilter(request, response);
-        } catch (JwtException e) {
+        } catch (UserAlreadyLoggedException|InvalidJwtAuthenticationException|JwtException e) { // Add exceptions here and implements new custom exception class which extends RuntimeException
         	
         	String message;
-        	if(e.getMessage() == "Token expired") { 
-        		message = "token-expired";
+        	switch(e.getMessage()) {
+	        	case "Token expired":
+	        		message = "token-expired";
+	        	break;
+	        	case "User already logged":
+	        		message = "user-already-logged";
+	        	break;
+	        	case "Cookie not found":
+	        		message = "cookie-not-found";
+	        	break;
+	        	default:
+	        		message = "access-denied";
         	}
-        	else {
-        		message = "access-denied";
+        	
+        	if (!message.equals("user-already-logged")) {
+	        	// if token is expired we delete the old cookie by setting 0 value inside it
+				final Cookie newCookie = new Cookie("access_token", "");
+				newCookie.setSecure(false); // a mettre en commentaire si ca marche pas
+				newCookie.setHttpOnly(true);
+				newCookie.setMaxAge(0);
+				newCookie.setPath("/");
+				response.addCookie(newCookie);
         	}
-            
-        	// if token is expired we delete the old cookie by setting 0 value inside it
-			final Cookie newCookie = new Cookie("access_token", "");
-			newCookie.setSecure(false); // a mettre en commentaire si ca marche pas
-			newCookie.setHttpOnly(true);
-			newCookie.setMaxAge(0);
-			newCookie.setPath("/");
-			response.addCookie(newCookie);
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            response.getWriter().write(convertObjectToJson(message));
-    }
-}
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.getWriter().write(JsonTools.convertObjectToJson(message));
+	    }
+	}
 
-    private String convertObjectToJson(Object object) throws JsonProcessingException {
-        if (object == null) {
-            return null;
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
-    }
+//    private String convertObjectToJson(Object object) throws JsonProcessingException {
+//        if (object == null) {
+//            return null;
+//        }
+//        ObjectMapper mapper = new ObjectMapper();
+//        return mapper.writeValueAsString(object);
+//    }
 
 }

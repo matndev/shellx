@@ -1,4 +1,5 @@
-<app-room       (currentRoomEmitter)="setCurrentRoom($event)">
+<app-room       [currentRoom]="currentRoom"
+                (currentRoomEmitter)="setCurrentRoom($event)">
 </app-room>
 <app-userlist   [currentRoom]="currentRoom"
                 (userListEmitter)="setUserList($event)">

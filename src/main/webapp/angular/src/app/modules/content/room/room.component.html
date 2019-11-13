@@ -6,7 +6,7 @@
     <app-message [message]="message"></app-message>
 </div> -->
 <div *ngFor="let room of rooms">
-    {{ room.getName() }}
+    <a [title]="room.getName()" [routerLink]="['/chat', room.getId()]" >{{ room.getName() }}</a>
 </div>
 
 <form ngNativeValidate [formGroup]="createRoomForm" (ngSubmit)="onSubmit()">
