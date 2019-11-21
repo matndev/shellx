@@ -15,6 +15,7 @@ import { CustomHttpInterceptorService } from './core/http/custom-http-intercepto
 import { ChatComponent } from './modules/templates/chat/chat.component';
 import { UserlistComponent } from './modules/content/user/userlist/userlist.component';
 import { LogoTextComponent } from './modules/content/logo-text/logo-text/logo-text.component';
+import { CommandComponent } from './modules/content/command/command/command.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { LogoTextComponent } from './modules/content/logo-text/logo-text/logo-te
     RoomComponent,
     ChatComponent,
     UserlistComponent,
-    LogoTextComponent
+    LogoTextComponent,
+    CommandComponent
   ],
   imports: [
     BrowserModule,

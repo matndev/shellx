@@ -13,7 +13,7 @@ export class FormContentManagerService {
 
   constructor() { }
 
-  getFormData(input: string, currentRoom: number, currentUser: number) : Observable<boolean> {
+  getFormData(input: string, currentRoom: number, currentUser: number) : boolean {
       
       this.currentRoom = currentRoom;
       this.currentUser = currentUser;
@@ -27,7 +27,7 @@ export class FormContentManagerService {
               return this.joinRoom(input);
           }
           else {
-              return this.newMessage(input);
+              // return this.newMessage(input);
           }
 
       }
@@ -75,8 +75,8 @@ export class FormContentManagerService {
 
   }
 
-  newMessage(input: string) : boolean {
+  // newMessage(input: string) : boolean {
 
-  }
+  // }
 
 }
