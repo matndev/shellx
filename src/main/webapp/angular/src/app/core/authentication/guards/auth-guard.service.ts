@@ -7,29 +7,50 @@ import { LoginComponent } from 'src/app/modules/authentication/login/login.compo
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuardService implements CanActivateChild {
+export class AuthGuardService implements CanActivate { // CanActivateChild
 
       constructor(private _authService: AuthenticationService, private _router: Router) {
       }
 
-      canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+      canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         
-              if (this._authService.isAuthenticated() && state.url != "/login") {
-                return true;
-              }
-              else if (this._authService.isAuthenticated() && state.url == "/login") {
-                this._router.navigate(['/chat']);
-                return false;    
-              }
-              else if (!this._authService.isAuthenticated() && state.url == "/login") {
-                return true;    
-              }    
-              else {
-                this._router.navigate(['/login']);
-                return false;
-              }
+        console.log(state.url);
 
-      }
+        if (this._authService.isAuthenticated() && state.url != "/login") {
+          return true;
+        }
+        else if (this._authService.isAuthenticated() && state.url == "/login") {
+          this._router.navigate(['/chat']);
+          return false;    
+        }
+        else if (!this._authService.isAuthenticated() && state.url == "/login" || state.url == "/home") {
+          return true;    
+        }    
+        else {
+          this._router.navigate(['/login']);
+          return false;
+        }
+
+}
+
+      // canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+        
+      //         if (this._authService.isAuthenticated() && state.url != "/login") {
+      //           return true;
+      //         }
+      //         else if (this._authService.isAuthenticated() && state.url == "/login") {
+      //           this._router.navigate(['/chat']);
+      //           return false;    
+      //         }
+      //         else if (!this._authService.isAuthenticated() && state.url == "/login") {
+      //           return true;    
+      //         }    
+      //         else {
+      //           this._router.navigate(['/login']);
+      //           return false;
+      //         }
+
+      // }
 
 }
 

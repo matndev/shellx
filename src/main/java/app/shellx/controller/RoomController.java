@@ -46,7 +46,7 @@ public class RoomController {
 	}
 	
 	
-	// GET Room only (s = simplified)
+	// GET Room only (s = simplified) and user count
 	@GetMapping(path = {"/get/{id}"}, produces="application/json")
 	public RoomDto find(@PathVariable long id, Authentication authentication) {
 		return this.roomService.findRoomDtoById(id, authentication);

@@ -5,6 +5,7 @@ export class Room {
 
     private id: number;
 	private name: string;
+	private description: string;
 	private roomAdmin: number;
 	//private dateCreation: date;
 	private enabled: boolean;
@@ -13,14 +14,16 @@ export class Room {
 	public users: User[];
 	
     constructor(id?: number,
-				name?: string, 
+				name?: string,
+				description?: string,
                 roomAdmin?: number, 
                 enabled?: boolean, 
                 modePrivate?: boolean, 
                 messages?: Message[], 
                 users?: User[]) {
 		this.id = id;
-        this.name = name;
+		this.name = name;
+		this.description = description;
         this.roomAdmin = roomAdmin;
         this.enabled = enabled;
         this.modePrivate = modePrivate;
@@ -38,6 +41,13 @@ export class Room {
 	setName(name: string) {
 		this.name = name;
 	}
+
+	getDescription(): string {
+		return this.description;
+	}
+	setDescription(description: string) {
+		this.description = description;
+	}	
 
 	getRoomAdmin(): number {
 		return this.roomAdmin;

@@ -15,10 +15,12 @@ public class RoomDto implements Serializable {
 
 	protected long id;
 	protected String name;
+	protected String description;
 	protected long roomAdmin;
 	protected LocalDate dateCreation;
 	protected boolean enabled;
 	protected boolean modePrivate;
+//	protected int userCount;
 	
 	public RoomDto() {
 		
@@ -53,6 +55,14 @@ public class RoomDto implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	public long getRoomAdmin() {
 		return roomAdmin;
@@ -78,4 +88,11 @@ public class RoomDto implements Serializable {
 		this.modePrivate = modePrivate;
 	}
 
+//	public int getUserCount() {
+//		return userCount;
+//	}
+//
+//	public void setUserCount(int userCount) {
+//		this.userCount = userCount;
+//	}	
 }

@@ -13,6 +13,8 @@ export class ChatComponent implements OnInit {
   private currentRoom: number;
   private userList: User[] = [];
   private userLogged: User;
+  private userCount: number;
+  private modeSidemenu: number;
 
   constructor(private auth: AuthenticationService,
               private route: ActivatedRoute,
@@ -20,6 +22,7 @@ export class ChatComponent implements OnInit {
 
   ngOnInit() {
     // this.userLogged = new User( "Pierrho", "", 1 );
+    this.modeSidemenu = 1;
     this.userLogged = this.auth.getCurrentUserInfos();
     this.route.paramMap.subscribe(params => {
       if (params.get('roomId') != undefined)
@@ -37,5 +40,15 @@ export class ChatComponent implements OnInit {
 
   setUserList(userListFromUserListComponent: User[]) {
     this.userList = userListFromUserListComponent;
+    this.userCount = this.userList.length;
+  }
+
+  swipeMenu() {
+    if (this.modeSidemenu === 0) {
+      this.modeSidemenu = 1;
+    }
+    else {
+      this.modeSidemenu = 0;
+    }
   }
 }

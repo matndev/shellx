@@ -3,7 +3,6 @@ import { RoomService } from './room.service';
 import { Room } from 'src/app/shared/models/content/room.model';
 import { Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { User } from 'src/app/shared/models/authentication/user.model';
 
 @Component({
   selector: 'app-room',
@@ -12,7 +11,9 @@ import { User } from 'src/app/shared/models/authentication/user.model';
 })
 export class RoomComponent implements OnInit {
 
-  @Input() currentRoom: number;  
+  @Input() currentRoom: number;
+  @Input() userCount: number;
+  @Input() modeSidemenu: number;
   @Output() currentRoomEmitter = new EventEmitter<number>();
 
   room: Room = null;
@@ -44,6 +45,7 @@ export class RoomComponent implements OnInit {
       result.body.forEach(element => {
         this.rooms.push(new Room(parseInt(element['id']),
                         element['name'],
+                        element['description'],
                         element['roomAdmin'],
                         element['enabled'],
                         element['modePrivate']
@@ -80,7 +82,7 @@ export class RoomComponent implements OnInit {
 
   public getRoomById(id: number) {
     this.roomService.getRoom(id).subscribe(data => {
-      this.room = new Room(data.body['id'], data.body['name'], data.body['roomAdmin'], data.body['enabled'], data.body['modePrivate']);
+      this.room = new Room(data.body['id'], data.body['name'], data.body['description'], data.body['roomAdmin'], data.body['enabled'], data.body['modePrivate']);
     });
   } 
  
@@ -101,10 +103,11 @@ export class RoomComponent implements OnInit {
   // }
 
   onSubmit() {
-    let newRoom = new Room(null, this.createRoomForm.get("content").value, 1, true, false, null, null);
+    let newRoom = new Room(null, this.createRoomForm.get("content").value, null, 1, true, false, null, null);
     this.roomService.createNewRoom(newRoom).subscribe(result => {
         this.rooms.push(new Room(result.body['id'],
                                   result.body['name'],
+                                  result.body['description'],
                                   result.body['roomAdmin'],
                                   result.body['enabled'],
                                   result.body['modePrivate']));

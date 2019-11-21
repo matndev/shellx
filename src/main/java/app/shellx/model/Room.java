@@ -39,6 +39,8 @@ public class Room implements Serializable {
 	@NotEmpty
 	@Column(name="rooms_name")
 	protected String name;
+	@Column(name="rooms_description")
+	protected String description;
 	@NotNull
 	@Column(name="rooms_admin")
 	protected long roomAdmin;
@@ -85,6 +87,14 @@ public class Room implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}	
 
 	public long getRoomAdmin() {
 		return roomAdmin;

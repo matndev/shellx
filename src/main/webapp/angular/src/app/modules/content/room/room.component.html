@@ -1,32 +1,36 @@
-<div *ngIf="room">{{ room.getName() }}</div>
-<!-- <div *ngFor="let user of users">
-    {{ user.getUsername() }}
-</div> -->
-<!-- <div *ngFor="let message of previousMessages">
-    <app-message [message]="message"></app-message>
-</div> -->
-<div *ngFor="let room of rooms">
-    <a [title]="room.getName()" [routerLink]="['/chat', room.getId()]" >{{ room.getName() }}</a>
-</div>
-
-<form ngNativeValidate [formGroup]="createRoomForm" (ngSubmit)="onSubmit()">
-
-    <div>
-        <input type="text" formControlName="content" required/>       
+<div class="col">
+    <div *ngIf="modeSidemenu===1" class="row bg-success">
+            <div class="col">
+                <div *ngIf="room">
+                    <p style="font-size:large;font-weight:bold;">{{ room.getName() }}</p>
+                    <p>{{ room.getDescription() }}</p>
+                    <p class="d-flex"><mat-icon svgIcon="multiusers" aria-hidden="true" aria-label="User Count"></mat-icon> {{ userCount }}</p>
+                </div>
+            </div>
     </div>
+    <div *ngIf="modeSidemenu===0" class="row bg-danger">
+            <div class="col">
+                <div *ngFor="let room of rooms">
+                    <a [title]="room.getName()" [routerLink]="['/chat', room.getId()]" >{{ room.getName() }}</a>
+                </div>
 
-    <button class="button" type="submit" [disabled]="!createRoomForm.valid" >Send</button>
-  
-</form>
+                <form ngNativeValidate [formGroup]="createRoomForm" (ngSubmit)="onSubmit()">
 
-    <!-- <div *ngIf="!loginForm.valid">
-        <div *ngIf="loginForm.get('email').hasError('required')">Email required</div>
-        <div *ngIf="loginForm.get('email').hasError('email')">Email format is not correct</div>
-        <div *ngIf="loginForm.get('password').hasError('required')">Password required</div>
-        <div *ngIf="loginForm.get('password').hasError('minlength')">Password must be at least 30 characters</div>
-        <div *ngIf="loginForm.get('password').hasError('maxlength')">Password must not exceed 30 characters</div>
-        <div *ngIf="loginForm.get('passwordMatching').hasError('required')">Confirmation password required</div>
-        <div *ngIf="loginForm.get('passwordMatching').hasError('minlength')">Password must be at least 30 characters</div>
-        <div *ngIf="loginForm.get('passwordMatching').hasError('maxlength')">Password must not exceed 30 characters</div>
-        <div *ngIf="loginForm.errors?.passwordMatching && (loginForm.touched || loginForm.dirty)">Passwords are not matching</div>
-    </div>   -->
+                    <!-- <div>
+                        <input type="text" formControlName="content" required/>       
+                    </div>
+
+                    <button class="button" type="submit" [disabled]="!createRoomForm.valid" >Send</button> -->
+
+                    <div class="input-group">
+                        <input type="text" formControlName="content" required/>
+                        <!-- placeholder="Room Name" aria-label="Room Name" aria-describedby="basic-addon2"> -->
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit" [disabled]="!createRoomForm.valid" >Send</button>
+                        </div>
+                    </div>
+                
+                </form>
+            </div>
+    </div>
+</div>

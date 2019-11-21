@@ -1,0 +1,25 @@
+/* copied from bootstrap.css, class: .row */
+:host {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    flex-grow: 1;
+}
+
+.panel-room-info button {
+    align-items: center;
+    color: grey;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.mat-y-icon  {
+    color: yellowgreen;
+  }
+
+/* .panel-room-info mat-icon {
+    float: right;
+} */

@@ -1,0 +1,28 @@
+
+/* copied from bootstrap.css, class: .row */
+:host {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    flex-grow: 1;
+    align-items: center; /* specific to this component */
+}
+
+form div {
+    color: #cfd0d0;
+}
+
+.login-form-info {
+    margin-top:20px;
+}
+
+.btn-secondary {
+    margin-left: 20px;
+}
+
+.btn-secondary a {
+    color: black;
+}

@@ -1,10 +1,21 @@
-<app-room       [currentRoom]="currentRoom"
-                (currentRoomEmitter)="setCurrentRoom($event)">
-</app-room>
-<app-userlist   [currentRoom]="currentRoom"
-                (userListEmitter)="setUserList($event)">
-</app-userlist>
-<app-message    [currentRoom]="currentRoom" 
-                [userList]="userList"
-                [userLogged]="userLogged">
-</app-message>
+<div class="col-9 d-flex flex-column">
+    <app-message    [currentRoom]="currentRoom" 
+                    [userList]="userList"
+                    [userLogged]="userLogged">
+    </app-message>
+</div>
+<div class="col-3 sidemenu">
+    <div class="row panel-room-info p-2">
+            <button *ngIf="modeSidemenu===0" class="btn w-100 d-flex rounded-0" (click)="swipeMenu()" ><div class="flex-grow-1 justify-content-start">ROOM INFORMATIONS</div> <div class=""><mat-icon class="mat-icon" svgIcon="swipe-right" aria-hidden="false" aria-label="swipe right" color="y-icon"></mat-icon></div></button>
+            <button *ngIf="modeSidemenu===1" class="btn w-100 d-flex rounded-0" (click)="swipeMenu()" ><div class="flex-grow-1 justify-content-start">BACK</div> <div class=""><mat-icon class="mat-icon" svgIcon="swipe-right" aria-hidden="false" aria-label="swipe right" color="y-icon"></mat-icon></div></button>
+    </div>
+    <app-room       [currentRoom]="currentRoom"
+                    [userCount]="userCount"
+                    [modeSidemenu]="modeSidemenu"
+                    (currentRoomEmitter)="setCurrentRoom($event)">
+    </app-room>
+    <app-userlist   [currentRoom]="currentRoom"
+                    [modeSidemenu]="modeSidemenu"
+                    (userListEmitter)="setUserList($event)">
+    </app-userlist>
+</div>

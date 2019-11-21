@@ -1,6 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,7 +31,8 @@ import { LogoTextComponent } from './modules/content/logo-text/logo-text/logo-te
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatIconModule
   ],
   providers: [
     CookieService,
@@ -38,4 +40,9 @@ import { LogoTextComponent } from './modules/content/logo-text/logo-text/logo-te
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIcon('multiusers', sanitizer.bypassSecurityTrustResourceUrl('./assets/icons/material/people-24px.svg'));
+    iconRegistry.addSvgIcon('swipe-right', sanitizer.bypassSecurityTrustResourceUrl('./assets/icons/material/arrow_forward_ios-24px.svg'));
+  }
+}

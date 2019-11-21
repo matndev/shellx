@@ -17,4 +17,6 @@ public interface RoomUserRepository extends CrudRepository<RoomUser, RoomUserId>
 	public Set<RoomUser> findByRoomId(long id);
 	
 	public void save(RoomUserDto entity);
+	
+	public int countByRoomId(long roomId);
 }

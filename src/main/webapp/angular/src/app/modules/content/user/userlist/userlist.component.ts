@@ -11,6 +11,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 export class UserlistComponent implements OnInit, OnChanges {
 
   @Input() currentRoom: number;
+  @Input() modeSidemenu: number;
   @Output() userListEmitter = new EventEmitter<User[]>();
   private users: User[] = [];
   addUserForm;
@@ -56,19 +57,9 @@ export class UserlistComponent implements OnInit, OnChanges {
     return await this.userlistService.getUsersByRoomId(id).toPromise();
   }  
 
-  onSubmit() {
-    // if (this.userLogged != null) {
-    //     this.userlistService.saveNewMessage(newMessage);
-    // } 
-    console.log("DEBUG : id room: "+this.currentRoom+", id user: "+this.addUserForm.get("content").value);
-    this.userlistService.add(this.currentRoom, this.addUserForm.get("content").value);
-  }  
-  
-  // async getUsersByRoomId(id: number) {
-  //   this.userlistService.getUsersByRoomId(id).subscribe(data => {
-  //     data.body.forEach(element => {
-  //           this.users.push(new User(element['username'], null, element['id']));
-  //     });
-  //   });
-  // }
+  // onSubmit() {
+  //   console.log("DEBUG : id room: "+this.currentRoom+", id user: "+this.addUserForm.get("content").value);
+  //   this.userlistService.add(this.currentRoom, this.addUserForm.get("content").value);
+  // } 
+   
 }

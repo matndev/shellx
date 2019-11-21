@@ -59,7 +59,10 @@ public class RoomService {
 		RoomUserId compKey = new RoomUserId(id, user.getId());
 		if (this.roomUserRepository.existsById(compKey)) {		
 			Room room = this.roomRepository.findById(id);
-			return new RoomDto(room.getId(), room.getName(), room.getRoomAdmin(), room.isModePrivate());
+//			int userCount = this.roomUserRepository.countByRoomId(id);
+			RoomDto roomDto = new RoomDto(room.getId(), room.getName(), room.getRoomAdmin(), room.isModePrivate());
+			roomDto.setDescription(room.getDescription());
+			return roomDto;
 		}
 		else { return null; }			
 	}
