@@ -14,8 +14,8 @@ public final class CookieConfig {
 
 	private static String name;
 	
-	@Value("${security.jwt.token.secret.key}")
-	private static int authenticationExpiration = 600;
+//	@Value("${security.jwt.token.secret.key}")
+	private static int authenticationExpiration = 3600; // 600
 	
 	private CookieConfig() {
 		

@@ -1,6 +1,9 @@
 package app.shellx.controller;
 
+import java.util.Map;
 import java.util.Set;
+
+import javax.xml.ws.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -15,6 +18,7 @@ import app.shellx.dto.RoomDto;
 import app.shellx.dto.UserDto;
 import app.shellx.model.Room;
 import app.shellx.service.RoomService;
+import app.shellx.service.RoomUserService;
 import app.shellx.service.UserService;
 
 @RestController
@@ -27,12 +31,29 @@ public class RoomController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private RoomUserService roomUserService;
+	
 	// Don't send messages to the broker (except with SendTo annotation)
 //	@SubscribeMapping("{id}/get")
 //	public Room findRoomWithMessages(@DestinationVariable int id) {
 //		return this.roomService.findCompleteRoomById(id);
 //	}
 	
+	@PostMapping(path="/join", consumes="application/json", produces="application/json")
+	public RoomDto join(@RequestBody Map<String, String> payload) {
+		if (payload.containsKey("idRoom") 
+			&& payload.containsKey("idUser")
+			&& payload.get("idRoom") != null
+			&& payload.get("idUser") != null
+			&& payload.size() == 2) {
+//			System.out.println("ID Room : "+payload.get("idRoom")+", ID User : "+payload.get("idUser"));
+			return this.roomUserService.join(Long.parseLong(payload.get("idRoom")), Long.parseLong(payload.get("idUser")));
+		}
+		else {
+			return null;
+		}
+	}
 	
 	@PostMapping(path="/add", consumes="application/json", produces="application/json")
 	public RoomDto add(@RequestBody Room room) {

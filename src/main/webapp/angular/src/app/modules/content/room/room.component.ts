@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { RoomService } from './room.service';
 import { Room } from 'src/app/shared/models/content/room.model';
 import { Validators, FormBuilder } from '@angular/forms';
@@ -9,12 +9,14 @@ import { Router } from '@angular/router';
   templateUrl: './room.component.html',
   styleUrls: ['./room.component.css']
 })
-export class RoomComponent implements OnInit {
-
+export class RoomComponent implements OnInit, OnChanges {
+  
   @Input() currentRoom: number;
   @Input() userCount: number;
   @Input() modeSidemenu: number;
+  @Input() arrCommandRoom: Array<any> = [];
   @Output() currentRoomEmitter = new EventEmitter<number>();
+  @Output() changeRoomEmitter = new EventEmitter<number>();
 
   room: Room = null;
   headersResp: string[];
@@ -86,10 +88,50 @@ export class RoomComponent implements OnInit {
     });
   } 
  
+  ngOnChanges(changes: SimpleChanges): void {
+    // console.log("ROOM COMPONENT : ngOnChanges"); changes.arrCommandRoom
+    if (changes.arrCommandRoom !== undefined && changes.arrCommandRoom.currentValue.length != 0 && changes.arrCommandRoom.currentValue != changes.arrCommandRoom.previousValue) {
+          console.log("changes 2: "+changes.arrCommandRoom.currentValue[1]);
+          if (changes.arrCommandRoom.currentValue[1] === "join") {
+                  this.roomService.join(this.arrCommandRoom[2], JSON.parse(localStorage.getItem("user")).id).subscribe(result => {
+                  this.rooms.push(new Room(result.body['id'],
+                                              result.body['name'],
+                                              result.body['description'],
+                                              result.body['roomAdmin'],
+                                              result.body['enabled'],
+                                              result.body['modePrivate']));
+                  });
+          }
+          else if (changes.arrCommandRoom.currentValue[1] === "create") {
+              // if (this.arrCommandRoom[2] instanceof Room) {
+                  let newRoom = new Room(null, this.arrCommandRoom[2], null, 1, true, false);
+                  this.roomService.createNewRoom(newRoom).subscribe(result => {
+                      this.rooms.push(new Room(result.body['id'],
+                                                result.body['name'],
+                                                result.body['description'],
+                                                result.body['roomAdmin'],
+                                                result.body['enabled'],
+                                                result.body['modePrivate']));
+                  }); 
+              // }        
+          }
+          else {}
+    }
+    else {} // console.log("DEBUGGGG erreur");
 
+    if (changes.currentRoom !== undefined && changes.currentRoom.currentValue != changes.currentRoom.previousValue) {
+        this.getRoomById(this.currentRoom);
+    }
 
+  }
 
-  
+  // Transfers new room id to chat comp, message comp, and userlist comp
+  // unsubscribe from all socket sources and flush arrays
+  changeRoom(idNextRoom: number) {
+      console.log("id next room: "+idNextRoom);
+      this.changeRoomEmitter.emit(idNextRoom);
+  }
+
   // public getUsersRoom(id: number) {
   //   this.roomService.getUsersByRoomId(id).subscribe(data => {
   //     data.body.forEach(element => {
@@ -102,18 +144,18 @@ export class RoomComponent implements OnInit {
   //   return message2.getMessageDate.getTime() - message1.postedAt.getTime();
   // }
 
-  onSubmit() {
-    let newRoom = new Room(null, this.createRoomForm.get("content").value, null, 1, true, false, null, null);
-    this.roomService.createNewRoom(newRoom).subscribe(result => {
-        this.rooms.push(new Room(result.body['id'],
-                                  result.body['name'],
-                                  result.body['description'],
-                                  result.body['roomAdmin'],
-                                  result.body['enabled'],
-                                  result.body['modePrivate']));
-    });
-    // this.roomService.createNewRoom(newRoom);
-  }
+  // onSubmit() {
+  //   let newRoom = new Room(null, this.createRoomForm.get("content").value, null, 1, true, false, null, null);
+  //   this.roomService.createNewRoom(newRoom).subscribe(result => {
+  //       this.rooms.push(new Room(result.body['id'],
+  //                                 result.body['name'],
+  //                                 result.body['description'],
+  //                                 result.body['roomAdmin'],
+  //                                 result.body['enabled'],
+  //                                 result.body['modePrivate']));
+  //   });
+  //   // this.roomService.createNewRoom(newRoom);
+  // }
 
   // public createMessage(data: any) : void {
   //   // A MODIFIER

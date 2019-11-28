@@ -5,6 +5,25 @@
     flex-wrap: wrap;
     margin-right: -15px;
     margin-left: -15px;
-    flex-grow: 1;
+    /* flex-grow: 1; */
     background-color: blueviolet;
+    flex: 0 0 100%;
+    max-height: 45%;
+    min-height: 45%;
+    overflow: auto;
+}
+
+.mat-list-item:hover {
+    background-color:#282b2e;
+}
+
+.mat-list-item a {
+    cursor: pointer;
+}
+
+.roomsMenuTitle {
+    padding-left:16px;
+    /* padding-top:10px;
+    padding-bottom:10px; */
+    font-weight: bold;
 }

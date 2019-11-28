@@ -1,10 +1,24 @@
-<div *ngIf="modeSidemenu===0" class="row">
-    <div class="col">
-        <div *ngFor="let user of users">
-            <p>{{ user.getUsername() }}</p>
-        </div>
+<div *ngIf="modeSidemenu===0" class="col p-0 pt-3">
 
-        <form ngNativeValidate [formGroup]="addUserForm" (ngSubmit)="onSubmit()">
+    <h6 class="userlistMenuTitle">USERS</h6>
+    <mat-list class="p-0" style="max-height: 100%;">
+        <mat-list-item *ngFor="let user of users">
+        <img matListAvatar src="assets/icons/user.jpg" alt="...">
+        <!-- <h3 matLine> {{user.getUsername()}} </h3> -->
+        <!-- <p matLine> --><a matLine>
+            <span> {{user.getUsername()}} </span></a>
+            <!-- <span class="demo-2"> -- {{user.getUsername()}} </span> -->
+        <!-- </p> -->
+        </mat-list-item>
+    </mat-list>
+
+</div> 
+
+        <!-- <div *ngFor="let user of users">
+            <p>{{ user.getUsername() }}</p>
+        </div> -->
+
+        <!-- <form ngNativeValidate [formGroup]="addUserForm" (ngSubmit)="onSubmit()">
 
             <div>
                 <input type="text" formControlName="content" required/>       
@@ -12,6 +26,4 @@
 
             <button class="button" type="submit" [disabled]="!addUserForm.valid" >Send</button>
         
-        </form>
-    </div>    
-</div>
+        </form> -->

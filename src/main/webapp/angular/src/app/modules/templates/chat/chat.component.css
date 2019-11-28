@@ -9,11 +9,15 @@
     flex-grow: 1;
 }
 
-.panel-room-info button {
-    align-items: center;
+.panel-room-info {
+    display:flex;
+    width:100%;
     color: grey;
     font-size: 12px;
     font-weight: bold;
+    border:none !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
 }
 
 .mat-y-icon  {

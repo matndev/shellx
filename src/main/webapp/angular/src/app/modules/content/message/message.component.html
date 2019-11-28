@@ -1,4 +1,4 @@
-<div class="col msg-box">
+<!-- <div class="col msg-box">
     <div class="row msglist">
         <div class="col d-flex flex-column justify-content-end">
             <div class="row" *ngFor="let message of messages">
@@ -7,7 +7,7 @@
         </div>
     </div>
 
-    <!-- <div class="row form-msg">
+    <div class="row form-msg">
         <div class="col p-1">
             <form class="form-inline d-flex" [formGroup]="sendMessageForm" (ngSubmit)="onSubmit()">
 
@@ -17,5 +17,15 @@
             
             </form>
         </div>
-    </div> -->
+    </div>
+</div> -->
+
+<div class="col"> <!-- msg-box -->
+        <div class="row"> <!-- msglist -->
+            <div class="col d-flex flex-column justify-content-end">
+                <div class="row" *ngFor="let message of messages">
+                    <p><span style="color:grey;">[ {{ message.messageDate }} ]</span> @{{ getAuthorUsername(message.messageAuthor) }} <span class="receiver" *ngIf="message.messageReceiver!=0">@{{ getReceiverUsername(message.messageReceiver) }}</span> : {{ message.messageContent }}</p>
+                </div>
+            </div>
+        </div>
 </div>

@@ -35,6 +35,14 @@ export class RoomService {
   //       );
   // }
 
+  public join(room_id: number, user_id: string) : Observable<HttpResponse<Room>> {
+    var obj = { idRoom: room_id, idUser: user_id };
+    return this.http.post<HttpResponse<Room>>("http://localhost:8086/rooms/join", JSON.stringify(obj), httpOptions)
+        .pipe(
+          catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
+        );
+  }
+
   public getRoomsByUserId(id: string) : Observable<HttpResponse<Room[]>> {
     return this.http.get<HttpResponse<Room[]>>("http://localhost:8086/rooms/get/all/"+id, httpOptions)
         .pipe(
