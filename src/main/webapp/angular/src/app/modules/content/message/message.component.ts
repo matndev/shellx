@@ -20,7 +20,8 @@ import { ChatService } from '../../templates/chat/chat.service';
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
-  styleUrls: ['./message.component.css']
+  styleUrls: ['./message.component.css'],
+  host: { 'class': 'row d-flex flex-fill shx-messages-frame__content' }
 })
 export class MessageComponent implements OnInit, OnChanges, OnDestroy {
 

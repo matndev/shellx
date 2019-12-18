@@ -1,29 +1,30 @@
-<div *ngIf="modeSidemenu===0" class="col p-0 pt-3">
+<!-- <div *ngIf="modeSidemenu===0" class="col p-0 pt-3">
 
     <h6 class="userlistMenuTitle">USERS</h6>
     <mat-list class="p-0" style="max-height: 100%;">
         <mat-list-item *ngFor="let user of users">
         <img matListAvatar src="assets/icons/user.jpg" alt="...">
-        <!-- <h3 matLine> {{user.getUsername()}} </h3> -->
-        <!-- <p matLine> --><a matLine>
+        <a matLine>
             <span> {{user.getUsername()}} </span></a>
-            <!-- <span class="demo-2"> -- {{user.getUsername()}} </span> -->
-        <!-- </p> -->
         </mat-list-item>
     </mat-list>
 
-</div> 
+</div> -->
 
-        <!-- <div *ngFor="let user of users">
-            <p>{{ user.getUsername() }}</p>
-        </div> -->
-
-        <!-- <form ngNativeValidate [formGroup]="addUserForm" (ngSubmit)="onSubmit()">
-
-            <div>
-                <input type="text" formControlName="content" required/>       
-            </div>
-
-            <button class="button" type="submit" [disabled]="!addUserForm.valid" >Send</button>
-        
-        </form> -->
+<!-- USER LIST -->
+<div *ngIf="modeSideMenu === 'userlist'" id="userlist" class="row shx-h-side-menu">
+    <div class="col p-0 d-flex">
+        <div class="shx-h-side-menu__list">
+            <h6>USERS</h6>
+            <ul class="list-group">
+                <li class="list-group-item rounded-0" *ngFor="let user of users">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" viewBox="0 0 24 24" >
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                    </svg>
+                    <a class="ml-2">{{user.getUsername()}}</a>
+                </li>
+            </ul>
+        </div>                    
+    </div>
+</div>

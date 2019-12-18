@@ -1,7 +1,6 @@
-/* You can add global styles to this file, and also import other style files */
+/* LAYOUT */
 
 html, body {
-    height: 100%;
 }
 
 * {
@@ -10,51 +9,21 @@ html, body {
 
 p {
     margin: 0 !important;
-    /* margin-top: auto !important;
-    margin-bottom: auto !important; */
-    /* display: flex !important;
-    margin: 0 !important;
-    align-items: center !important; */
-    /* background-color: orange; */
-    /* line-height: normal !important; */
-    /* margin-top: 0 !important;  // DEFAULT VALUES
-    margin-bottom: 1rem !important;     */
 }
 
 .nopadding {
     padding: 0 !important;
     margin: 0 !important;
- }
-
-.shxbody {
-    background-color: #111417; /* #191c21; 21252E */
 }
 
-.sidemenu {
-    /* BUG TEMPORARY FIX : gap sidemenu. Cause height top menu */
-    height: 100%;
-    margin-bottom: -20%; /* should >height top menu */ 
-    /* */
-    background-color: #0b0e10;
+.shx-transparent {
+    background-color: transparent !important;
+    border: transparent !important;
 }
 
-.switchMenu {
-    flex:0 0 100%;
-    max-height: 10%;
-    min-height: 10%;
-}
-
-.nav-top, input {
-    background-color: #282b2e;
-}
+/* NATIVE TAGS */
 
 li a {
-    color: #cfd0d0;
-}
-
-li a:hover {
-    border-bottom: 2px solid #cfd0d0; 
-    margin-bottom: -2px;
     color: #cfd0d0;
 }
 
@@ -63,6 +32,339 @@ form input {
     margin-bottom:10px;
     /* border: 1px solid #282b2e; */
     border:none !important;
+}
+
+/* COMPONENTS */
+
+/*
+ * NAVBAR TOP
+ */
+
+.shx-navbar-top {
+    /* height: 56px; */
+    background-color: hsl(210, 7%, 17%) !important;
+}
+
+.shx-navbar-top li a:hover {
+    border-bottom: 2px solid #cfd0d0; 
+    margin-bottom: -2px;
+    color: #cfd0d0;
+}
+
+/*
+ * CONTENT
+ */
+
+.shx-content {
+    height: calc(100vh - 56px) !important;
+    margin-top: 56px !important;
+    background-color: hsl(210, 15%, 8%); /* #191c21; 21252E */
+    /* background-image: linear-gradient(to bottom, hsla(0,0%,95%,0) 10%, hsla(0,0%,98%,1)), url('theme/background/background03.png') !important; */
+}
+
+/*
+ * LOGIN COMPONENT
+ */
+
+.shx-comp-login form div {
+    color: #cfd0d0;
+}
+
+.shx-comp-login .login-form-info {
+    margin-top:20px;
+}
+
+.shx-comp-login .btn-secondary {
+    margin-left: 20px;
+}
+
+.shx-comp-login .btn-secondary a {
+    color: black;
+}
+
+
+/*
+ * CHAT COMPONENT
+ */
+
+/*
+ * MESSAGE COMPONENT
+ */
+
+@media (max-width: 576px) {
+    .shx-messages-frame {
+        display: flex;
+    }
+}
+  
+.shx-messages-frame {
+    font-size: 15px;
+}
+  
+.shx-messages-frame__content {
+    height: calc(100vh - 112px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+/*
+ * COMMAND COMPONENT
+ */
+
+.shx-chat-form-frame {
+    height: 56px;
+    background-color: #0b0e10;
+    border-top: 2px solid #0b0e10;
+}
+  
+.shx-chat-form {
+    width: 100%;
+    flex: 0 0 auto;
+    overflow: hidden !important;
+}
+  
+.shx-chat-form__content {
+    width: 100%;
+}
+  
+.shx-chat-form__content input {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: .25rem;
+    flex-grow: 1;
+    line-height: 2;
+    /* background-color: hsl(0,0%,86%);
+    border: 1px solid hsl(0,0%,82%); */
+}
+  
+.shx-chat-form__content input:active {
+    border:none;  
+}
+  
+.shx-chat-form__content img {
+    transform: rotate(-45deg);
+    margin-bottom: 5px;
+    opacity: 50%;
+}
+
+/*
+ * SLIDE MENU BUTTON
+ */
+
+.shx-slide-menu-button {
+    width:70px;
+    height:70px;
+    position:absolute;
+    left:50%;
+    bottom:90px;
+    transform: translate(-20px);
+    z-index:2;
+}
+  
+.shx-slide-menu-button button {
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    border-radius: 35px;
+    font-size: 24px;
+    line-height: 1.33;
+    background-color: hsl(134, 48%, 69%);
+    border: none;
+}
+  
+.shx-slide-menu-button button:hover {
+    transition: all .5s;
+    transition-timing-function: cubic-bezier(.2, 3, .4, 1);
+    transform: scale(1.1, 1.1);
+}
+
+
+/*
+ * SIDE MENU FRAME
+ */
+
+@media (max-width: 576px) {
+    .shx-side-menu-frame.show {
+        display: flex;
+    }
+}
+  
+.shx-side-menu-frame {
+    background-color: #0b0e10;
+}
+  
+.shx-side-menu-frame li {
+    margin-top: 0 !important;
+    padding: 0.5rem 1.25rem !important;
+}
+  
+.shx-side-menu-frame li:hover:not(.shx-toolbar-menu) {
+    background-color:#282b2e !important;
+}
+  
+.shx-side-menu-frame svg {
+    fill: hsl(0, 0%, 60%);
+}
+  
+.shx-side-menu-frame .list-group-item.active {
+    background-color: hsl(0,0%,85%) !important;
+    color: hsl(0,0%,40%) !important;
+}
+  
+.shx-side-menu-frame li:hover > .shx-delete-notif {
+    display: flex !important;
+    flex-grow: 1;
+    justify-content: flex-end;
+    align-items: flex-start;
+    visibility: visible !important;
+}
+  
+/*
+* SWITCH MENU
+*/
+
+.shx-switch-menu-frame {
+    align-items: center;
+    height: 57px;
+}
+  
+.shx-switch-menu {
+    flex: 0 1 auto;
+    overflow: hidden;
+}
+
+.shx-switch-menu .nav-pills, .shx-switch-menu .nav-link {
+    border-radius: 0 !important;
+}
+
+.shx-switch-menu .nav-item {
+    border-bottom: 2px solid transparent;
+}
+
+.shx-switch-menu .nav-item.active {
+    background-color: transparent !important;
+    border-bottom: 2px solid white;
+    transition: border-bottom 0.5s linear;
+}
+
+.shx-switch-menu .nav-item img {
+    opacity: 30% !important;
+}
+
+.shx-switch-menu .nav-item.active img {
+    opacity: 100% !important;
+}
+
+/* CSS ANIMATION on SwitchMenu */
+.tab-content div {
+    animation: 0.1s linear 0s 1 slideInFromLeft;
+}
+  
+/*
+ * SIDE MENU CONTENT
+ */
+
+.shx-h-side-menu {
+    height:calc(100vh - 113px) !important;
+    overflow-y: auto;
+}
+
+.shx-h-side-menu__list {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.shx-h-side-menu__list h6 {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    margin-left: 1.25rem;
+    font-weight: bold;
+}
+
+/*
+ * ROOM LIST
+ */
+
+.shx-room-content a {
+    cursor: pointer;
+}
+  
+.shx-manage-room {
+    visibility: hidden;
+}
+  
+.shx-manage-room button {
+    border: none;
+}
+
+/*
+ * USER LIST
+ */
+
+#userlist a {
+    cursor: pointer;
+}
+  
+#userlist li {
+    background-color: transparent;
+    border: transparent;
+}
+
+/*
+ * ROOM INFO
+ */
+
+ #roominfo h6 {
+    margin-top: 1.25rem;
+    margin-left: 1.25rem;
+    font-weight: bold;
+}
+  
+#roominfo p {
+    padding: 1rem;
+}
+  
+#roominfo ul {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-bottom: .5rem;
+    list-style-type: none;
+}
+
+
+
+
+
+.nav-top, input {
+    background-color: #282b2e;
+}
+
+/* copied from bootstrap.css, class: .row */
+. {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    flex-grow: 1;
+}
+
+.panel-room-info {
+    display:flex;
+    width:100%;
+    color: grey;
+    font-size: 12px;
+    font-weight: bold;
+    border:none !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+
+.mat-y-icon  {
+    color: yellowgreen;
 }
 
 .test-col {

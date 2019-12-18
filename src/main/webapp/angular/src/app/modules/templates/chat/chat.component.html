@@ -1,4 +1,4 @@
-<div class="col-9 d-flex flex-column">
+<div class="col-sm-9 d-sm-flex flex-column shx-messages-frame collapse multi-collapse show" id="messages-frame">
     <app-message    [currentRoom]="currentRoom" 
                     [nextRoom] = "nextRoom"
                     [userList]="userList"
@@ -9,29 +9,47 @@
                     (commandEmitter)="setCommand($event)">
     </app-command>
 </div>
-<div class="col-3 sidemenu">
-    <div class="row d-flex switchMenu">
-        <div class="col p-0 bg-danger">
-            <!-- <button *ngIf="modeSidemenu===0" class="btn w-100 d-flex rounded-0" (click)="swipeMenu()" ><div class="flex-grow-1 justify-content-start">ROOM INFORMATIONS</div> <div class=""><mat-icon class="mat-icon" svgIcon="swipe-right" aria-hidden="false" aria-label="swipe right" color="y-icon"></mat-icon></div></button>
-            <button *ngIf="modeSidemenu===1" class="btn w-100 d-flex rounded-0" (click)="swipeMenu()" ><div class="flex-grow-1 justify-content-start">BACK</div> <div class=""><mat-icon class="mat-icon" svgIcon="swipe-right" aria-hidden="false" aria-label="swipe right" color="y-icon"></mat-icon></div></button> -->
-            <button *ngIf="modeSidemenu===0" class="btn rounded-0 panel-room-info h-100 align-items-center bg-success" (click)="swipeMenu()" >
-                <div class="d-flex flex-grow-1 justify-content-start">ROOM INFORMATIONS</div>
-                <mat-icon class="mat-icon" svgIcon="swipe-right" aria-hidden="false" aria-label="swipe right" color="y-icon">
-                </mat-icon></button>
-            <button *ngIf="modeSidemenu===1" class="btn rounded-0 panel-room-info h-100 align-items-center bg-success" (click)="swipeMenu()" ><div class="d-flex flex-grow-1 justify-content-start">BACK</div> <div class=""><mat-icon class="mat-icon" svgIcon="swipe-right" aria-hidden="false" aria-label="swipe right" color="y-icon"></mat-icon></div></button>            
+
+<!-- SLIDE MENU BUTTON -->
+<div class="d-sm-none shx-slide-menu-button">
+    <button type="button" data-toggle="collapse" data-target=".multi-collapse" 
+            aria-expanded="false" aria-controls="messages-frame side-menu-frame">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24">
+                <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/>
+                <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+    </button>
+</div>
+
+<!-- SIDE MENU -->
+<div class="col-sm-3 d-sm-flex flex-column collapse multi-collapse shx-side-menu-frame" id="side-menu-frame">
+
+    <!-- SWITCH MENU BUTTON -->
+    <div class="row shx-switch-menu-frame">
+        <div class="col d-flex">
+            <div class="shx-switch-menu">
+                <nav class="nav nav-pills">
+                    <a class="nav-item nav-link" [ngClass]="{'active': modeSideMenu=='roomlist'}" (click)="modeSideMenu='roomlist'" ><mat-icon class="mat-icon" svgIcon="menu-room" aria-hidden="false" aria-label="menu-room" color="y-icon"></mat-icon></a>
+                    <a class="nav-item nav-link" [ngClass]="{'active': modeSideMenu=='userlist'}" (click)="modeSideMenu='userlist'" ><mat-icon class="mat-icon" svgIcon="menu-user" aria-hidden="false" aria-label="menu-user" color="y-icon"></mat-icon></a>
+                    <a class="nav-item nav-link" [ngClass]="{'active': modeSideMenu=='roominfo'}" (click)="modeSideMenu='roominfo'" ><mat-icon class="mat-icon" svgIcon="menu-room-info" aria-hidden="false" aria-label="menu-room-info" color="y-icon"></mat-icon></a>
+                    <!-- <a class="nav-item nav-link" href="#notifications" data-toggle="tab" ><mat-icon class="mat-icon" svgIcon="menu-notifications" aria-hidden="false" aria-label="menu-notifications" color="y-icon"></mat-icon></a> -->
+                </nav>
+            </div>
         </div>
     </div>
-    <app-room       [currentRoom]="currentRoom"
-                    [userCount]="userCount"
-                    [modeSidemenu]="modeSidemenu"
-                    [arrCommandRoom]="arrCommandRoom"
-                    (changeRoomEmitter)="changeRoom($event)"
-                    (currentRoomEmitter)="setCurrentRoom($event)">
-    </app-room>
-    <app-userlist   [currentRoom]="currentRoom" 
-                    [nextRoom] = "nextRoom"
-                    [modeSidemenu]="modeSidemenu"
-                    [arrCommandUserlist]="arrCommandUserlist"
-                    (userListEmitter)="setUserList($event)">
-    </app-userlist>
+    <div class="tab-content">
+        <app-room       [currentRoom]="currentRoom"
+                        [userCount]="userCount"
+                        [modeSideMenu]="modeSideMenu"
+                        [arrCommandRoom]="arrCommandRoom"
+                        (changeRoomEmitter)="changeRoom($event)"
+                        (currentRoomEmitter)="setCurrentRoom($event)">
+        </app-room>
+        <app-userlist   [currentRoom]="currentRoom" 
+                        [nextRoom] = "nextRoom"
+                        [modeSideMenu]="modeSideMenu"
+                        [arrCommandUserlist]="arrCommandUserlist"
+                        (userListEmitter)="setUserList($event)">
+        </app-userlist>
+    </div>
 </div>

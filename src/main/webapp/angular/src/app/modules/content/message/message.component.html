@@ -1,31 +1,5 @@
-<!-- <div class="col msg-box">
-    <div class="row msglist">
-        <div class="col d-flex flex-column justify-content-end">
-            <div class="row" *ngFor="let message of messages">
-                <p><span style="color:grey;">[ {{ message.messageDate }} ]</span> @{{ getAuthorUsername(message.messageAuthor) }} <span class="receiver" *ngIf="message.messageReceiver!=0">@{{ getReceiverUsername(message.messageReceiver) }}</span> : {{ message.messageContent }}</p>
-            </div>
-        </div>
+<div class="col d-flex flex-column flex-grow-1 p-3 justify-content-end">
+    <div class="media" *ngFor="let message of messages">
+        <p><span style="color:grey;">[ {{ message.messageDate }} ]</span> @{{ getAuthorUsername(message.messageAuthor) }} <span class="receiver" *ngIf="message.messageReceiver!=0">@{{ getReceiverUsername(message.messageReceiver) }}</span> : {{ message.messageContent }}</p>
     </div>
-
-    <div class="row form-msg">
-        <div class="col p-1">
-            <form class="form-inline d-flex" [formGroup]="sendMessageForm" (ngSubmit)="onSubmit()">
-
-                <input class="mt-auto mb-auto mr-1 flex-grow-1" type="text" formControlName="content" required/>
-
-                <button class="btn btn-primary" type="submit" [disabled]="!sendMessageForm.valid" >Send</button>
-            
-            </form>
-        </div>
-    </div>
-</div> -->
-
-<div class="col"> <!-- msg-box -->
-        <div class="row"> <!-- msglist -->
-            <div class="col d-flex flex-column justify-content-end">
-                <div class="row" *ngFor="let message of messages">
-                    <p><span style="color:grey;">[ {{ message.messageDate }} ]</span> @{{ getAuthorUsername(message.messageAuthor) }} <span class="receiver" *ngIf="message.messageReceiver!=0">@{{ getReceiverUsername(message.messageReceiver) }}</span> : {{ message.messageContent }}</p>
-                </div>
-            </div>
-        </div>
 </div>

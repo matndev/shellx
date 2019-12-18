@@ -48,5 +48,10 @@ export class AppModule {
   constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('multiusers', sanitizer.bypassSecurityTrustResourceUrl('./assets/icons/material/people-24px.svg'));
     iconRegistry.addSvgIcon('swipe-right', sanitizer.bypassSecurityTrustResourceUrl('./assets/icons/material/arrow_forward_ios-24px.svg'));
+    iconRegistry.addSvgIcon('menu-room', sanitizer.bypassSecurityTrustResourceUrl('./assets/icons/material/list-24px.svg'));
+    iconRegistry.addSvgIcon('menu-user', sanitizer.bypassSecurityTrustResourceUrl('./assets/icons/material/people_alt-24px.svg'));
+    iconRegistry.addSvgIcon('menu-room-info', sanitizer.bypassSecurityTrustResourceUrl('./assets/icons/material/info-24px.svg'));
+    iconRegistry.addSvgIcon('menu-notifications', sanitizer.bypassSecurityTrustResourceUrl('./assets/icons/material/notifications-24px.svg'));
+    iconRegistry.addSvgIcon('room-locked', sanitizer.bypassSecurityTrustResourceUrl('./assets/icons/material/lock-24px.svg'));
   }
 }

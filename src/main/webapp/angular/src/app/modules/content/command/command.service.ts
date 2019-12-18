@@ -8,8 +8,9 @@ export class CommandService {
 
   private arrCommand: Array<any> = [];
 
-  private regexJoinRoom = /^\/join ([0-9]+)$/;    // join
-  private regexCreateRoom = /^\/create ([A-Ba-z0-9]+)$/;  // create
+  private regexJoinRoom = /^\/join ([0-9]+)$/;              // join
+  private regexCreateRoom = /^\/create ([A-Ba-z0-9]+)$/;    // create
+  private regexLeaveRoom = /^\/leave ([0-9]+)$/;            // leave
 
   constructor() { }
 
@@ -28,6 +29,13 @@ export class CommandService {
               var res = this.regexCreateRoom.exec(input);
               this.arrCommand.push("room");
               this.arrCommand.push("create");
+              this.arrCommand.push(res[1]);
+              return this.arrCommand;            
+          }
+          else if (this.regexLeaveRoom.test(input)) {
+              var res = this.regexLeaveRoom.exec(input);
+              this.arrCommand.push("room");
+              this.arrCommand.push("leave");
               this.arrCommand.push(res[1]);
               return this.arrCommand;            
           }

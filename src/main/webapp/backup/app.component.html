@@ -1,0 +1,18 @@
+<div class="container-fluid shxbody d-flex flex-column h-100">
+  
+  <div class="row">
+    <nav class="navbar navbar-expand-lg d-flex flex-grow-1 nav-top">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/login">Sign in</a></li>
+        <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/register">Sign up</a></li>
+        <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/chat">Chat</a></li>
+        <li class="nav-item"><a class="nav-link" (click)="logout()">Logout</a></li>
+      </ul>
+    </nav>  
+  </div>
+
+  <!-- Apply d-none class to remove gap (angular bug) -->
+  <router-outlet class="d-none"></router-outlet>
+
+</div>

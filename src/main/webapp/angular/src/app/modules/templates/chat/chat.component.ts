@@ -8,7 +8,8 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css']
+  styleUrls: ['./chat.component.css'],
+  host: { 'class': 'row flex-fill' }
 })
 export class ChatComponent implements OnInit {
 
@@ -17,7 +18,7 @@ export class ChatComponent implements OnInit {
   private userList: User[] = [];
   private userLogged: User;
   private userCount: number;
-  private modeSidemenu: number;
+  private modeSideMenu: string;
 
   private arrCommandRoom: Array<any> = [];
   private arrCommandUserlist: Array<any> = [];
@@ -32,7 +33,7 @@ export class ChatComponent implements OnInit {
 
   ngOnInit() {
     // this.userLogged = new User( "Pierrho", "", 1 );
-    this.modeSidemenu = 0;
+    this.modeSideMenu = "roomlist";
     this.userLogged = this.auth.getCurrentUserInfos();
     this.route.paramMap.subscribe(params => {
       if (params.get('roomId') != undefined)
@@ -70,7 +71,7 @@ export class ChatComponent implements OnInit {
   }
 
   setCommand(arrCommandFromCommandComponent: Array<any>) {
-    console.log("CHAT COMPONENT : arrcommand"+arrCommandFromCommandComponent);
+    console.log("CHAT COMPONENT : arrcommand : "+arrCommandFromCommandComponent);
     if (arrCommandFromCommandComponent[0] === "room") {
       this.arrCommandRoom = arrCommandFromCommandComponent;
     }
@@ -81,15 +82,17 @@ export class ChatComponent implements OnInit {
       this.arrCommandMessage = arrCommandFromCommandComponent;
     }
     else 
-    { }
+    { 
+      console.log("This command is not valid");
+    }
   }
 
-  swipeMenu() {
-    if (this.modeSidemenu === 0) {
-      this.modeSidemenu = 1;
-    }
-    else {
-      this.modeSidemenu = 0;
-    }
-  }
+  // swipeMenu() {
+  //   if (this.modeSidemenu === 0) {
+  //     this.modeSidemenu = 1;
+  //   }
+  //   else {
+  //     this.modeSidemenu = 0;
+  //   }
+  // }
 }

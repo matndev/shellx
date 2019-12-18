@@ -1,0 +1,13 @@
+:host {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.form-msg {
+    position:relative;
+    background-color: #0b0e10;
+}

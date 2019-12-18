@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
 import { RoomService } from './room.service';
 import { Room } from 'src/app/shared/models/content/room.model';
 import { Validators, FormBuilder } from '@angular/forms';
@@ -13,10 +13,11 @@ export class RoomComponent implements OnInit, OnChanges {
   
   @Input() currentRoom: number;
   @Input() userCount: number;
-  @Input() modeSidemenu: number;
+  @Input() modeSideMenu: string;
   @Input() arrCommandRoom: Array<any> = [];
   @Output() currentRoomEmitter = new EventEmitter<number>();
   @Output() changeRoomEmitter = new EventEmitter<number>();
+
 
   room: Room = null;
   headersResp: string[];
@@ -115,6 +116,13 @@ export class RoomComponent implements OnInit, OnChanges {
                   }); 
               // }        
           }
+          else if (changes.arrCommandRoom.currentValue[1] === "leave") {
+                  //this.roomService.leave(this.arrCommandRoom[2], JSON.parse(localStorage.getItem("user")).id).subscribe(result => {
+                  var index = this.rooms.findIndex(x => x.getId()==this.arrCommandRoom[2]);
+                  console.log("Index dans tableau de la room à supprimer : "+index);
+                  this.rooms.forEach((x,y) => console.log("Index : "+y+", Room ID : "+x.getId()+", Room Name : "+x.getName()));
+                  //});
+          }          
           else {}
     }
     else {} // console.log("DEBUGGGG erreur");

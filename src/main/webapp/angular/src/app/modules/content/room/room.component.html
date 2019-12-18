@@ -1,4 +1,4 @@
-<div class="col pt-3"> <!-- spécifique pour colonne : align-self-center -->
+<!-- <div class="col pt-3">
     <div *ngIf="modeSidemenu===1" class="row bg-success">
             <div class="col">
                 <div *ngIf="room">
@@ -17,21 +17,52 @@
                         <a matLine (click)="changeRoom(room.getId())">{{ room.getName() }}</a>
                     </mat-list-item>
                 </mat-list>
-                <!-- <div class="d-flex bg-warning p-2" *ngFor="let room of rooms"> -->
-                    <!-- <a [title]="room.getName()" [routerLink]="['/chat', room.getId()]" >{{ room.getName() }}</a> -->
-                    <!-- <a style="cursor:pointer;background-color: burlywood;" (click)="changeRoom(room.getId())">{{ room.getName() }}</a>
-                </div> -->
             </div>
+    </div>
+</div> -->
+
+
+<!-- ROOM LIST -->
+<div *ngIf="modeSideMenu === 'roomlist'" id="roomlist" class="row shx-h-side-menu">
+    <div class="col p-0 d-flex">
+        <div class="shx-h-side-menu__list">
+            <h6>ROOMS</h6>
+            <ul class="list-group">
+                <li class="shx-pre-submenu list-group-item d-flex flex-row rounded-0 shx-transparent" *ngFor="let room of rooms">
+                    <div class="shx-room-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24">
+                            <path fill="none" d="M0 0h24v24H0V0z"/>
+                            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12zM7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/>
+                        </svg>
+                        <a class="ml-2" (click)="changeRoom(room.getId())" >{{ room.getName() }}</a>
+                    </div>
+                    <!-- <div class="shx-manage-room">
+                        <button class="btn" id="btn_manageroom_3">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="none" d="M0 0h24v24H0V0z"/>
+                                <path d="M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69zm-2 5.79V18h-3.52L12 20.48 9.52 18H6v-3.52L3.52 12 6 9.52V6h3.52L12 3.52 14.48 6H18v3.52L20.48 12 18 14.48zM12 6.5c-3.03 0-5.5 2.47-5.5 5.5s2.47 5.5 5.5 5.5 5.5-2.47 5.5-5.5-2.47-5.5-5.5-5.5zm0 9c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+                            </svg>
+                        </button>
+                    </div> -->
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- ROOM INFO -->
+<div *ngIf="modeSideMenu === 'roominfo'" id="roominfo" class="row shx-h-side-menu">
+    <div *ngIf="room">    
+        <h6>INFORMATIONS</h6>
+        <p *ngIf="room.getDescription()">{{ room.getDescription() }}</p>
+        <p *ngIf="!room.getDescription()">No description available</p>
+        <ul class="d-flex flex-row p-0">
+            <li class="d-flex flex-row"><mat-icon class="mat-icon mr-2" svgIcon="multiusers" aria-hidden="false" aria-label="User number" color="y-icon"></mat-icon>{{ userCount }}</li>
+            <li><mat-icon class="mat-icon" svgIcon="room-locked" aria-hidden="false" aria-label="Room locked" color="y-icon"></mat-icon></li>
+        </ul>
     </div>
 </div>
 
-                <!-- <form ngNativeValidate [formGroup]="createRoomForm" (ngSubmit)="onSubmit()">
+<!-- Contrairement à une opinion répandue, le Lorem Ipsum n'est pas simplement du texte aléatoire. Il trouve ses racines dans une oeuvre de la littérature latine classique datant de 45 av. J.-C., le rendant vieux de 2000 ans. Un professeur du Hampden-Sydney College, en Virginie, s'est intéressé à un des mots latins les plus obscurs, consectetur, extrait d'un passage du Lorem Ipsum, et en étudiant tous les usages de ce mot dans la littérature classique, découvrit la source incontestable du Lorem Ipsum. Il provient en fait des sections 1.10.32 et 1.10.33 du "De Finibus Bonorum et Malorum" (Des Suprêmes Biens et des Suprêmes Maux) de Cicéron. Cet ouvrage, très populaire pendant la Renaissance, est un traité sur la théorie de l'éthique. Les premières lignes du Lorem Ipsum, "Lorem ipsum dolor sit amet...", proviennent de la section 1.10.32.
+            L'extrait standard de Lorem Ipsum utilisé depuis le XVIè siècle est reproduit ci-dessous pour les curieux. Les sections 1.10.32 et 1.10.33 du "De Finibus Bonorum et Malorum" de Cicéron sont aussi reproduites dans leur version originale, accompagnée de la traduction anglaise de H. Rackham (1914).
+-->
 
-                    <div class="input-group">
-                        <input type="text" formControlName="content" required/>
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="submit" [disabled]="!createRoomForm.valid" >Send</button>
-                        </div>
-                    </div>
-                
-                </form> -->

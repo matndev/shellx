@@ -1,0 +1,103 @@
+/* LAYOUT */
+
+html, body {
+    height: 100%;
+}
+
+* {
+    color: #cfd0d0;
+}
+
+p {
+    margin: 0 !important;
+}
+
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* NATIVE TAGS */
+
+ li a {
+    color: #cfd0d0;
+}
+
+li a:hover {
+    border-bottom: 2px solid #cfd0d0; 
+    margin-bottom: -2px;
+    color: #cfd0d0;
+}
+
+form input {
+    padding:5px;
+    margin-bottom:10px;
+    /* border: 1px solid #282b2e; */
+    border:none !important;
+}
+
+/* COMPONENTS */
+
+.shxbody {
+    background-color: #111417; /* #191c21; 21252E */
+}
+
+.sidemenu {
+    /* BUG TEMPORARY FIX : gap sidemenu. Cause height top menu */
+    /* height: 100%;
+    margin-bottom: -20%; should >height top menu  */
+    /* */
+    background-color: #0b0e10;
+}
+
+.switchMenu {
+    flex:0 0 100%;
+    max-height: 10%;
+    min-height: 10%;
+}
+
+.nav-top, input {
+    background-color: #282b2e;
+}
+
+/* copied from bootstrap.css, class: .row */
+. {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    flex-grow: 1;
+}
+
+.panel-room-info {
+    display:flex;
+    width:100%;
+    color: grey;
+    font-size: 12px;
+    font-weight: bold;
+    border:none !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+
+.mat-y-icon  {
+    color: yellowgreen;
+}
+
+.test-col {
+    /* -ms-flex-preferred-size: 0;
+    flex-basis: 0;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    max-width: 100%; */
+
+    -ms-flex: 0 0 66.666667%;
+    flex: 0 0 66.666667%;
+    max-width: 66.666667%;
+}
+
+mat-icon {
+    display: flex !important;
+}

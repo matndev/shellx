@@ -7,7 +7,8 @@ import { CommandService } from '../command.service';
 @Component({
   selector: 'app-command',
   templateUrl: './command.component.html',
-  styleUrls: ['./command.component.css']
+  styleUrls: ['./command.component.css'],
+  host: { 'class' : 'row shx-chat-form-frame' }
 })
 export class CommandComponent implements OnInit {
 
@@ -36,8 +37,15 @@ export class CommandComponent implements OnInit {
   onSubmit() {
     if (this.userLogged != null) {
         var arrCommand = this.commandService.detectCommand(this.sendCommandForm.get("content").value);
-        this.commandEmitter.emit(arrCommand);
-        console.log("COMMAND COMPONENT : arrcommand : "+arrCommand[2]);
+        this.sendCommandForm.reset();
+        if (arrCommand != null && arrCommand != undefined) {
+          console.log("arrCommand value : "+arrCommand[0]+" / "+arrCommand[1]+" / "+arrCommand[2]);
+          this.commandEmitter.emit(arrCommand);
+          // arrCommand.splice(0);
+        }
+        else {
+          console.log("COMMAND COMPONENT : This command is not valid");
+        }
     } 
   }
 

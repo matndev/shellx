@@ -1,0 +1,49 @@
+<!-- div class="row" => component.css (:host) -->
+<div class="col-4"></div>
+<div class="col-4">
+
+        <form ngNativeValidate [formGroup]="loginForm" (ngSubmit)="onSubmit()">  
+
+            <div class="row">
+                <label class="col-6">Email * </label>
+                <input class="col-6" type="text" formControlName="email" required/>       
+            </div>
+
+            <div class="row">
+                <label class="col-6">Password * </label>
+                <input class="col-6" type="password" formControlName="password" required/> 
+            </div>
+
+            <div class="row">
+                <label class="col-6">Confirm password * </label>
+                <input class="col-6" type="password" formControlName="matchingPassword" required/> 
+            </div>
+
+            <button class="btn btn-primary" type="submit" [disabled]="!loginForm.valid">Sign in</button>
+            <button class="btn btn-secondary" type="button"><a routerLink="/register">Sign up</a></button>
+        
+        </form>
+
+        <!-- <nav>
+            <a routerLink="/register">Sign up</a>
+        </nav> -->
+
+        <div class="login-form-info">
+            <p>Password (Length) : between 8 and 30 characters</p>
+
+            <div *ngIf="!loginForm.valid">
+                <div *ngIf="loginForm.get('email').hasError('required')">Email required</div>
+                <div *ngIf="loginForm.get('email').hasError('email')">Email format is not correct</div>
+                <div *ngIf="loginForm.get('password').hasError('required')">Password required</div>
+                <div *ngIf="loginForm.get('password').hasError('minlength')">Password must be at least 8 characters</div>
+                <div *ngIf="loginForm.get('password').hasError('maxlength')">Password must not exceed 30 characters</div>
+                <div *ngIf="loginForm.get('matchingPassword').hasError('required')">Confirmation password required</div>
+                <div *ngIf="loginForm.get('matchingPassword').hasError('minlength')">Password must be at least 8 characters</div>
+                <div *ngIf="loginForm.get('matchingPassword').hasError('maxlength')">Password must not exceed 30 characters</div>
+                <div *ngIf="loginForm.errors?.matchingPassword && (loginForm.touched || loginForm.dirty)">Passwords are not matching</div>
+            </div>
+
+        </div>
+
+</div>
+<div class="col-4"></div>

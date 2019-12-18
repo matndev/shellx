@@ -15,7 +15,7 @@ export class UserlistComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() currentRoom: number;
   @Input() nextRoom: number;
-  @Input() modeSidemenu: number;
+  @Input() modeSideMenu: string;
   @Input() arrCommandUserlist: Array<any> = [];
   @Output() userListEmitter = new EventEmitter<User[]>();
 

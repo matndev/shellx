@@ -1,0 +1,37 @@
+<div class="col pt-3"> <!-- spécifique pour colonne : align-self-center -->
+    <div *ngIf="modeSidemenu===1" class="row bg-success">
+            <div class="col">
+                <div *ngIf="room">
+                    <p style="font-size:large;font-weight:bold;">{{ room.getName() }}</p>
+                    <p>{{ room.getDescription() }}</p>
+                    <p class="d-flex"><mat-icon svgIcon="multiusers" aria-hidden="true" aria-label="User Count"></mat-icon> {{ userCount }}</p>
+                </div>
+            </div>
+    </div>
+    <div *ngIf="modeSidemenu===0" class="row">
+            <div class="col p-0">
+                <h6 class="roomsMenuTitle">ROOMS</h6>
+                <mat-list class="p-0">
+                    <mat-list-item *ngFor="let room of rooms">
+                        <img matListAvatar src="assets/icons/user.jpg" alt="...">
+                        <a matLine (click)="changeRoom(room.getId())">{{ room.getName() }}</a>
+                    </mat-list-item>
+                </mat-list>
+                <!-- <div class="d-flex bg-warning p-2" *ngFor="let room of rooms"> -->
+                    <!-- <a [title]="room.getName()" [routerLink]="['/chat', room.getId()]" >{{ room.getName() }}</a> -->
+                    <!-- <a style="cursor:pointer;background-color: burlywood;" (click)="changeRoom(room.getId())">{{ room.getName() }}</a>
+                </div> -->
+            </div>
+    </div>
+</div>
+
+                <!-- <form ngNativeValidate [formGroup]="createRoomForm" (ngSubmit)="onSubmit()">
+
+                    <div class="input-group">
+                        <input type="text" formControlName="content" required/>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit" [disabled]="!createRoomForm.valid" >Send</button>
+                        </div>
+                    </div>
+                
+                </form> -->

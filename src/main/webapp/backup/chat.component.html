@@ -1,0 +1,37 @@
+<div class="col-9 d-flex flex-column">
+    <app-message    [currentRoom]="currentRoom" 
+                    [nextRoom] = "nextRoom"
+                    [userList]="userList"
+                    [userLogged]="userLogged"
+                    [arrCommandMessage]="arrCommandMessage">
+    </app-message>
+    <app-command    [userLogged]="userLogged"
+                    (commandEmitter)="setCommand($event)">
+    </app-command>
+</div>
+<div class="col-3 sidemenu">
+    <div class="row d-flex switchMenu">
+        <div class="col p-0 bg-danger">
+            <!-- <button *ngIf="modeSidemenu===0" class="btn w-100 d-flex rounded-0" (click)="swipeMenu()" ><div class="flex-grow-1 justify-content-start">ROOM INFORMATIONS</div> <div class=""><mat-icon class="mat-icon" svgIcon="swipe-right" aria-hidden="false" aria-label="swipe right" color="y-icon"></mat-icon></div></button>
+            <button *ngIf="modeSidemenu===1" class="btn w-100 d-flex rounded-0" (click)="swipeMenu()" ><div class="flex-grow-1 justify-content-start">BACK</div> <div class=""><mat-icon class="mat-icon" svgIcon="swipe-right" aria-hidden="false" aria-label="swipe right" color="y-icon"></mat-icon></div></button> -->
+            <button *ngIf="modeSidemenu===0" class="btn rounded-0 panel-room-info h-100 align-items-center bg-success" (click)="swipeMenu()" >
+                <div class="d-flex flex-grow-1 justify-content-start">ROOM INFORMATIONS</div>
+                <mat-icon class="mat-icon" svgIcon="swipe-right" aria-hidden="false" aria-label="swipe right" color="y-icon">
+                </mat-icon></button>
+            <button *ngIf="modeSidemenu===1" class="btn rounded-0 panel-room-info h-100 align-items-center bg-success" (click)="swipeMenu()" ><div class="d-flex flex-grow-1 justify-content-start">BACK</div> <div class=""><mat-icon class="mat-icon" svgIcon="swipe-right" aria-hidden="false" aria-label="swipe right" color="y-icon"></mat-icon></div></button>            
+        </div>
+    </div>
+    <app-room       [currentRoom]="currentRoom"
+                    [userCount]="userCount"
+                    [modeSidemenu]="modeSidemenu"
+                    [arrCommandRoom]="arrCommandRoom"
+                    (changeRoomEmitter)="changeRoom($event)"
+                    (currentRoomEmitter)="setCurrentRoom($event)">
+    </app-room>
+    <app-userlist   [currentRoom]="currentRoom" 
+                    [nextRoom] = "nextRoom"
+                    [modeSidemenu]="modeSidemenu"
+                    [arrCommandUserlist]="arrCommandUserlist"
+                    (userListEmitter)="setUserList($event)">
+    </app-userlist>
+</div>
