@@ -57,6 +57,15 @@ export class UserlistService {
             }));
   }
 
+  public invite(user_id: number, room_id: number) : Observable<HttpResponse<boolean>> {
+    // this.socketClient.send("/app/user/invite/"+idRoom, idUser);
+    var obj = { idRoom: room_id, idUser: user_id };
+    return this.http.post<HttpResponse<boolean>>("http://localhost:8086/user/invite", JSON.stringify(obj), httpOptions)
+        .pipe(
+          catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
+        );    
+  }
+
   // public getUsersByRoomId(id: number): Observable<User[]> {
   //   return this.socketClient
   //     .onMessage('/app/user/subscribe/'+id)

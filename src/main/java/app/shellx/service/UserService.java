@@ -21,6 +21,7 @@ import app.shellx.dto.RoomDto;
 import app.shellx.dto.RoomUserDto;
 import app.shellx.dto.UserDto;
 import app.shellx.model.Message;
+import app.shellx.model.Notification;
 import app.shellx.model.Role;
 import app.shellx.model.Room;
 import app.shellx.model.RoomUser;
@@ -43,6 +44,9 @@ public class UserService implements UserDetailsService {
 	
 	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+	private NotificationService notificationService;
 
     @Transactional(readOnly=true)
     public User loadUserByUsername(final String username) throws UsernameNotFoundException {
@@ -149,9 +153,35 @@ public class UserService implements UserDetailsService {
 		Room room = this.roomRepository.findById(idRoom);
 		RoomUser roomUser = new RoomUser(room, user, 3);
 		this.roomUserRepository.save(roomUser);
+		this.notificationService.deleteInvitationType(idRoom, userDto.getId());
 		UserDto resUser = new UserDto(user);
 		return resUser;
-	}    
+	}
+	
+	@Transactional
+	public Notification invite(long idRoom, long idUser) throws NullPointerException {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String userLogged = ((User) principal).getUsername();
+		User user = this.userRepository.findById(idUser);
+		Room room = this.roomRepository.findById(idRoom);
+		if (user != null && room != null) {
+			RoomUser roomUser = new RoomUser(room, user, -1);
+			this.roomUserRepository.save(roomUser);
+			Notification notif = new Notification(	"invite",
+													"Room invitation",
+													"@"+userLogged+" invited you in the room \""+room.getName()+"\"",
+													idUser,
+													idRoom,
+													null,
+													false
+													);
+			boolean notifValid = this.notificationService.add(notif);
+			if (notifValid) {
+				return notif;
+			}
+		}
+		return null;
+	} 	
     
 //	@Transactional(readOnly = true)
 //	public Set<UserDto> findUsersByRoomId(long id) {

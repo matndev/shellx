@@ -32,7 +32,7 @@
                     <a class="nav-item nav-link" [ngClass]="{'active': modeSideMenu=='roomlist'}" (click)="modeSideMenu='roomlist'" ><mat-icon class="mat-icon" svgIcon="menu-room" aria-hidden="false" aria-label="menu-room" color="y-icon"></mat-icon></a>
                     <a class="nav-item nav-link" [ngClass]="{'active': modeSideMenu=='userlist'}" (click)="modeSideMenu='userlist'" ><mat-icon class="mat-icon" svgIcon="menu-user" aria-hidden="false" aria-label="menu-user" color="y-icon"></mat-icon></a>
                     <a class="nav-item nav-link" [ngClass]="{'active': modeSideMenu=='roominfo'}" (click)="modeSideMenu='roominfo'" ><mat-icon class="mat-icon" svgIcon="menu-room-info" aria-hidden="false" aria-label="menu-room-info" color="y-icon"></mat-icon></a>
-                    <!-- <a class="nav-item nav-link" href="#notifications" data-toggle="tab" ><mat-icon class="mat-icon" svgIcon="menu-notifications" aria-hidden="false" aria-label="menu-notifications" color="y-icon"></mat-icon></a> -->
+                    <a class="nav-item nav-link" [ngClass]="{'active': modeSideMenu=='notifications'}" (click)="modeSideMenu='notifications'" ><mat-icon class="mat-icon" svgIcon="menu-notifications" aria-hidden="false" aria-label="menu-notifications" color="y-icon"></mat-icon></a>
                 </nav>
             </div>
         </div>
@@ -51,5 +51,8 @@
                         [arrCommandUserlist]="arrCommandUserlist"
                         (userListEmitter)="setUserList($event)">
         </app-userlist>
+        <app-notifications
+                        [modeSideMenu]="modeSideMenu">
+        </app-notifications>        
     </div>
 </div>

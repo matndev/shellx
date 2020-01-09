@@ -17,6 +17,8 @@ import { UserlistComponent } from './modules/content/user/userlist/userlist.comp
 import { LogoTextComponent } from './modules/content/logo-text/logo-text/logo-text.component';
 import { CommandComponent } from './modules/content/command/command/command.component';
 import { MatListModule } from '@angular/material/list';
+import { NotificationsComponent } from './modules/content/notifications/notifications.component';
+import { ProfileComponent } from './modules/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { MatListModule } from '@angular/material/list';
     ChatComponent,
     UserlistComponent,
     LogoTextComponent,
-    CommandComponent
+    CommandComponent,
+    NotificationsComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

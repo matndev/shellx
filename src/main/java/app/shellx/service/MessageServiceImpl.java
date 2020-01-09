@@ -16,16 +16,6 @@ public class MessageServiceImpl implements MessageService {
 	@Autowired
 	private MessageRepository messageRepository;
 	
-//	@Autowired
-//	private RoomService roomService;
-	
-	/*@Autowired
-	private Message message;*/
-	
-	/*@Autowired
-	public MessageServiceImpl(MessageRepository<Message> messageRepository) {
-		this.messageRepository = messageRepository;
-	}*/
 	
 	@Transactional
 	public Message add(MessageDto messageDto) throws NullPointerException {
@@ -39,14 +29,6 @@ public class MessageServiceImpl implements MessageService {
 		message.setMessageRoom(messageDto.getMessageRoomId());
 		this.messageRepository.save(message);
 		return message;
-//		try {
-//			Room room = roomService.findRoomById(messageDto.getMessageRoom());
-//			message.setMessageRoom(room);
-//			this.messageRepository.save(message);
-//		} catch(Exception e) {
-//			// LOGGER
-//			System.out.println("Error : message can't be saved");
-//		}
 	}
 	
 	@Transactional(readOnly = true)

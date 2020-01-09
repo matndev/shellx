@@ -22,6 +22,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -74,6 +75,7 @@ public class User implements UserDetails {
 	private Set<Authority> authorities;
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="user")
+	@Where(clause = "role <> -1")
 	private Set<RoomUser> rooms = new HashSet<RoomUser>();
 
 	

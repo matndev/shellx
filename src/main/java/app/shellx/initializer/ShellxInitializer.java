@@ -1,3 +1,33 @@
+/***
+ * 
+ * ### ShellxInitializer
+ * 
+ * Class used to setup data structure and values before starting the application and after the bootstrap of the Spring application
+ * context.
+ * 
+ * ### ApplicationRunner
+ * 
+ * Similar to CommandLineRunner, Spring boot also provides an ApplicationRunner interface with a run() method to be invoked 
+ * at application startup. However, instead of raw String arguments passed to the callback method, we have an instance of the 
+ * ApplicationArguments class.
+ * The ApplicationArguments interface has methods to get argument values that are options and plain argument values. 
+ * An argument that is prefixed with – – is an option argument.
+ * 
+ * ### Others ways to config beans or properties after Spring application context initialized:
+ * 
+ * The @PostConstruct Annotation
+ * The InitializingBean Interface
+ * An ApplicationListener
+ * The @Bean Initmethod Attribute
+ * Constructor Injection
+ * Spring Boot CommandLineRunner
+ * 
+ * -------------------------------
+ * 
+ * https://www.baeldung.com/running-setup-logic-on-startup-in-spring
+ * 
+ */
+
 package app.shellx.initializer;
 
 import java.util.HashSet;

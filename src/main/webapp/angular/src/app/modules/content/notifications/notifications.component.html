@@ -1,0 +1,32 @@
+<!-- NOTIFICATIONS LIST -->
+<div *ngIf="modeSideMenu === 'notifications'" id="notifications" class="row shx-h-side-menu">
+    <div class="col p-0 d-flex">
+        <div class="shx-h-side-menu__list">
+            <h6>NOTIFICATIONS</h6>
+            <ul class="list-group">
+                <li *ngFor="let notification of notifications" class="list-group-item d-flex flex-row shx-transparent">
+                    <div class="d-flex flex-row" >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="min-width: 24px !important;min-height: 24px !important;">
+                            <path fill="none" d="M0 0h24v24H0V0z"/>
+                            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6zM7.58 4.08L6.15 2.65C3.75 4.48 2.17 7.3 2.03 10.5h2c.15-2.65 1.51-4.97 3.55-6.42zm12.39 6.42h2c-.15-3.2-1.73-6.02-4.12-7.85l-1.42 1.43c2.02 1.45 3.39 3.77 3.54 6.42z"/>
+                        </svg>
+                        <p class="ml-2">{{ notification.getTitle() }}<br />{{ notification.getDescription() }}<br />
+                            <button class="btn btn-primary py-0" (click)="notifOnClick($event)" value="{{ notification.getIdRoom() }},{{ notification.getIdUser() }}">
+                                Accept
+                            </button>
+                        </p>
+                    </div>
+                    <div class="shx-delete-notif">
+                        <button class="btn p-0" (click)="deleteNotif($event)" value="{{ notification.getId() }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                <path d="M0 0h24v24H0z" fill="none"/>
+                            </svg>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div> 
+

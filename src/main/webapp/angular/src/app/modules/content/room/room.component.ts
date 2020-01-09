@@ -1,15 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, HostBinding, OnDestroy } from '@angular/core';
 import { RoomService } from './room.service';
 import { Room } from 'src/app/shared/models/content/room.model';
 import { Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CommandService } from '../command/command.service';
+import { AuthenticationService } from '../../authentication/authentication/authentication.service';
 
 @Component({
   selector: 'app-room',
   templateUrl: './room.component.html',
   styleUrls: ['./room.component.css']
 })
-export class RoomComponent implements OnInit, OnChanges {
+export class RoomComponent implements OnInit, OnChanges, OnDestroy {
   
   @Input() currentRoom: number;
   @Input() userCount: number;
@@ -22,18 +24,57 @@ export class RoomComponent implements OnInit, OnChanges {
   room: Room = null;
   headersResp: string[];
 
-  createRoomForm;
   isNewRoomExists: boolean = false;
   // private users: User[] = [];
   private rooms: Room[] = [];
 
+  subscriptionCommandService;
+
+
   constructor(
+    private authenticationService: AuthenticationService,
     private roomService: RoomService,
-    private formBuilder: FormBuilder,
+    private commandService: CommandService,
     private router: Router
   ) {
-    this.createRoomForm = this.formBuilder.group({
-      content: ['', [Validators.required, Validators.maxLength(100)]]
+
+    // COMMAND FORM SUBSCRIPTION
+    this.subscriptionCommandService = this.commandService.arrCommandSubject.subscribe(command => {
+      if (command[0] === "room") {
+        if (command[1] === "join") {
+          this.roomService.join(command[2], JSON.parse(localStorage.getItem("user")).id).subscribe(result => {
+            this.rooms.push(new Room( result.body['id'],
+                                      result.body['name'],
+                                      result.body['description'],
+                                      result.body['roomAdmin'],
+                                      result.body['enabled'],
+                                      result.body['modePrivate']));
+          });
+        }
+        else if (command[1] === "create") {
+          let newRoom = new Room(null, command[2], null, 1, true, false);
+          this.roomService.createNewRoom(newRoom).subscribe(result => {
+              this.rooms.push(new Room(result.body['id'],
+                                        result.body['name'],
+                                        result.body['description'],
+                                        result.body['roomAdmin'],
+                                        result.body['enabled'],
+                                        result.body['modePrivate']));
+          });           
+        }
+        else if (command[1] === "leave") {   
+          var index = this.rooms.findIndex(x => x.getId()==command[2]);
+          console.log("Index dans tableau de la room à supprimer : "+index);
+          this.rooms.forEach((x,y) => console.log("Index : "+y+", Room ID : "+x.getId()+", Room Name : "+x.getName()));
+          this.roomService.leave(command[2], JSON.parse(localStorage.getItem("user")).id).subscribe(res => {
+
+            if (res.status === 200) {
+              this.rooms.splice(index,1);
+            }
+          });
+        }
+        else {}
+      }
     });
   }
 
@@ -74,14 +115,33 @@ export class RoomComponent implements OnInit, OnChanges {
     })   
     .then(() => {
       // Get current room info
-      // var idRoom = this.rooms[0].getId();
       this.currentRoom != undefined ? this.getRoomById(this.currentRoom) : this.getRoomById(this.rooms[0].getId());
+    })
+    .catch(error => {
+      // Executed if the promise result is null
+      //console.log(error.message);
     });
   }
 
   async getRooms() : Promise<any> {
-    return await this.roomService.getRoomsByUserId("1").toPromise();
+    var id = this.authenticationService.getCurrentUserInfos().id;
+
+    return await new Promise((resolve, reject) => {
+      this.roomService.getRoomsByUserId(id).subscribe(res => {
+        if (res.body !== null) {
+          resolve(res);
+        }
+        else {
+          reject();
+        }
+      });
+    });
   } 
+
+  // async getRooms() : Promise<any> {
+  //   var id = this.authenticationService.getCurrentUserInfos().id;
+  //   return await this.roomService.getRoomsByUserId(id).toPromise();
+  // }   
 
   public getRoomById(id: number) {
     this.roomService.getRoom(id).subscribe(data => {
@@ -90,47 +150,16 @@ export class RoomComponent implements OnInit, OnChanges {
   } 
  
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log("ROOM COMPONENT : ngOnChanges"); changes.arrCommandRoom
-    if (changes.arrCommandRoom !== undefined && changes.arrCommandRoom.currentValue.length != 0 && changes.arrCommandRoom.currentValue != changes.arrCommandRoom.previousValue) {
-          console.log("changes 2: "+changes.arrCommandRoom.currentValue[1]);
-          if (changes.arrCommandRoom.currentValue[1] === "join") {
-                  this.roomService.join(this.arrCommandRoom[2], JSON.parse(localStorage.getItem("user")).id).subscribe(result => {
-                  this.rooms.push(new Room(result.body['id'],
-                                              result.body['name'],
-                                              result.body['description'],
-                                              result.body['roomAdmin'],
-                                              result.body['enabled'],
-                                              result.body['modePrivate']));
-                  });
-          }
-          else if (changes.arrCommandRoom.currentValue[1] === "create") {
-              // if (this.arrCommandRoom[2] instanceof Room) {
-                  let newRoom = new Room(null, this.arrCommandRoom[2], null, 1, true, false);
-                  this.roomService.createNewRoom(newRoom).subscribe(result => {
-                      this.rooms.push(new Room(result.body['id'],
-                                                result.body['name'],
-                                                result.body['description'],
-                                                result.body['roomAdmin'],
-                                                result.body['enabled'],
-                                                result.body['modePrivate']));
-                  }); 
-              // }        
-          }
-          else if (changes.arrCommandRoom.currentValue[1] === "leave") {
-                  //this.roomService.leave(this.arrCommandRoom[2], JSON.parse(localStorage.getItem("user")).id).subscribe(result => {
-                  var index = this.rooms.findIndex(x => x.getId()==this.arrCommandRoom[2]);
-                  console.log("Index dans tableau de la room à supprimer : "+index);
-                  this.rooms.forEach((x,y) => console.log("Index : "+y+", Room ID : "+x.getId()+", Room Name : "+x.getName()));
-                  //});
-          }          
-          else {}
-    }
-    else {} // console.log("DEBUGGGG erreur");
 
     if (changes.currentRoom !== undefined && changes.currentRoom.currentValue != changes.currentRoom.previousValue) {
         this.getRoomById(this.currentRoom);
     }
 
+  }
+
+  ngOnDestroy() {
+    console.log("ROOM COMPONENT : Destroy method");
+    this.subscriptionCommandService.unsubscribe();
   }
 
   // Transfers new room id to chat comp, message comp, and userlist comp
@@ -139,49 +168,4 @@ export class RoomComponent implements OnInit, OnChanges {
       console.log("id next room: "+idNextRoom);
       this.changeRoomEmitter.emit(idNextRoom);
   }
-
-  // public getUsersRoom(id: number) {
-  //   this.roomService.getUsersByRoomId(id).subscribe(data => {
-  //     data.body.forEach(element => {
-  //           this.users.push(new User(element['username']));
-  //     });
-  //   });
-  // }
-
-  // public static descendingByPostedAt(message1: Message, message2: Message): number {
-  //   return message2.getMessageDate.getTime() - message1.postedAt.getTime();
-  // }
-
-  // onSubmit() {
-  //   let newRoom = new Room(null, this.createRoomForm.get("content").value, null, 1, true, false, null, null);
-  //   this.roomService.createNewRoom(newRoom).subscribe(result => {
-  //       this.rooms.push(new Room(result.body['id'],
-  //                                 result.body['name'],
-  //                                 result.body['description'],
-  //                                 result.body['roomAdmin'],
-  //                                 result.body['enabled'],
-  //                                 result.body['modePrivate']));
-  //   });
-  //   // this.roomService.createNewRoom(newRoom);
-  // }
-
-  // public createMessage(data: any) : void {
-  //   // A MODIFIER
-  //   //var date = new Date().toJSON().slice(0,10).replace(/-/g,'/');
-  //   // var date = new Date();
-  //   let newMessage = new Message( new User("pierrho", "", 1),
-  //                                 data.get("content").value,
-  //                                 null,
-  //                                 true,
-  //                                 null,
-  //                                 true,
-  //                                 this.room.getId());
-  //   this.roomService.saveNewMessage(newMessage);
-  // }
 }
-
-// ngOnInit() {
-//   this.pusherService.messagesChannel.bind('client-new-message', (message) => {
-//     this.messages.push(message);
-//   });
-// }

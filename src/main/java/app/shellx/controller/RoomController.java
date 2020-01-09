@@ -47,13 +47,26 @@ public class RoomController {
 			&& payload.get("idRoom") != null
 			&& payload.get("idUser") != null
 			&& payload.size() == 2) {
-//			System.out.println("ID Room : "+payload.get("idRoom")+", ID User : "+payload.get("idUser"));
 			return this.roomUserService.join(Long.parseLong(payload.get("idRoom")), Long.parseLong(payload.get("idUser")));
 		}
 		else {
 			return null;
 		}
 	}
+	
+	@PostMapping(path="/leave", consumes="application/json", produces="application/json")
+	public Map<String, String> leave(@RequestBody Map<String, String> payload) {
+		if (payload.containsKey("idRoom") 
+			&& payload.containsKey("idUser")
+			&& payload.get("idRoom") != null
+			&& payload.get("idUser") != null
+			&& payload.size() == 2) {
+			return this.roomUserService.leave(Long.parseLong(payload.get("idRoom")), Long.parseLong(payload.get("idUser")));
+		}
+		else {
+			return null;
+		}
+	}	
 	
 	@PostMapping(path="/add", consumes="application/json", produces="application/json")
 	public RoomDto add(@RequestBody Room room) {

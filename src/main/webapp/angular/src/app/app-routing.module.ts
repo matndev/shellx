@@ -6,6 +6,7 @@ import { RegisterComponent } from './modules/authentication/register/register.co
 import { ChatComponent } from './modules/templates/chat/chat.component';
 import { AuthGuardService } from './core/authentication/guards/auth-guard.service';
 import { LogoTextComponent } from './modules/content/logo-text/logo-text/logo-text.component';
+import { ProfileComponent } from './modules/profile/profile.component';
 
 const routes: Routes = [
   // { path: '', component: LogoTextComponent, canActivateChild: [AuthGuardService], 
@@ -17,12 +18,13 @@ const routes: Routes = [
   //       //{ path: '', redirectTo: '/message', pathMatch: 'full' }
   //   ]
   // }
-  { path: '',               redirectTo:'home', pathMatch:'full' },
-  { path: 'home',           component: LogoTextComponent, canActivate: [AuthGuardService] },
-  { path: 'login',          component: LoginComponent, canActivate: [AuthGuardService] },
-  { path: 'register',       component: RegisterComponent, canActivate: [AuthGuardService] },
-  { path: 'chat',           component: ChatComponent, canActivate: [AuthGuardService] },
-  { path: 'chat/:roomId',   component: ChatComponent, canActivate: [AuthGuardService] }
+  { path: '',                 redirectTo:'home', pathMatch:'full' },
+  { path: 'home',             component: LogoTextComponent, canActivate: [AuthGuardService] },
+  { path: 'login',            component: LoginComponent, canActivate: [AuthGuardService] },
+  { path: 'register',         component: RegisterComponent, canActivate: [AuthGuardService] },
+  { path: 'chat',             component: ChatComponent, canActivate: [AuthGuardService] },
+  { path: 'chat/:roomId',     component: ChatComponent, canActivate: [AuthGuardService] },
+  { path: 'profile/:userId',  component: ProfileComponent, canActivate: [AuthGuardService] }
 ];
 
 @NgModule({

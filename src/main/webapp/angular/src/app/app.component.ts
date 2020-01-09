@@ -1,15 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from './modules/authentication/authentication/authentication.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-  constructor() {}
+  private userId: number;
+  private userAuth: boolean;
 
-  /*authenticated() {
-    return authenticationService.authenticated;
-  }*/
+  constructor(private authenticationService: AuthenticationService) {
+  }
+
+  ngOnInit() {
+
+    this.authenticationService.authenticatedObs.subscribe(res => {
+      res == true ? this.userAuth = true : this.userAuth = false;
+    });
+
+    var user = this.authenticationService.getCurrentUserInfos();
+    if (user !== null) {
+      this.userId = user.id;
+    }
+  }
 }

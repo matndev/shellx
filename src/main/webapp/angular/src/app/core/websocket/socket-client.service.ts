@@ -51,12 +51,15 @@ export class SocketClientService implements OnDestroy {
   }
 
   public onMessage(topic: string, handler = SocketClientService.jsonHandler) : Observable<any> {
-    return this.connect().pipe(first(), switchMap(client => {
+    return this.connect().pipe(first(), switchMap(client => { // Get the very first connection, complete obs, then returning a new observable with switchMap
       return new Observable<any>(observer => {
         const subscription : StompSubscription = client.subscribe(topic, message => {
             observer.next(handler(message));
         });
-        return () => client.unsubscribe(subscription .id);
+        return () => {
+          console.log("Unsubscribe from socket-client service");
+          client.unsubscribe(subscription .id);
+        }
       });
     }));
   }

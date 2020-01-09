@@ -29,7 +29,7 @@ export class MessageService {
   public subscribeChannel(id: number): Observable<Message[]> {
     return this.socketClient
             .onMessage('/topic/messages/subscribe/'+id)
-            .pipe(first(), map(messages => {
+            .pipe(map(messages => {
                     var newMessages: Message[] = [];
                     if (messages instanceof Array){
                         messages.forEach(e => newMessages.push(new Message(e.messageAuthor, e.messageContent, e.messageDate, e.messageEnabled, e.messageReceiver, e.messageVisible, e.messageRoom)));

@@ -8,6 +8,7 @@ import { Message } from 'src/app/shared/models/content/message.model';
 import * as moment from 'moment';
 import { takeLast, takeUntil } from 'rxjs/operators';
 import { ChatService } from '../../templates/chat/chat.service';
+import { CommandService } from '../command/command.service';
 
 /*const httpOptions = {
   headers: new HttpHeaders({
@@ -35,36 +36,46 @@ export class MessageComponent implements OnInit, OnChanges, OnDestroy {
   // previousMessages: Message[] = [];
   headersResp: string[];
   sendMessageForm;
+  subscriptionCommandService;
 
   private subMessages: Subscription;
 
   constructor(
       private messageService: MessageService,
       private chatService: ChatService,
-      private formBuilder: FormBuilder,
+      private commandService: CommandService,
       private router: Router
-  ) {
-    // this.sendMessageForm = this.formBuilder.group({
-    //   content: ['', [Validators.required, Validators.maxLength(100)]]
-    // });
-  }
+  ) {}
 
   ngOnInit() {
     console.log("MESSAGE COMPONENT : Init method");
+
+    // COMMAND FORM SUBSCRIPTION
+    this.subscriptionCommandService = this.commandService.arrCommandSubject.subscribe(command => {
+      if (command[0] === "message") {
+        //if (command[1] === "join") {
+          this.send(command[2]);
+        //}
+        //else {}
+      }
+    });
   }
 
   ngOnDestroy() {
     console.log("MESSAGE COMPONENT : Destroy method");
-    this.subMessages.unsubscribe();
+    if (this.subMessages !== undefined) {
+      this.subMessages.unsubscribe();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log("MESSAGE COMP : changes() function");
     if (changes.currentRoom !== undefined && changes.currentRoom.currentValue != changes.currentRoom.previousValue) {
  
       this.subMessages = this.messageService.subscribeChannel(changes.currentRoom.currentValue)
       // .pipe(takeUntil(this.unsubscribeSubject))
       .subscribe(data => {
-        // console.log("data: "+data);
+        // console.log("data: "+data); 
         this.messages.push(...data);
         this.messages = this.messages.sort((a,b) => (a.getMessageDate() > b.getMessageDate()) ? 1 : ((b.getMessageDate() > a.getMessageDate()) ? -1 : 0));
       });
@@ -76,31 +87,21 @@ export class MessageComponent implements OnInit, OnChanges, OnDestroy {
     }
     
     if (changes.nextRoom !== undefined && changes.nextRoom.currentValue != changes.nextRoom.previousValue) {
-      this.subMessages.unsubscribe();
+      if (this.subMessages !== undefined) {
+        this.subMessages.unsubscribe();
+      }
       this.messages.splice(0,this.messages.length);
       console.log("MESSAGE COMPONENT : flush and unsubscription");
       this.chatService.setUnsubscribersValue("messages", true);
     }
   }
 
-  // flushMessages() : Promise<any> {
-  //   this.messages.splice(0,this.messages.length);
-  //   this.messageService.unsubscribe
-  // }
-
-  // GET HISTORY 10 by 10 or more
-  // public getMessagesHistory(currentRoom: number) {
-  //   this.messageService.getMessagesHistory(currentRoom).subscribe(data => {
-  //     data.body.map(element => this.previousMessages.push(element));
-  //   });
-  // }
-
-  onSubmit() {
+  send(content: string) {
     if (this.userLogged != null) {
         // If message not a response to a specific user in the room let field "Receiver" empty
         let dateUTC = moment.utc().format("YYYY-MM-DDTHH:mm:ssZ");
         let newMessage = new Message( this.userLogged.getId(),
-                                      this.sendMessageForm.get("content").value,
+                                      content,
                                       dateUTC,
                                       true,
                                       null,
@@ -128,37 +129,24 @@ export class MessageComponent implements OnInit, OnChanges, OnDestroy {
     }    
   }
 
-  // setMessage(message: Message) {
-  //     this.message = message;
-  // }
-
-  /*authenticate(userLogin: User): Observable<User> {
-    return this.http.post<User>(this.url+'/login/', userLogin, httpOptions)
-                    .pipe(
-                        //retry(3), //retry a failed request up to 3 times
-                        catchError(this.handleError('login', userLogin))
-                    );
-                    //.subscribe((data: User) => this.user = data);
-  }*/
-
  /**
   * Handle Http operation that failed.
   * Let the app continue.
   * @param operation - name of the operation that failed
   * @param result - optional value to return as the observable result
   */
- private handleError<T> (operation = 'operation', result?: T) {
-  return (error: any): Observable<T> => {
+  private handleError<T> (operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
 
-    // TODO: send the error to remote logging infrastructure
-    console.error(error); // log to console instead
+      // TODO: send the error to remote logging infrastructure
+      console.error(error); // log to console instead
 
-    // TODO: better job of transforming error for user consumption
-    //this.log(`${operation} failed: ${error.message}`);
+      // TODO: better job of transforming error for user consumption
+      //this.log(`${operation} failed: ${error.message}`);
 
-    // Let the app keep running by returning an empty result.
-    return of(result as T);
-  };
-}  
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
+  }  
 
 }

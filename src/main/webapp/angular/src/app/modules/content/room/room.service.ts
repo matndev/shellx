@@ -43,7 +43,15 @@ export class RoomService {
         );
   }
 
-  public getRoomsByUserId(id: string) : Observable<HttpResponse<Room[]>> {
+  public leave(room_id: number, user_id: string) : Observable<HttpResponse<any>> {
+    var obj = { idRoom: room_id, idUser: user_id };
+    return this.http.post<HttpResponse<any>>("http://localhost:8086/rooms/leave", JSON.stringify(obj), httpOptions)
+        .pipe(
+          catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
+        );    
+  }
+
+  public getRoomsByUserId(id: number) : Observable<HttpResponse<Room[]>> {
     return this.http.get<HttpResponse<Room[]>>("http://localhost:8086/rooms/get/all/"+id, httpOptions)
         .pipe(
           catchError(this.handleError.bind(this)) // .bind(this) used to pass the context

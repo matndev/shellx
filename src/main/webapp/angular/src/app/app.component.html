@@ -1,5 +1,5 @@
 <!-- NAVBAR TOP -->
-<nav class="navbar navbar-expand-md fixed-top navbar-dark shx-navbar-top">
+<nav class="navbar navbar-expand-md fixed-top navbar-dark shx-navbar-top py-0">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" 
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -12,6 +12,11 @@
       <li class="nav-item"><a class="nav-link" routerLinkActive="active" routerLink="/chat">Chat</a></li>
       <li class="nav-item"><a class="nav-link" (click)="logout()">Logout</a></li>
     </ul>
+  </div>
+  <div class="shx-navbar-top-right">
+    <a *ngIf="userAuth" class="nav-link" routerLinkActive="active" [routerLink]="['/profile', userId]">
+      <img src="../assets/icons/user.jpg" alt="profile picture" class="rounded-circle" width="36px" height="36px" />
+    </a>  
   </div>
 </nav>
 

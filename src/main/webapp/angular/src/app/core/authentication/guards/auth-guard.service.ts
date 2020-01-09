@@ -16,14 +16,14 @@ export class AuthGuardService implements CanActivate { // CanActivateChild
         
         console.log(state.url);
 
-        if (this._authService.isAuthenticated() && state.url != "/login") {
+        if (this._authService.isAuthenticated() && state.url != "/login" && state.url != "/register") {
           return true;
         }
-        else if (this._authService.isAuthenticated() && state.url == "/login") {
+        else if (this._authService.isAuthenticated() && (state.url == "/login" || state.url == "/register")) {
           this._router.navigate(['/chat']);
           return false;    
         }
-        else if (!this._authService.isAuthenticated() && state.url == "/login" || state.url == "/home") {
+        else if (!this._authService.isAuthenticated() && (state.url == "/login" || state.url == "/home" || state.url == "/register")) {
           return true;    
         }    
         else {

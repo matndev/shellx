@@ -1,6 +1,6 @@
-import { Injectable, ModuleWithComponentFactories } from '@angular/core';
+import { Injectable, ModuleWithComponentFactories, OnInit, OnDestroy } from '@angular/core';
 import { UserLogin } from 'src/app/shared/models/authentication/user-login.model';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, throwError, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
@@ -18,10 +18,12 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService {
+export class AuthenticationService implements OnInit, OnDestroy {
 
   private url = "http://localhost:8086";
-  private authenticated = false;
+  // private authenticated = false;
+  private authenticatedState = new Subject<boolean>();
+  public authenticatedObs = this.authenticatedState.asObservable();
   private cookieExpValue = '';
 
   constructor(
@@ -29,19 +31,33 @@ export class AuthenticationService {
     private cookieService: CookieService
   ) { }
 
+  ngOnInit() {
+    var initStateAuth = this.isAuthenticated();
+  }
+
+  ngOnDestroy() {
+    this.authenticatedState.next();
+    this.authenticatedState.complete();
+  }  
+
   isAuthenticated() : boolean {
     // console.log("Expiration cookie : "+this.cookieService.get('_exp'));
     // console.log("Current time : "+moment().format());
     // console.log("Expiration comparison :");
     var exp = moment(this.cookieService.get('_exp')).diff(moment().format());
     console.log(exp);
-    return (exp > 30000) ? true : false;
+    var isAuthValid = (exp > 30000) ? true : false;
+    this.authenticatedState.next(isAuthValid);
+    return isAuthValid;
   }
 
   getCurrentUserInfos() : User {
     if (this.isAuthenticated()) {
       var obj = JSON.parse(localStorage.getItem("user"));
       return new User(obj.username, obj.email, obj.id, obj.role, obj.avatar);
+    }
+    else {
+      return null;
     }
   }
 

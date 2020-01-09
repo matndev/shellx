@@ -32,19 +32,19 @@ export class ChatComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    // this.userLogged = new User( "Pierrho", "", 1 );
     this.modeSideMenu = "roomlist";
     this.userLogged = this.auth.getCurrentUserInfos();
     this.route.paramMap.subscribe(params => {
       if (params.get('roomId') != undefined)
           this.currentRoom = +params.get('roomId');
     });
-    // console.log("Current user infos: "+this.userLogged.toString());
   }
 
   ngOnDestroy() {
     console.log("CHAT COMPONENT : ngOnDestroy : unsubscription");
-    this.subChangeRoom.unsubscribe();
+    if (this.subChangeRoom !== undefined) {
+      this.subChangeRoom.unsubscribe();
+    }
   }
 
   getCurrentRoom() : number {
@@ -86,13 +86,5 @@ export class ChatComponent implements OnInit {
       console.log("This command is not valid");
     }
   }
-
-  // swipeMenu() {
-  //   if (this.modeSidemenu === 0) {
-  //     this.modeSidemenu = 1;
-  //   }
-  //   else {
-  //     this.modeSidemenu = 0;
-  //   }
-  // }
+  
 }

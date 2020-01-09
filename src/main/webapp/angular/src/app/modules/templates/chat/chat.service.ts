@@ -1,3 +1,9 @@
+/***
+ * 
+ * Observables used in this class allow cleaning of subscriptions before the change of the room
+ * 
+ */
+
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 

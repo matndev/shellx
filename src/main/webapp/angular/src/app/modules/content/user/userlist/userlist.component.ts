@@ -5,6 +5,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ChatService } from 'src/app/modules/templates/chat/chat.service';
+import { CommandService } from '../../command/command.service';
 
 @Component({
   selector: 'app-userlist',
@@ -23,22 +24,36 @@ export class UserlistComponent implements OnInit, OnChanges, OnDestroy {
   addUserForm;
 
   private subUserlist: Subscription;
+  subscriptionCommandService;
 
   constructor(private userlistService: UserlistService,
               private chatService: ChatService,
-              private formBuilder: FormBuilder) {
-    this.addUserForm = this.formBuilder.group({
-      content: ['', [Validators.required, Validators.maxLength(100)]]
-    });
+              private commandService: CommandService) {
   }
 
   ngOnInit() {
     console.log("USERLIST COMPONENT : Init method");
+    // COMMAND FORM SUBSCRIPTION
+    this.subscriptionCommandService = this.commandService.arrCommandSubject.subscribe(command => {
+      if (command[0] === "user") {
+        if (command[1] === "invite") {
+          this.userlistService.invite(command[2], this.currentRoom).subscribe(result => {
+            console.log("Result invite command : "+result.body);
+          });
+        }
+        else {}
+      }
+    });
   }
 
   ngOnDestroy() {
     console.log("USERLIST COMPONENT : Destroy method");
-    this.subUserlist.unsubscribe();
+    if (this.subUserlist !== undefined) {
+      this.subUserlist.unsubscribe();
+    }
+    if (this.subscriptionCommandService !== undefined) {
+      this.subscriptionCommandService.unsubscribe();
+    }
   }  
 
   ngOnChanges(changes: SimpleChanges) {
@@ -52,6 +67,11 @@ export class UserlistComponent implements OnInit, OnChanges, OnDestroy {
           console.log("data: "+data);
           this.users.push(...data);
           this.users = this.users.sort((a,b) => (a.getUsername() > b.getUsername()) ? 1 : ((b.getUsername() > a.getUsername()) ? -1 : 0));
+          for (var i = this.users.length - 1; i >= 0; --i) {
+            if (this.users[i].getRole() == -1) {
+                this.users.splice(i,1);
+            }
+          }
           this.userListEmitter.emit(this.users);
         });
 
@@ -66,6 +86,11 @@ export class UserlistComponent implements OnInit, OnChanges, OnDestroy {
           // Or useful method for older versions
           // return names.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]);
           this.users = this.users.sort((a,b) => (a.getUsername() > b.getUsername()) ? 1 : ((b.getUsername() > a.getUsername()) ? -1 : 0));
+          for (var i = this.users.length - 1; i >= 0; --i) {
+            if (this.users[i].getRole() == -1) {
+                this.users.splice(i,1);
+            }
+          }        
         })
         .then(() => {
           this.userListEmitter.emit(this.users);
@@ -84,11 +109,6 @@ export class UserlistComponent implements OnInit, OnChanges, OnDestroy {
 
   async getUsersByRoomId(id: number) : Promise<any> {
     return await this.userlistService.getUsersByRoomId(id).toPromise();
-  }  
-
-  // onSubmit() {
-  //   console.log("DEBUG : id room: "+this.currentRoom+", id user: "+this.addUserForm.get("content").value);
-  //   this.userlistService.add(this.currentRoom, this.addUserForm.get("content").value);
-  // } 
+  }   
    
 }

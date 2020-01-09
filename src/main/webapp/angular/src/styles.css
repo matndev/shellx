@@ -11,6 +11,10 @@ p {
     margin: 0 !important;
 }
 
+input {
+    background-color: #282b2e;
+}
+
 .nopadding {
     padding: 0 !important;
     margin: 0 !important;
@@ -41,7 +45,7 @@ form input {
  */
 
 .shx-navbar-top {
-    /* height: 56px; */
+    min-height: 56px;
     background-color: hsl(210, 7%, 17%) !important;
 }
 
@@ -49,6 +53,11 @@ form input {
     border-bottom: 2px solid #cfd0d0; 
     margin-bottom: -2px;
     color: #cfd0d0;
+}
+
+.shx-navbar-top-right a {
+    padding: 0;
+    padding-right: 1rem;
 }
 
 /*
@@ -337,19 +346,8 @@ form input {
 
 
 
-.nav-top, input {
+/* .nav-top, input {
     background-color: #282b2e;
-}
-
-/* copied from bootstrap.css, class: .row */
-. {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
-    flex-grow: 1;
 }
 
 .panel-room-info {
@@ -368,11 +366,6 @@ form input {
 }
 
 .test-col {
-    /* -ms-flex-preferred-size: 0;
-    flex-basis: 0;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    max-width: 100%; */
 
     -ms-flex: 0 0 66.666667%;
     flex: 0 0 66.666667%;
@@ -381,4 +374,4 @@ form input {
 
 mat-icon {
     display: flex !important;
-}
+} */
