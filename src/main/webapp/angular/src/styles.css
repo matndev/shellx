@@ -46,7 +46,8 @@ form input {
 
 .shx-navbar-top {
     min-height: 56px;
-    background-color: hsl(210, 7%, 17%) !important;
+    /* background-color: hsl(210, 7%, 17%) !important; */
+    background-color: hsla(278, 37%, 46%, 1) !important; /* hsla(278, 58%, 56%, 1) */
 }
 
 .shx-navbar-top li a:hover {
@@ -68,7 +69,39 @@ form input {
     height: calc(100vh - 56px) !important;
     margin-top: 56px !important;
     background-color: hsl(210, 15%, 8%); /* #191c21; 21252E */
-    /* background-image: linear-gradient(to bottom, hsla(0,0%,95%,0) 10%, hsla(0,0%,98%,1)), url('theme/background/background03.png') !important; */
+    /* background-image: linear-gradient(to bottom, hsla(210, 15%, 8%, 0) 50%, hsla(210, 15%, 8%, 1)), url('assets/pattern-final-2.png') !important; */
+    /* background-image: url('assets/pattern-b.png'); */
+}
+
+/*
+ * LOGO TEXT COMPONENT
+ */
+
+/* #shx-home-content p {
+    margin-top: 20% !important;
+    text-align: center;
+} */
+
+#shx-home-content a {
+    border-radius: 2px;
+}
+
+#shx-home-content a:hover {
+    text-decoration: none;
+}
+
+#shx-home-content a.shx-sign-in {
+    margin-right: 20px;
+    /* padding: 10px 30px 10px 30px; */
+    color: white !important;
+    background-color: hsla(278, 37%, 46%, 1);
+    border: 2px solid hsla(278, 37%, 46%, 1);
+}
+
+#shx-home-content a.shx-sign-up {
+    /* padding: 10px 30px 10px 30px; */
+    color: hsla(278, 37%, 46%, 1) !important;
+    border: 2px solid hsla(278, 37%, 46%, 1);
 }
 
 /*
@@ -83,14 +116,40 @@ form input {
     margin-top:20px;
 }
 
-.shx-comp-login .btn-secondary {
+.shx-comp-login .sign-in {
+    background-color: hsla(278, 37%, 46%, 1);
+    border: 2px solid hsla(278, 37%, 46%, 1);
+    border-radius: 2px;
+}
+
+.shx-comp-login .sign-in a {
+    color: white !important;
+    text-decoration: none;
+}
+
+.shx-comp-login .sign-up {
     margin-left: 20px;
+    border: 2px solid hsla(278, 37%, 46%, 1);
+    border-radius: 2px;
 }
 
-.shx-comp-login .btn-secondary a {
-    color: black;
+.shx-comp-login .sign-up a {
+    color: hsla(278, 37%, 46%, 1) !important;
+    text-decoration: none;
 }
 
+/*
+ * REGISTER COMPONENT
+ */
+
+.shx-comp-register .sign-up {
+    margin-bottom: 20px;
+    background-color: hsla(278, 37%, 46%, 1);
+    border: 2px solid hsla(278, 37%, 46%, 1);
+    border-radius: 2px;
+    color: white !important;
+    text-decoration: none;
+}
 
 /*
  * CHAT COMPONENT
@@ -122,8 +181,8 @@ form input {
 
 .shx-chat-form-frame {
     height: 56px;
-    background-color: #0b0e10;
-    border-top: 2px solid #0b0e10;
+    /* background-color: #0b0e10; */
+    border-top: 2px solid hsla(0, 0%, 10%, 1);
 }
   
 .shx-chat-form {
@@ -142,6 +201,7 @@ form input {
     margin-right: .25rem;
     flex-grow: 1;
     line-height: 2;
+    background-color: transparent !important;
     /* background-color: hsl(0,0%,86%);
     border: 1px solid hsl(0,0%,82%); */
 }

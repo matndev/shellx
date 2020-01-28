@@ -5,6 +5,7 @@ import { catchError, first, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { User } from 'src/app/shared/models/authentication/user.model';
 import { SocketClientService } from 'src/app/core/websocket/socket-client.service';
+import { SERVER_HTTPS_URL } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,6 +20,8 @@ const httpOptions = {
 })
 export class UserlistService {
 
+  private url = SERVER_HTTPS_URL;
+
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -27,7 +30,7 @@ export class UserlistService {
 
   // No interfaces used because Typescript convert it in JS at runtime
   public getUsersByRoomId(id: number) : Observable<HttpResponse<User[]>> {
-    return this.http.get<HttpResponse<any>>("http://localhost:8086/user/room/"+id, httpOptions)
+    return this.http.get<HttpResponse<any>>(this.url+"/user/room/"+id, httpOptions)
         .pipe(
             map(obj => {
               var userArray: User[] = [];
@@ -45,7 +48,7 @@ export class UserlistService {
   public subscribeUserlist(id: number) : Observable<User[]> {
     return this.socketClient
             .onMessage('/topic/user/subscribe/'+id)
-            .pipe(first(), map(user => {
+            .pipe(map(user => {
                     var newUsers: User[] = [];
                     if (user instanceof Array){
                         user.forEach(e => newUsers.push(new User(e.username, e.email, e.id, e.role, e.avatar)));
@@ -60,7 +63,7 @@ export class UserlistService {
   public invite(user_id: number, room_id: number) : Observable<HttpResponse<boolean>> {
     // this.socketClient.send("/app/user/invite/"+idRoom, idUser);
     var obj = { idRoom: room_id, idUser: user_id };
-    return this.http.post<HttpResponse<boolean>>("http://localhost:8086/user/invite", JSON.stringify(obj), httpOptions)
+    return this.http.post<HttpResponse<boolean>>(this.url+"/user/invite", JSON.stringify(obj), httpOptions)
         .pipe(
           catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
         );    

@@ -20,6 +20,7 @@ export class NotificationsComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private notificationsService: NotificationsService,
     private userlistService: UserlistService
+    // private location: Location
   ) { }
 
   ngOnInit() {
@@ -32,7 +33,7 @@ export class NotificationsComponent implements OnInit, OnChanges, OnDestroy {
     resGetNotifications.then((result) => {
       this.notifications.push(...result.body);
       this.notifications = [ ...new Set(this.notifications) ];
-      this.notifications = this.notifications.sort((a,b) => (a.getDateCreation() > b.getDateCreation()) ? 1 : ((b.getDateCreation() > a.getDateCreation()) ? -1 : 0));        
+      this.notifications = this.notifications.sort((a,b) => (a.getDateCreation() > b.getDateCreation()) ? 1 : ((b.getDateCreation() > a.getDateCreation()) ? -1 : 0));
     });   
   }
 
@@ -53,7 +54,12 @@ export class NotificationsComponent implements OnInit, OnChanges, OnDestroy {
 
   public notifOnClick(event: any) {
     var arrIds = (event.target.value).split(',');
+    console.log(arrIds[2]);
+    this.notifications.splice(this.notifications.findIndex(function(i){
+      return i.getId() === arrIds[2];
+    }), 1);
     this.userlistService.add(arrIds[0], arrIds[1]);
+    window.location.reload();
   }
 
   public deleteNotif(event: any) {

@@ -70,6 +70,7 @@ export class RoomComponent implements OnInit, OnChanges, OnDestroy {
 
             if (res.status === 200) {
               this.rooms.splice(index,1);
+              this.changeRoom(this.rooms[0].getId());
             }
           });
         }

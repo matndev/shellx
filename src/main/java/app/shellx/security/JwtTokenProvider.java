@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -102,9 +103,20 @@ public class JwtTokenProvider {
 //            }
             return true;
         } catch (ExpiredJwtException e) {
+        	boolean isTokenDeleted = invalidate(token);
             throw new ExpiredJwtException(null, null, "Token expired");
         } catch (JwtException | IllegalArgumentException e) {
             throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
         }
     }
+	
+	public boolean invalidate(String token) {
+		if (token != null) {
+			if (RedisUtil.INSTANCE.sismember("validjwt", token)) {
+				RedisUtil.INSTANCE.srem("validjwt", token);
+				return true;
+			}
+		}
+		return false;
+	}
 }

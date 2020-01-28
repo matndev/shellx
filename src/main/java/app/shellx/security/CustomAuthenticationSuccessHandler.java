@@ -39,30 +39,23 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		// Token doesn't exist so it is a successful authentication by form login
 		if (jwtTokenProvider.resolveToken(request) == null) {
 			
-			System.out.println("JWT Token creation");
+			//System.out.println("JWT Token creation");
 			List<String> authorities = authentication.getAuthorities().stream().map(e -> e.getAuthority()).collect(Collectors.toList());
 			
-			System.out.println("Username : "+authentication.getName());
+			//System.out.println("Username : "+authentication.getName());
 			authorities.forEach(System.out::println);
 			
 			String jwtToken = jwtTokenProvider.createToken(authentication.getName(), authorities);
 			log.info("Contenu token créé "+jwtToken);
 			
-//			long userId = ((User) authentication.getPrincipal()).getId();
-			
-//			final Cookie cookie = jwtTokenProvider.createCookieForToken(jwtToken);
-//			response.addCookie(cookie);
+			//RedisUtil.INSTANCE.sadd("validjwt", jwtToken);
 			
 			UserDto userDto = new UserDto((User) authentication.getPrincipal());
 			
 			response.addCookie(CookieConfig.createCookieForJWT(jwtToken));
 			response.addCookie(CookieConfig.createCookieExpirationSession(jwtTokenProvider.getExpirationDate(jwtToken)));		
 			response.addCookie(CookieConfig.createCookieWithIdUser(userDto.getId()));
-			
-//			response.getWriter().print(userDto);
 			response.getWriter().write(JsonTools.convertObjectToJson(userDto));
-
-//			response.setHeader("Authorization", jwtToken);
 		}
 	}
 

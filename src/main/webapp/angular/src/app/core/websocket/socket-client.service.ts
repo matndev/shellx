@@ -3,6 +3,7 @@
  * 
  * https://dimitr.im/websockets-angular
  * https://github.com/g00glen00b/spring-boot-angular-websockets/tree/master/angular-websockets-client
+ * 
  */
 
 import { Injectable, OnDestroy } from '@angular/core';
@@ -10,6 +11,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Message, StompSubscription, CompatClient, Stomp } from '@stomp/stompjs';
 import * as SockJS from 'sockjs-client';
 import { filter, first, switchMap } from 'rxjs/operators';
+import { SERVER_HTTPS_URL } from 'src/environments/environment';
 
 export enum SocketClientState {
   ATTEMPTING, CONNECTED
@@ -21,11 +23,12 @@ export enum SocketClientState {
 export class SocketClientService implements OnDestroy {
 
   private client: CompatClient;
-  private state: BehaviorSubject<SocketClientState>
+  private state: BehaviorSubject<SocketClientState>;
+  private url = SERVER_HTTPS_URL; // Not supported in SockJS constructor 
 
   constructor() { 
     console.log("Connection Websocket beginning");
-    this.client = Stomp.over(function() { return new SockJS("http://localhost:8086/ws")});
+    this.client = Stomp.over(function() { return new SockJS("https://localhost:8443/wss")}); // this.url or any attribute not supported
     this.state = new BehaviorSubject<SocketClientState>(SocketClientState.ATTEMPTING);
     this.client.connect({}, () => {
       console.log("connexion established");
@@ -51,7 +54,8 @@ export class SocketClientService implements OnDestroy {
   }
 
   public onMessage(topic: string, handler = SocketClientService.jsonHandler) : Observable<any> {
-    return this.connect().pipe(first(), switchMap(client => { // Get the very first connection, complete obs, then returning a new observable with switchMap
+    // Get the very first connection, complete obs, then returning a new observable with switchMap
+    return this.connect().pipe(first(), switchMap(client => {
       return new Observable<any>(observer => {
         const subscription : StompSubscription = client.subscribe(topic, message => {
             observer.next(handler(message));

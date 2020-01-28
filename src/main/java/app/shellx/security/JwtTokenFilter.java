@@ -18,9 +18,11 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.FilterChain;
@@ -90,41 +92,33 @@ public class JwtTokenFilter extends GenericFilterBean {
 				auth.getAuthorities().forEach(System.out::println);
 				Cookie cookies[] = request.getCookies();
 				if (cookies != null) {
+					
+					Boolean isIdTestValid = null;
 					for (Cookie cookie : cookies) {
 						if (cookie.getName().equals("_id")) {
-						   
-						   
-//						String cookieValue = cookie.getValue();
-//						System.out.println("Contenu du cookie : "+cookieValue);
-//						Date exp = new Date();
-//						exp = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(cookieValue).getBody().getExpiration();
-//						LocalDateTime ldt = LocalDateTime.ofInstant(exp.toInstant(), ZoneId.systemDefault());
-//						System.out.println("Date : "+ldt.getDayOfYear()+"/"+ldt.getDayOfMonth()+"/"+ldt.getYear()+", Time : "+ldt.getSecond()+":"+ldt.getMinute()+":"+ldt.getHour());
-						
-						
-							if (Long.parseLong(cookie.getValue()) == ((User) auth.getPrincipal()).getId()) {
-								System.out.println("### DEBUG : Inside comparison between _id and auth id : ");
-								System.out.println("_id : "+((User) auth.getPrincipal()).getId()+", auth id : "+Long.parseLong(cookie.getValue()));
-								
-	
-								List<String> authorities = new ArrayList<String>();
-								auth.getAuthorities().forEach(authority -> authorities.add(authority.getAuthority()));
-								String newToken = jwtTokenProvider.createToken(auth.getName(), authorities);
-	//							final Cookie newCookie = jwtTokenProvider.createCookieForToken(newToken);
-								response.addCookie(CookieConfig.createCookieForJWT(newToken));
-								response.addCookie(CookieConfig.createCookieExpirationSession(jwtTokenProvider.getExpirationDate(newToken)));
-								filterChain.doFilter(req, response);
-							}
+							isIdTestValid = isIdCookieValid(cookie, auth);
+							break;
 						}
 					}
+					if (isIdTestValid != null && isIdTestValid) {
+					// && RedisUtil.INSTANCE.sismember("validjwt", token)
+					//boolean isTokenDeleted = jwtTokenProvider.invalidate(token);
+					//if JWT exists in the Redis cache
+					//if (isTokenDeleted) {
+						List<String> authorities = new ArrayList<String>();
+						auth.getAuthorities().forEach(authority -> authorities.add(authority.getAuthority()));
+						String newToken = jwtTokenProvider.createToken(auth.getName(), authorities);
+						//RedisUtil.INSTANCE.sadd("validjwt", newToken);
+						response.addCookie(CookieConfig.createCookieForJWT(newToken));
+						response.addCookie(CookieConfig.createCookieExpirationSession(jwtTokenProvider.getExpirationDate(newToken)));
+						filterChain.doFilter(req, response);
+					/*}
+					else {
+						System.out.println("Refreshing token : Error in the deletion of the expired token");
+					}*/
+					}
 				}
-//				else {
-//					filterChain.doFilter(req, res);
-//				}
 			}
-//			else {
-//				filterChain.doFilter(req, res);
-//			}
 		}
 		else if (token != null && jwtTokenProvider.validateToken(token) && request.getRequestURI().equals("/login")) {
 			throw new UserAlreadyLoggedException("User already logged");
@@ -133,4 +127,60 @@ public class JwtTokenFilter extends GenericFilterBean {
 			filterChain.doFilter(req, res);
 		}
 	}
+	
+	// Compare if _id value is the same as the id contained in the JWT
+	// If _id is modified by a XSS script for another ID it would be rejected here
+	private boolean isIdCookieValid(Cookie cookie, Authentication auth) {
+			if (Long.parseLong(cookie.getValue()) == ((User) auth.getPrincipal()).getId()) {
+				System.out.println("### DEBUG : Inside comparison between _id and auth id : ");
+				System.out.println("_id : "+((User) auth.getPrincipal()).getId()+", auth id : "+Long.parseLong(cookie.getValue()));
+				return true;
+			}
+		System.out.println("ID differents");
+		return false;
+	}
+	
 }
+
+// Extraction exp time from cookie, use for less renewal tokens
+
+//String cookieValue = cookie.getValue();
+//System.out.println("Contenu du cookie : "+cookieValue);
+//Date exp = new Date();
+//exp = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(cookieValue).getBody().getExpiration();
+//LocalDateTime ldt = LocalDateTime.ofInstant(exp.toInstant(), ZoneId.systemDefault());
+//System.out.println("Date : "+ldt.getDayOfYear()+"/"+ldt.getDayOfMonth()+"/"+ldt.getYear()+", Time : "+ldt.getSecond()+":"+ldt.getMinute()+":"+ldt.getHour());
+
+
+// Temp saved
+
+// for cookie : cookies
+
+
+//if (cookie.getName().equals("_id")) {
+//	
+//	// Compare if _id value is the same as the id contained in the JWT + if JWT exists in the Redis cache
+//	// If _id is modified by a XSS script for another ID it would be rejected here
+//	// && RedisUtil.INSTANCE.sismember("validjwt", token)
+//	if (Long.parseLong(cookie.getValue()) == ((User) auth.getPrincipal()).getId()) {
+//		System.out.println("### DEBUG : Inside comparison between _id and auth id : ");
+//		System.out.println("_id : "+((User) auth.getPrincipal()).getId()+", auth id : "+Long.parseLong(cookie.getValue()));
+//		
+//		//boolean isTokenDeleted = jwtTokenProvider.invalidate(token);
+//		//if (isTokenDeleted) {
+//			List<String> authorities = new ArrayList<String>();
+//			auth.getAuthorities().forEach(authority -> authorities.add(authority.getAuthority()));
+//			String newToken = jwtTokenProvider.createToken(auth.getName(), authorities);
+//			//RedisUtil.INSTANCE.sadd("validjwt", newToken);
+//			response.addCookie(CookieConfig.createCookieForJWT(newToken));
+//			response.addCookie(CookieConfig.createCookieExpirationSession(jwtTokenProvider.getExpirationDate(newToken)));
+//			filterChain.doFilter(req, response);
+//		/*}
+//		else {
+//			System.out.println("Refreshing token : Error in the deletion of the expired token");
+//		}*/
+//	}
+//	else {
+//		System.out.println("ID differents or JWT not found in Redis");
+//	}
+//}

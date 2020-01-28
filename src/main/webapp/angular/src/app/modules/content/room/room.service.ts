@@ -5,6 +5,8 @@ import { catchError } from 'rxjs/operators';
 import { Room } from 'src/app/shared/models/content/room.model';
 import { Router } from '@angular/router';
 import { User } from 'src/app/shared/models/authentication/user.model';
+import { SERVER_HTTPS_URL } from 'src/environments/environment';
+
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,13 +21,15 @@ const httpOptions = {
 })
 export class RoomService {
 
+  private url = SERVER_HTTPS_URL;
+
   constructor(
     private http: HttpClient,
     private router: Router
   ) { }
 
   getRoom(id: number): Observable<HttpResponse<Room>> {
-    return this.http.get<HttpResponse<Room>>("http://localhost:8086/rooms/get/"+id, httpOptions);
+    return this.http.get<HttpResponse<Room>>(this.url+"/rooms/get/"+id, httpOptions);
   }
 
   // getRoomWithMessages(id: string): Observable<HttpResponse<Message[]>> {
@@ -37,7 +41,7 @@ export class RoomService {
 
   public join(room_id: number, user_id: string) : Observable<HttpResponse<Room>> {
     var obj = { idRoom: room_id, idUser: user_id };
-    return this.http.post<HttpResponse<Room>>("http://localhost:8086/rooms/join", JSON.stringify(obj), httpOptions)
+    return this.http.post<HttpResponse<Room>>(this.url+"/rooms/join", JSON.stringify(obj), httpOptions)
         .pipe(
           catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
         );
@@ -45,28 +49,28 @@ export class RoomService {
 
   public leave(room_id: number, user_id: string) : Observable<HttpResponse<any>> {
     var obj = { idRoom: room_id, idUser: user_id };
-    return this.http.post<HttpResponse<any>>("http://localhost:8086/rooms/leave", JSON.stringify(obj), httpOptions)
+    return this.http.post<HttpResponse<any>>(this.url+"/rooms/leave", JSON.stringify(obj), httpOptions)
         .pipe(
           catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
         );    
   }
 
   public getRoomsByUserId(id: number) : Observable<HttpResponse<Room[]>> {
-    return this.http.get<HttpResponse<Room[]>>("http://localhost:8086/rooms/get/all/"+id, httpOptions)
+    return this.http.get<HttpResponse<Room[]>>(this.url+"/rooms/get/all/"+id, httpOptions)
         .pipe(
           catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
         );
   }
 
   public getUsersByRoomId(id: number) : Observable<HttpResponse<User[]>> {
-    return this.http.get<HttpResponse<User[]>>("http://localhost:8086/rooms/get/users/"+id, httpOptions)
+    return this.http.get<HttpResponse<User[]>>(this.url+"/rooms/get/users/"+id, httpOptions)
         .pipe(
           catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
         );
   }
 
   public createNewRoom(room: Room) : Observable<HttpResponse<Room>> {
-    return this.http.post<HttpResponse<Room>>("http://localhost:8086/rooms/add", room, httpOptions)
+    return this.http.post<HttpResponse<Room>>(this.url+"/rooms/add", room, httpOptions)
         .pipe(
           catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
         );

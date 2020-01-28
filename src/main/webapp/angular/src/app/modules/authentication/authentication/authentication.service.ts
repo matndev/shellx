@@ -6,13 +6,16 @@ import { catchError } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import * as moment from 'moment';
 import { User } from 'src/app/shared/models/authentication/user.model';
+import { SERVER_HTTPS_URL } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
+    'X-Forwarded-Proto': 'https',
     //'Authorization': 'Basic ' + btoa('mail:password')
   }), 
-  observe: 'response' as 'body'
+  observe: 'response' as 'body',
+  withCredentials: true
 };
 
 @Injectable({
@@ -20,8 +23,10 @@ const httpOptions = {
 })
 export class AuthenticationService implements OnInit, OnDestroy {
 
-  private url = "http://localhost:8086";
-  // private authenticated = false;
+  //private url = "https://localhost:8443"; 
+  // http://localhost:8086
+  private url = SERVER_HTTPS_URL;
+
   private authenticatedState = new Subject<boolean>();
   public authenticatedObs = this.authenticatedState.asObservable();
   private cookieExpValue = '';
@@ -62,7 +67,11 @@ export class AuthenticationService implements OnInit, OnDestroy {
   }
 
   login(credentials, callback) {
-    this.http.post(this.url+'/login', credentials, { observe: 'response', withCredentials: true }).subscribe(response => {
+    this.http.post<HttpResponse<any>>(this.url+'/login', credentials, httpOptions) // { observe: 'response', withCredentials: true }
+    .pipe(
+      catchError(this.handleError.bind(this)) // .bind(this) used to pass the context
+    )
+    .subscribe(response => { 
       localStorage.setItem("user", JSON.stringify(response.body));
       return callback && callback();
     });

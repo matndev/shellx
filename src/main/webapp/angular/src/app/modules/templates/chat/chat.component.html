@@ -1,3 +1,4 @@
+<!-- MESSAGES & FORM -->
 <div class="col-sm-9 d-sm-flex flex-column shx-messages-frame collapse multi-collapse show" id="messages-frame">
     <app-message    [currentRoom]="currentRoom" 
                     [nextRoom] = "nextRoom"
@@ -38,6 +39,7 @@
         </div>
     </div>
     <div class="tab-content">
+        <!-- ROOM LIST -->
         <app-room       [currentRoom]="currentRoom"
                         [userCount]="userCount"
                         [modeSideMenu]="modeSideMenu"
@@ -45,12 +47,14 @@
                         (changeRoomEmitter)="changeRoom($event)"
                         (currentRoomEmitter)="setCurrentRoom($event)">
         </app-room>
+        <!-- USER LIST -->
         <app-userlist   [currentRoom]="currentRoom" 
                         [nextRoom] = "nextRoom"
                         [modeSideMenu]="modeSideMenu"
                         [arrCommandUserlist]="arrCommandUserlist"
                         (userListEmitter)="setUserList($event)">
         </app-userlist>
+        <!-- NOTIFICATION LIST -->
         <app-notifications
                         [modeSideMenu]="modeSideMenu">
         </app-notifications>        

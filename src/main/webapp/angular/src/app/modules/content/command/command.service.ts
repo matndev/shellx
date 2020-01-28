@@ -71,7 +71,7 @@ export class CommandService {
 
   isFormValid(stringToCheck: string) : boolean {
       if (typeof stringToCheck == "string" && stringToCheck != null && stringToCheck != undefined) {
-          if (stringToCheck.length < 500) {
+          if (stringToCheck.length < 150) {
               return true
           }
           else {

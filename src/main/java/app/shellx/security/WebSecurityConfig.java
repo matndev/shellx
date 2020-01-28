@@ -60,6 +60,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -82,6 +83,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private ExceptionTokenVerificationHandlerFilter exceptionTokenVerificationHandlerFilter;
 	
+	@Autowired
+	private StatelessCSRFFilter statelessCSRFFilter;
+	
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -93,12 +97,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 			.cors().and()
-			.csrf().disable()
-			.authorizeRequests() // .antMatchers("/**")
+			.csrf().disable() // Not stateless, replaced by custom csrf filter below (csrf = CsrfFilter.class)
+			.addFilterBefore(statelessCSRFFilter, CsrfFilter.class) // Bug: /login, /register to fix
+			.authorizeRequests()
 				.antMatchers("/login/**", "/register/**").permitAll()
 				.antMatchers("/admin/**").hasRole("ADMIN")		
 				.anyRequest().authenticated()
 				.and()
+			// Enable HTTPS (with Heroku)
+			// redirect all plain HTTP requests to HTTPS if X-Forwarded-Proto is present (Heroku adds it automatically) 
+			.requiresChannel()
+		      .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+		      .requiresSecure().and()
+		    //
+		      
 			//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 			.addFilterAt(customUsernamePasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)	
 			/*.formLogin()
@@ -140,17 +152,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    	return registration;
 //    }
     
+    
+    // Enabling CORS for the whole application
+    // Specific to Spring Boot (https://spring.io/blog/2015/06/08/cors-support-in-spring-framework)
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebConfig() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                .allowedOrigins(
-                        "http://localhost:4200")
+                .allowedOrigins("http://localhost:4200",
+                        		"https://localhost:4200")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
-                .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",
-                        		"Access-Control-Request-Headers", "Authorization", "Cache-Control",
+                .allowedHeaders("Content-Type", "X-Requested-With", "X-Forwarded-Proto", "accept", "Origin", "Access-Control-Request-Method",
+                        		"Access-Control-Request-Headers", "Authorization", "Cache-Control", "XSRF-TOKEN",
                         		"Access-Control-Allow-Origin")
                 .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials", "set-cookie")
                 .allowCredentials(true).maxAge(3600);

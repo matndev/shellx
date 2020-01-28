@@ -57,5 +57,6 @@ export class AppModule {
     iconRegistry.addSvgIcon('menu-room-info', sanitizer.bypassSecurityTrustResourceUrl('./assets/icons/material/info-24px.svg'));
     iconRegistry.addSvgIcon('menu-notifications', sanitizer.bypassSecurityTrustResourceUrl('./assets/icons/material/notifications-24px.svg'));
     iconRegistry.addSvgIcon('room-locked', sanitizer.bypassSecurityTrustResourceUrl('./assets/icons/material/lock-24px.svg'));
+    iconRegistry.addSvgIcon('send', sanitizer.bypassSecurityTrustResourceUrl('./assets/icons/material/send-24px.svg'));
   }
 }

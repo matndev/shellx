@@ -11,9 +11,16 @@
 -->
 
 <!-- div class="row" => :host -->
-<div class="col-4"></div>
-<div class="col-4 align-self-center">
-    <img title="logo" src="assets/logo.png" class="img-fluid" />
+<div class="col-12 align-self-center" id="shx-home-content">
+    <div class="row pb-5">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4"><img title="logo" src="assets/logo.png" class="img-fluid" /></div>
+        <div class="col-sm-4"></div>
+    </div>
+    <div class="row">
+        <p class="col-12 d-flex justify-content-center">
+            <a class="shx-sign-in p-2 px-4" routerLinkActive="active" routerLink="/login">Sign in</a>
+            <a class="shx-sign-up p-2 px-4" routerLinkActive="active" routerLink="/register">Sign up</a>
+        </p>
+    </div>
 </div>
-<div class="col-4"></div>
-

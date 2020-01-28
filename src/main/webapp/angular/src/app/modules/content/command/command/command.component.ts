@@ -27,7 +27,7 @@ export class CommandComponent implements OnInit {
     private router: Router    
   ) { 
     this.sendCommandForm = this.formBuilder.group({
-      content: ['', [Validators.required, Validators.maxLength(100)]]
+      content: ['', [Validators.required, Validators.maxLength(150)]]
     });    
   }
 

@@ -1,8 +1,10 @@
 <div class="col d-flex">
     <div class="d-flex flex-row shx-chat-form">
         <form class="shx-chat-form__content form-inline d-flex" [formGroup]="sendCommandForm" (ngSubmit)="onSubmit()">
-            <input type="text" formControlName="content" required/>       
-            <button class="btn btn-primary" type="submit" [disabled]="!sendCommandForm.valid" >Send</button>
+            <input type="text" formControlName="content" maxlength="150" #content required/>
+            <!-- template reference variable : #content (doc Angular) -->
+            <p>{{ 150-content.value.length }}</p>
+            <button class="btn" type="submit" [disabled]="!sendCommandForm.valid" ><mat-icon class="mat-icon" svgIcon="send" aria-hidden="false" aria-label="send" color="y-icon"></mat-icon></button>
         </form>  
     </div>
 </div>

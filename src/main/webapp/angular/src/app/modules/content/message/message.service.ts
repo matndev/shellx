@@ -6,6 +6,7 @@ import { Message } from 'src/app/shared/models/content/message.model';
 import { Router } from '@angular/router';
 import { SocketClientService } from 'src/app/core/websocket/socket-client.service';
 import * as moment from 'moment';
+import { SERVER_HTTPS_URL } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,6 +20,8 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class MessageService {
+
+  private url = SERVER_HTTPS_URL;
 
   constructor(
     private http: HttpClient,
@@ -43,13 +46,6 @@ export class MessageService {
             }));
   }
 
-  // .pipe(first(), map(messages => messages.map(MessageService.getMessages)));
-  // private static getMessages(message: any): Message {
-  //   console.log("DEBUG : Deserialize messages date : "+(message['postedAt'])); //+message.getMessageDate());
-  //   const postedAt = new Date(message['postedAt']);
-  //   return {...message, postedAt};
-  // }  
-
   private dateManager(messages: any) : Message[] {
     messages.forEach(element => {
       if (element.messageDate != null) {
@@ -65,7 +61,7 @@ export class MessageService {
   } 
   
   public getMessagesHistory(currentRoomId: number) : Observable<HttpResponse<Message[]>> {
-    return this.http.get<HttpResponse<any>>("http://localhost:8086/messages/get/all/"+currentRoomId, httpOptions)
+    return this.http.get<HttpResponse<any>>(this.url+"/messages/get/all/"+currentRoomId, httpOptions)
         .pipe(
           map(obj => {
             var messagesArray: Message[] = [];

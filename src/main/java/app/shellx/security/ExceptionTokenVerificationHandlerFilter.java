@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,9 @@ import io.jsonwebtoken.JwtException;
 @Order(1)
 @Component
 public class ExceptionTokenVerificationHandlerFilter extends OncePerRequestFilter {
+	
+	@Value("${security.cookie.setsecure.enable}")
+    private static boolean isSetSecureEnabled;
 	
 	private Logger log = LogManager.getLogger(ExceptionTokenVerificationHandlerFilter.class.getName());
 	
@@ -52,7 +56,7 @@ public class ExceptionTokenVerificationHandlerFilter extends OncePerRequestFilte
         	if (!message.equals("user-already-logged")) {
 	        	// if token is expired we delete the old cookie by setting 0 value inside it
 				final Cookie newCookie = new Cookie("access_token", "");
-				newCookie.setSecure(false); // a mettre en commentaire si ca marche pas
+				newCookie.setSecure(isSetSecureEnabled); // a mettre en commentaire si ca marche pas
 				newCookie.setHttpOnly(true);
 				newCookie.setMaxAge(0);
 				newCookie.setPath("/");

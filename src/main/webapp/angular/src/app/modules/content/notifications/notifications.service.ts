@@ -7,6 +7,7 @@ import { Notification } from '../../../shared/models/content/notification.model'
 import * as moment from 'moment';
 import { HttpResponse, HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { SERVER_HTTPS_URL } from 'src/environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -21,6 +22,8 @@ const httpOptions = {
 })
 export class NotificationsService {
 
+  private url = SERVER_HTTPS_URL;
+
   constructor(
     private authenticationService: AuthenticationService,
     private socketClient: SocketClientService,
@@ -32,7 +35,7 @@ export class NotificationsService {
     var id = this.authenticationService.getCurrentUserInfos().getId();
     return this.socketClient
             .onMessage('/topic/notifications/subscribe/'+id)
-            .pipe(first(), map(notifications => {
+            .pipe(map(notifications => {
                     var newNotifications: Notification[] = [];
                     if (notifications instanceof Array){
                         notifications.forEach(e => newNotifications.push(new Notification(  e.id, 
@@ -62,7 +65,7 @@ export class NotificationsService {
 
   public getNotificationsByUserId() : Observable<HttpResponse<any>> {
     var id = this.authenticationService.getCurrentUserInfos().getId();
-    return this.http.get<HttpResponse<any>>("http://localhost:8086/notifications/get/all/"+id, httpOptions)
+    return this.http.get<HttpResponse<any>>(this.url+"/notifications/get/all/"+id, httpOptions)
     .pipe(
         map(obj => {
           var notificationsArray: Notification[] = [];
@@ -96,7 +99,7 @@ export class NotificationsService {
 
   public deleteById(idNotif: number) : Observable<HttpResponse<boolean>> {
       // var obj = { idNotif: idNotif };
-      return this.http.post<HttpResponse<any>>("http://localhost:8086/notifications/delete", JSON.stringify(idNotif), httpOptions)
+      return this.http.post<HttpResponse<any>>(this.url+"/notifications/delete", JSON.stringify(idNotif), httpOptions)
                       .pipe(
                         catchError(this.handleError.bind(this))
                       );

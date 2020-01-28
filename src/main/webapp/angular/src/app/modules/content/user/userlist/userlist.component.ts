@@ -97,6 +97,7 @@ export class UserlistComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
    
+    // Cleaning subscriptions and datas before redirection to the new room
     if (changes.nextRoom !== undefined && changes.nextRoom.currentValue != changes.nextRoom.previousValue) {
       // this.unsubscribeSubject.next();
       // this.unsubscribeSubject.complete();

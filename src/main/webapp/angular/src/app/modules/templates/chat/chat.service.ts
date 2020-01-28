@@ -1,6 +1,7 @@
 /***
  * 
  * Observables used in this class allow cleaning of subscriptions before the change of the room
+ * When Message & Userlist components are cleaned with their respective booleans set to true we are allowed to change the room
  * 
  */
 
